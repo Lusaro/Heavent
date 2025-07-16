@@ -1,0 +1,765 @@
+:root {
+    --primary: #000000;
+    --secondary: #F5A623;
+    --background: #F7F7F7;
+    --text: #333333;
+    --muted: #AAAAAA;
+    --radius: 10px;
+    --shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    --shadow-hover: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+/* Base Styles */
+body {
+    margin: 0;
+    font-family: 'Roboto', sans-serif;
+    background-image: url("new-bg.png"); /* Dies ist Ihr "COMING SOON"-Hintergrund */
+    background-attachment: fixed;
+    background-size: cover;
+    background-position: center;
+    color: var(--text);
+    line-height: 1.6;
+    overflow-x: hidden;
+}
+
+/* Header Styles */
+header {
+    text-align: center;
+    padding: 1rem 2rem;
+    background-color: rgba(255, 255, 255, 0.2);
+    box-shadow: var(--shadow);
+    margin-bottom: 2rem;
+    position: relative; /* Wichtig für absolute Positionierung des Warenkorb-Icons */
+    backdrop-filter: blur(2.5px);
+}
+
+.page-title {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 2.5rem;
+    margin-bottom: 1.5rem;
+    color: var(--primary);
+    font-weight: 700;
+}
+
+/* Warenkorb-Icon im Header */
+.cart-icon-container {
+    position: absolute;
+    top: 1rem;
+    right: 2rem;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.cart-button {
+    background: var(--primary);
+    color: white;
+    border: none;
+    border-radius: 50%; /* Rund */
+    width: 45px; /* Größe anpassen */
+    height: 45px; /* Größe anpassen */
+    font-size: 1.5rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: var(--shadow);
+    transition: background-color 0.2s ease, transform 0.2s ease;
+}
+
+.cart-button:hover {
+    background: #333;
+    transform: scale(1.05);
+}
+
+.cart-count {
+    background-color: var(--secondary);
+    color: white;
+    font-weight: bold;
+    border-radius: 50%;
+    padding: 0.3em 0.6em;
+    font-size: 0.8rem;
+    position: absolute;
+    top: -8px;
+    right: -8px;
+    min-width: 20px;
+    text-align: center;
+    box-shadow: var(--shadow);
+}
+
+
+/* Filter Styles */
+.filters {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 1.5rem;
+    flex-wrap: wrap;
+    margin-bottom: 2rem;
+}
+
+.size-filter {
+    display: flex;
+    gap: 0.5rem;
+    margin-right: 1rem;
+}
+
+.size-btn {
+    padding: 0.5rem 1rem;
+    border-radius: var(--radius);
+    border: none;
+    background: transparent;
+    color: var(--text);
+    cursor: pointer;
+    font-size: 0.9rem;
+    min-width: 40px;
+    transition: all 0.2s ease;
+}
+
+.size-btn:hover {
+    background: rgba(0, 0, 0, 0.05);
+}
+
+.size-btn.active {
+    background: var(--primary);
+    color: white;
+    font-weight: 500;
+}
+
+.filters select,
+.filters input {
+    padding: 0.75rem 1.5rem;
+    border-radius: var(--radius);
+    border: 1px solid var(--muted);
+    background: white;
+    color: var(--text);
+    font-size: 1rem;
+    transition: border-color 0.3s ease;
+}
+
+.filters select:focus,
+.filters input:focus {
+    outline: none;
+    border-color: var(--primary);
+}
+
+/* Product Grid Styles */
+.product-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 2rem;
+    padding: 0 2rem;
+    margin: 0 auto;
+    max-width: 1400px;
+    width: calc(100% - 4rem);
+}
+
+.product-card {
+    background: white;
+    color: var(--text);
+    border-radius: var(--radius);
+    overflow: hidden;
+    transition: opacity 0.3s ease, box-shadow 0.3s ease;
+    transform: none !important; /* Stellt sicher, dass JS-Animationen nicht überschrieben werden */
+    opacity: 1;
+    height: auto;
+    width: 100%;
+    box-sizing: border-box;
+    position: relative;
+    box-shadow: var(--shadow);
+}
+
+.product-card.hidden {
+    opacity: 0;
+    height: 0;
+    width: 0;
+    padding: 0 !important;
+    margin: 0 !important;
+    position: absolute; /* Versteckte Elemente nehmen keinen Platz ein */
+    pointer-events: none; /* Verhindert Interaktionen */
+    visibility: hidden; /* Sicherstellen, dass sie nicht sichtbar sind */
+    border: none; /* Entfernt Ränder, die sonst sichtbar sein könnten */
+}
+
+.product-card:hover {
+    box-shadow: var(--shadow-hover);
+    transform: none !important; /* Behält JS-Animationen bei */
+}
+
+.product-image {
+    aspect-ratio: 4/3;
+    /* Change 'cover' to 'contain' */
+    background-size: contain; 
+    background-repeat: no-repeat; /* Add this to prevent repeating if image is smaller than container */
+    background-position: center;
+    position: relative;
+}
+
+.product-size {
+    font-size: 1.2rem;
+    color: var(--muted);
+}
+
+/* Watermark/Badge Styles */
+.corner-badge {
+    width: 50px;
+    height: auto;
+    cursor: help;
+    display: block;
+}
+
+.badge-tooltip {
+    position: absolute;
+    bottom: 100%; /* Über dem Badge */
+    right: 0;
+    background: rgba(0, 0, 0, 0.85);
+    color: #fff;
+    padding: 0.4rem 0.6rem;
+    font-size: 0.75rem;
+    border-radius: 6px;
+    white-space: normal;
+    pointer-events: none;
+    opacity: 0;
+    transform: translateY(5px);
+    transition: opacity 0.3s ease, transform 0.3s ease;
+    width: 200px;
+    z-index: 5;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+}
+
+/* Der Tooltip erscheint NUR beim Hover über .corner-badge (dem PNG-Bild) */
+.corner-badge:hover + .badge-tooltip {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.badge-tooltip::after {
+    content: '';
+    position: absolute;
+    top: 100%;
+    right: 10px;
+    border-width: 6px;
+    border-style: solid;
+    border-color: rgba(0, 0, 0, 0.85) transparent transparent transparent;
+}
+
+.badge-wrapper {
+    position: absolute;
+    bottom: 8px;
+    right: 8px;
+    display: inline-block;
+}
+
+
+.product-info {
+    padding: 1.5rem;
+}
+
+.product-info h3 {
+    margin: 0 0 0.5rem 0;
+    font-size: 1.2rem;
+    font-weight: 500;
+}
+
+.product-info .price {
+    margin: 0;
+    font-weight: bold;
+    font-size: 1.1rem;
+}
+
+/* Footer Styles */
+footer {
+    text-align: center;
+    margin-top: 3rem;
+    padding: 2rem;
+    color: var(--muted);
+}
+
+/* Modal Styles */
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.7);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s ease, visibility 0.3s ease;
+}
+
+.modal-overlay.active {
+    opacity: 1;
+    visibility: visible;
+}
+
+.modal-container {
+    background: white;
+    border-radius: var(--radius);
+    width: 80%;
+    max-width: 900px;
+    display: flex;
+    overflow: hidden;
+    opacity: 0;
+    transition: opacity 0.4s ease;
+    min-height: 400px;
+}
+
+.modal-overlay.active .modal-container {
+    opacity: 1;
+}
+
+/* NEU/ANGEPASST: Globale Regel für das <img> Tag im Modal */
+.modal-image {
+    max-width: 100%; /* Stellt sicher, dass das Bild nicht breiter als sein Container wird */
+    max-height: 100%; /* Stellt sicher, dass das Bild nicht höher als sein Container wird */
+    object-fit: contain; /* Passt das Bild innerhalb der Box an, ohne es zu beschneiden */
+    display: block; /* Entfernt zusätzlichen Platz unter dem Bild */
+    width: auto; /* Erlaubt dem Bild, seine natürliche Breite zu haben, wenn es kleiner ist */
+    height: auto; /* Erlaubt dem Bild, seine natürliche Höhe zu haben, wenn es kleiner ist */
+}
+
+
+/* Bild-Animation (links nach rechts) */
+.modal-image-container {
+    flex: 1;
+    min-height: 400px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #f9f9f9; /* Der graue Hintergrund, wenn das Bild nicht den gesamten Bereich füllt */
+    overflow: hidden;
+    transform: translateX(-50px);
+    opacity: 0;
+    transition: transform 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.1),
+                opacity 0.5s ease;
+}
+
+.modal-overlay.active .modal-image-container {
+    transform: translateX(0);
+    opacity: 1;
+}
+
+/* Inhalts-Animation (rechts nach links) */
+.modal-content {
+    flex: 1;
+    padding: 2rem;
+    position: relative;
+    transform: translateX(50px);
+    opacity: 0;
+    transition: transform 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.1),
+                opacity 0.5s ease;
+    transition-delay: 0.15s;
+}
+
+.modal-overlay.active .modal-content {
+    transform: translateX(0);
+    opacity: 1;
+}
+
+/* Einzelne Elemente Animation */
+.modal-title {
+    transform: translateX(20px);
+    opacity: 0;
+    transition: transform 0.4s ease, opacity 0.4s ease;
+    transition-delay: 0.3s;
+}
+
+.modal-price {
+    transform: translateX(20px);
+    opacity: 0;
+    transition: transform 0.4s ease, opacity 0.4s ease;
+    transition-delay: 0.4s;
+}
+
+.modal-description {
+    transform: translateX(20px);
+    opacity: 0;
+    transition: transform 0.4s ease, opacity 0.4s ease;
+    transition-delay: 0.5s;
+}
+
+.modal-discount { /* Das Elternelement des Spans */
+    transform: translateX(20px);
+    opacity: 0;
+    transition: transform 0.4s ease, opacity 0.4s ease;
+    transition-delay: 0.6s;
+}
+
+.modal-actions {
+    transform: translateX(20px);
+    opacity: 0;
+    transition: transform 0.4s ease, opacity 0.4s ease;
+    transition-delay: 0.7s;
+}
+
+.modal-overlay.active .modal-title,
+.modal-overlay.active .modal-price,
+.modal-overlay.active .modal-description,
+.modal-overlay.active .modal-discount,
+.modal-overlay.active .modal-actions {
+    transform: translateX(0);
+    opacity: 1;
+}
+
+.close-modal {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    background: none;
+    border: none;
+    font-size: 2rem;
+    cursor: pointer;
+    color: var(--muted);
+    transition: color 0.2s ease;
+}
+
+.close-modal:hover {
+    color: var(--text);
+}
+
+.modal-title {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 2rem;
+    margin-bottom: 0.1rem;
+}
+
+.modal-price {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: rgb(0, 172, 37);
+    margin-bottom: 1.5rem;
+}
+
+.original-price {
+    text-decoration: line-through;
+    font-size: 1rem;
+    color: var(--muted);
+    margin-left: 0.5rem;
+}
+
+.modal-description {
+    line-height: 1.6;
+    margin-bottom: 1.5rem;
+}
+
+.modal-discount {
+    margin-bottom: 1.5rem;
+}
+
+.modal-discount span {
+    color: var(--secondary);
+    font-weight: bold;
+}
+
+.modal-divider {
+    border: none;
+    border-top: 1px solid #eee;
+    margin: 1.5rem 0;
+}
+
+.modal-actions {
+    display: flex;
+    gap: 1rem;
+    margin-top: 2rem;
+}
+
+.add-to-cart,
+.buy-now {
+    padding: 0.75rem 1.5rem;
+    border-radius: var(--radius);
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    min-width: 120px;
+}
+
+.add-to-cart {
+    background: white;
+    border: 2px solid var(--primary);
+    color: var(--primary);
+}
+
+.add-to-cart:hover {
+    background: rgba(0, 0, 0, 0.05);
+}
+
+.buy-now {
+    background: var(--primary);
+    border: 2px solid var(--primary);
+    color: white;
+}
+
+.buy-now:hover {
+    background: #333;
+    border-color: #333;
+}
+
+/* Favoriten-Button Container */
+.favorite-btn-container {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    z-index: 2;
+}
+
+/* Favoriten-Button auf Produktkarten (Nur das Herz-Symbol) */
+.favorite-btn {
+    background: transparent;
+    border: none; /* Explizit keinen Rahmen */
+    border-radius: 0; /* Explizit keinen Radius */
+    width: 35px; /* Behält die Klickfläche */
+    height: 35px; /* Behält die Klickfläche */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem; /* Größe des Herzens */
+    cursor: pointer;
+    color: transparent; /* Macht das ursprüngliche &#9825; unsichtbar */
+    transition: all 0.2s ease;
+    padding: 0;
+    line-height: 1;
+    position: relative; /* Wichtig für die Positionierung der Pseudo-Elemente */
+    font-family: 'Arial', sans-serif; /* Oder eine andere Systemschrift, die Herzen gut darstellt */
+}
+
+/* Hover-Effekt auf den Container anwenden, um das Herz zu beeinflussen */
+.favorite-btn-container:hover .favorite-btn {
+    transform: scale(1.1); /* Skaliert den gesamten Button */
+}
+
+/* Standard Herz (hohl) */
+.favorite-btn::before {
+    content: '\2661'; /* Unicode für hohles Herz */
+    font-size: 1.5rem;
+    color: var(--muted);
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    transition: all 0.2s ease;
+}
+
+/* Gefülltes Herz (aktiv) */
+.favorite-btn.active::before {
+    content: '\2764'; /* Unicode für schwarzes Herz (gefüllt) */
+    color: #ff4d4d; /* Setzt die Farbe des gefüllten Herzens auf Rot */
+    /* transform: translate(-50%, -50%) scale(1.1); */ /* Optional: Etwas größer beim Aktivieren */
+}
+
+/* Hover-Effekt, wenn der Button NICHT aktiv ist (für das hohle Herz) */
+.favorite-btn:not(.active):hover::before {
+    color: #ff4d4d; /* Herz wird rot beim Hover (wenn hohl) */
+    transform: translate(-50%, -50%) scale(1.1); /* Skaliert das Herz beim Hover */
+}
+
+/* Hover-Effekt, wenn der Button aktiv ist (für das gefüllte Herz) */
+.favorite-btn.active:hover::before {
+    transform: translate(-50%, -50%) scale(1.1); /* Skaliert das Herz beim Hover */
+}
+
+/* Entferne Schatten, wenn der Button aktiv ist, da es keinen Hintergrund gibt */
+.favorite-btn.active {
+    box-shadow: none;
+}
+
+
+/* Styles für Warenkorb-Modal-Inhalte */
+#cartItems {
+    margin-top: 1.5rem;
+}
+
+.cart-item {
+    display: flex;
+    align-items: center;
+    margin-bottom: 1rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 1px dashed #eee;
+}
+
+.cart-item-image {
+    width: 80px;
+    height: 80px;
+    background-size: cover;
+    background-position: center;
+    border-radius: var(--radius);
+    margin-right: 1rem;
+    flex-shrink: 0;
+}
+
+.cart-item-details {
+    flex-grow: 1;
+}
+
+.cart-item-details h4 {
+    margin: 0 0 5px 0;
+    font-size: 1.1rem;
+}
+
+.cart-item-details p {
+    margin: 0;
+    font-size: 0.9rem;
+    color: var(--muted);
+}
+
+.cart-item-price {
+    font-weight: bold;
+    color: var(--primary);
+    flex-shrink: 0;
+    text-align: right;
+    margin-left: 1rem;
+}
+
+.cart-item-remove {
+    background: none;
+    border: none;
+    font-size: 1.2rem;
+    color: #ff4d4d;
+    cursor: pointer;
+    margin-left: 1rem;
+    transition: transform 0.2s ease;
+}
+
+.cart-item-remove:hover {
+    transform: scale(1.1);
+}
+
+.cart-summary {
+    text-align: right;
+    margin-top: 1.5rem;
+    font-size: 1.1rem;
+}
+
+.cart-summary p {
+    margin: 0.5rem 0;
+}
+
+.cart-summary span {
+    font-weight: bold;
+    color: var(--primary);
+}
+
+.cart-summary .original-price-total {
+    text-decoration: line-through;
+    color: var(--muted);
+    font-weight: normal;
+    font-size: 0.9em;
+    margin-left: 0.5rem;
+}
+
+.empty-cart-message {
+    text-align: center;
+    color: var(--muted);
+    padding: 2rem;
+}
+
+
+/* Responsive Styles */
+@media (max-width: 768px) {
+    .page-title {
+        font-size: 2rem;
+    }
+
+    .filters {
+        flex-direction: column;
+        align-items: center;
+        gap: 1rem;
+    }
+
+    .size-filter {
+        margin-right: 0;
+        margin-bottom: 1rem;
+        justify-content: center;
+        width: 100%;
+    }
+
+    .filters select,
+    .filters input {
+        width: 100%;
+        max-width: 300px;
+    }
+
+    .product-grid {
+        grid-template-columns: 1fr;
+        padding: 0 1rem;
+        gap: 1.5rem;
+    }
+
+    .modal-container {
+        flex-direction: column;
+        width: 90%;
+        max-height: 90vh;
+        overflow-y: auto;
+    }
+
+    .modal-image-container {
+        padding: 1rem;
+        min-height: 300px;
+        width: 100%;
+    }
+
+    /* .modal-image Regeln sind jetzt global definiert, hier nicht mehr nötig,
+       es sei denn, Sie möchten spezifische Überschreibungen für diese Breakpoints */
+    /*
+    .modal-image {
+        max-width: 100%;
+        max-height: 100%;
+        object-fit: contain;
+        width: auto;
+        height: auto;
+    }
+    */
+
+    .modal-overlay.active .modal-image-container {
+        transform: translateX(0);
+        opacity: 1;
+    }
+
+    .modal-content {
+        padding: 1.5rem;
+    }
+
+    .modal-actions {
+        margin-top: 1rem;
+    }
+
+    .cart-icon-container {
+        top: 0.5rem;
+        right: 0.5rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .page-title {
+        font-size: 1.8rem;
+    }
+
+    .modal-image-container {
+        min-height: 300px;
+        width: 100%;
+        border-radius: var(--radius) var(--radius) 0 0; /* Abgerundete Ecken oben */
+        padding: 1rem;
+    }
+
+    .product-info {
+        padding: 1rem;
+    }
+
+    .modal-title {
+        font-size: 1.5rem;
+    }
+
+    .modal-price {
+        font-size: 1.2rem;
+    }
+
+    .add-to-cart,
+    .buy-now {
+        padding: 0.6rem 1rem;
+        min-width: 100px;
+    }
+}

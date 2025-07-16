@@ -1,0 +1,398 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Heavent - PNG-Striche eingefügt</title>
+    <style>
+        body {
+            margin: 0;
+            overflow: hidden; /* Verhindert Scrollbalken */
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end; /* Inhalt (Container mit Bild) am unteren Rand ausrichten */
+            min-height: 100vh;
+            background-color: #000000; /* Schwarzer Hintergrund, passend zur Skizze */
+        }
+
+        /* --- Hintergrundbild und dessen Animation --- */
+        .image-wrapper {
+            width: 100vw;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: flex-end;
+            position: relative;
+            overflow: hidden;
+            animation: shrinkWrapper 1s forwards ease-out; /* Animation auf den Wrapper anwenden */
+            transform-origin: center bottom;
+            z-index: 1; /* NEW: Set higher than content initially, but lower than boxes/lines */
+                                    /* We'll handle visual layering for the "behind" effect with initial positioning */
+        }
+
+        .background-image {
+            max-width: 100%;
+            max-height: 100%;
+            object-fit: contain;
+            display: block;
+        }
+
+        @keyframes shrinkWrapper {
+            from {
+                transform: scale(1);
+            }
+            to {
+                transform: scale(0.8); /* Endgröße: 80% */
+            }
+        }
+
+        /* --- Hauptinhalt (Titel) --- */
+        .content {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column; /* Für Überschrift und Untertitel */
+            justify-content: flex-start; /* Oben ausrichten */
+            align-items: center; /* Horizontal zentrieren */
+            padding-top: 5vh; /* Abstand vom oberen Rand */
+            z-index: 0; /* NEW: Start behind the image. Will "pop out" with transform. */
+            text-align: center;
+            color: white;
+            font-family: Arial, sans-serif;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+            pointer-events: none; /* Macht den Content-Div durchklickbar */
+
+            /* NEW: Initial state for animation */
+            opacity: 0;
+            transform: translateY(100px); /* Start hidden below its final position */
+        }
+
+        .content > * {
+            pointer-events: auto; /* Macht die Elemente im Content-Div wieder klickbar */
+        }
+
+        .content h1 {
+            font-size: 4em; /* Größere Schrift für "Heavent" */
+            margin-bottom: 5px; /* Weniger Abstand zur Unterzeile */
+            letter-spacing: 2px; /* Etwas Abstand zwischen den Buchstaben */
+            text-shadow: 4px 1px 20px rgb(255, 255, 255);
+        }
+
+        .content p {
+            font-size: 1.5em; /* "Not Heaven" etwas größer */
+            margin-top: 0;
+            opacity: 0.7; /* Leicht transparent */
+        }
+
+        /* NEW: Keyframes for the title pop-up animation */
+        @keyframes contentPopUp {
+            from {
+                opacity: 0;
+                transform: translateY(100px); /* Start below final position */
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0); /* End at final position */
+            }
+        }
+
+        /* --- SVG-Container für PNGs --- */
+        .svg-images-container {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1; /* NEW: Adjusted to be between image and boxes, same as image-wrapper */
+            pointer-events: none; /* PNGs sollen nicht klickbar sein */
+            opacity: 1; /* Der Container selbst ist sichtbar, die Images werden animiert */
+        }
+
+        /* Standard-Initialzustand für alle Striche (wird per JS überschrieben) */
+        .svg-images-container image {
+            opacity: 0; /* Standardmäßig unsichtbar */
+            clip-path: inset(0 100% 0 0); /* Dies ist ein Fallback und wird per JS angepasst */
+        }
+
+        /* Keyframes für den individuellen Striche-Fade-in */
+        /* Strich wächst von RECHTS nach LINKS (vom Zentrum der Seite weg) */
+        @keyframes drawLineFromRightToLeft {
+            0% { opacity: 0; clip-path: inset(0 0 0 100%); } /* Rechts komplett abgeschnitten */
+            100% { opacity: 1; clip-path: inset(0 0 0 0); } /* Voll sichtbar */
+        }
+
+        /* Strich wächst von LINKS nach RECHTS (vom Zentrum der Seite weg) */
+        @keyframes drawLineFromLeftToRight {
+            0% { opacity: 0; clip-path: inset(0 100% 0 0); } /* Links komplett abgeschnitten */
+            100% { opacity: 1; clip-path: inset(0 0 0 0); } /* Voll sichtbar */
+        }
+
+        /* --- Glasboxen --- */
+        .glass-box-container {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 2; /* Still highest */
+            pointer-events: none; /* Container selbst nicht klickbar */
+        }
+
+        .glass-box {
+            position: absolute;
+            width: 300px; /* Breite der Box */
+            height: 270px; /* Höhe der Box */
+            background-color: #030303; /* Leicht transparentes Schwarz */
+            border: 1px solid rgba(255, 255, 255, 0.2); /* Heller Rand */
+            border-radius: 8px; /* Leicht abgerundete Ecken */
+            backdrop-filter: blur(8px); /* Der "Glas"-Effekt */
+            -webkit-backdrop-filter: blur(8px); /* Für Safari */
+            opacity: 0; /* Startet unsichtbar */
+            transform: translateY(20px); /* Startet leicht verschoben, um einen "Pop-in" Effekt zu haben */
+            pointer-events: auto; /* Die Boxen selbst sollen klickbar sein, falls nötig */
+
+            /* Flexbox für den Inhalt der Box */
+            display: flex;
+            flex-direction: column; /* Inhalt vertikal anordnen */
+            align-items: center; /* Horizontale Zentrierung der Elemente */
+            justify-content: center; /* Vertikale Zentrierung des gesamten Inhalts (Bild + Text) */
+            gap: 15px; /* Abstand zwischen Bild und Text */
+
+            padding: 15px; /* Einheitlicher Innenabstand */
+            box-sizing: border-box; /* Padding in die Breite/Höhe einbeziehen */
+
+            font-size: 1.2em;
+            color: white;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
+        }
+
+        /* Positionierung der einzelnen Boxen - diese sollten zu den Endpunkten der "Linien" passen */
+        .box-top-left {
+            top: 15%;
+            left: 5%;
+        }
+
+        .box-top-right {
+            top: 15%;
+            right: 5%;
+        }
+
+        .box-bottom-left {
+            bottom: 15%;
+            left: 5%;
+        }
+
+        .box-bottom-right {
+            bottom: 15%;
+            right: 5%;
+        }
+
+        /* Animation für die Boxen */
+        @keyframes fadeInAndSlideUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* --- STYLES FÜR BOX-INHALTE --- */
+        .glass-box img {
+            max-width: 100%;
+            max-height: 70%;
+            height: auto;
+            display: block;
+            object-fit: contain;
+            flex-shrink: 0;
+        }
+
+        .glass-box .box-text {
+            font-size: 0.9em;
+            text-align: center;
+            line-height: 1.4;
+            opacity: 0.8;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+        }
+
+        /* --- Neuer Style für den Impressum-Link --- */
+        .impressum-link-container {
+            position: absolute; /* Position absolut zum Body */
+            bottom: 2vh; /* Abstand vom unteren Rand des Viewports */
+            left: 50%; /* Horizontal zentrieren */
+            transform: translateX(-50%); /* Exakte Zentrierung */
+            z-index: 10; /* Soll über allem anderen liegen */
+            text-align: center;
+            padding: 5px 10px;
+            background-color: rgba(0, 0, 0, 0.5); /* Leichter, transparenter Hintergrund */
+            border-radius: 5px;
+            pointer-events: auto; /* Muss klickbar sein */
+        }
+
+        .impressum-link-container a {
+            color: rgba(255, 255, 255, 0.7); /* Hellerer, leicht transparenter Text */
+            text-decoration: none; /* Keine Unterstreichung */
+            font-family: Arial, sans-serif;
+            font-size: 0.9em;
+            transition: color 0.3s ease; /* Übergang für Hover-Effekt */
+        }
+
+        .impressum-link-container a:hover {
+            color: white; /* Weiß bei Hover */
+            text-decoration: underline; /* Unterstreichung bei Hover */
+        }
+    </style>
+</head>
+<body>
+    <div class="image-wrapper">
+        <img src="Logo.png" alt="Hintergrundbild" class="background-image">
+    </div>
+
+    <div class="content" id="mainTitleContent"> <div>
+            <h1>Heavent</h1>
+            <p>Heaven't YOU Heard Yet?</p>
+        </div>
+    </div>
+
+    <svg class="svg-images-container" viewBox="0 0 1000 1000" preserveAspectRatio="xMidYMid meet">
+        <image id="strich1" href="strich.png" x="50" y="400" width="150" height="20"
+                transform="rotate(30 225 310) translate(0, 0)"></image>
+
+        <image id="strich2" href="strich.png" x="800" y="400" width="150" height="20"
+                transform="rotate(-30 775 310) translate(0, 0)"></image>
+
+        <image id="strich3" href="strich.png" x="10" y="600" width="150" height="20"
+                transform="rotate(-30 225 710) translate(0, 0)"></image>
+
+        <image id="strich4" href="strich.png" x="850" y="600" width="150" height="20"
+                transform="rotate(30 775 710) translate(0, 0)"></image>
+    </svg>
+
+    <div class="glass-box-container">
+        <div id="box1" class="glass-box box-top-left">
+            <img src="idea.png" alt="Icon 1">
+            <p class="box-text">Latest Drop!</p>
+        </div>
+        <div id="box2" class="glass-box box-top-right">
+            <img src="idea.png" alt="Icon 2">
+            <p class="box-text">Rabatte</p>
+        </div>
+        <div id="box3" class="glass-box box-bottom-left">
+            <img src="Mockup.png" alt="Icon 3">
+            <p class="box-text">Collection</p>
+        </div>
+        <div id="box4" class="glass-box box-bottom-right">
+            <img src="idea.png" alt="Icon 4">
+            <p class="box-text">Account</p>
+        </div>
+    </div>
+
+    <div class="impressum-link-container">
+        <a href="impressum.html" target="_blank">Impressum</a>
+    </div>
+
+    <script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const imageWrapper = document.querySelector('.image-wrapper');
+        const svgImagesContainer = document.querySelector('.svg-images-container');
+        const glassBoxes = document.querySelectorAll('.glass-box');
+        const pngImages = document.querySelectorAll('.svg-images-container image');
+        const mainTitleContent = document.getElementById('mainTitleContent'); // Get the main title content div
+
+        // --- Global timings for animations ---
+        // REDUCED: Duration of background image shrink in ms
+        const initialImageShrinkDuration = 700; // Was 1000ms, now 0.7 seconds
+
+        const pngFadeInDuration = 800; // Duration of a single PNG animation in ms
+        const delayBetweenPNGs = 50; // ms delay between starting individual PNGs
+
+        const boxAnimationStartDelay = 400; // Milliseconds after simultaneous start of Logo & Strokes
+        const boxFadeInDuration = 800; // Duration of a single box animation in ms
+
+        // Adjusted: Animation timing for the main title content
+        // Start even closer to the shrink end, or just after it.
+        const contentAnimationStartDelay = initialImageShrinkDuration - 100; // Was -200, now -100 (starts later relative to shrink, but shrink itself is faster)
+        const contentAnimationDuration = 800; // Duration of title pop-up animation
+
+        const imgElement = document.querySelector('.background-image');
+
+        // Function to safely start all animations once the background image is loaded
+        const initializeAnimations = () => {
+            console.log('Background image loaded or animation readiness reached. Starting animation sequence...');
+            startAnimations();
+        };
+
+        // Event listener for image load
+        imgElement.addEventListener('load', initializeAnimations);
+        imgElement.addEventListener('error', () => {
+            console.error('Error loading background image! Check path: ' + imgElement.src);
+            // If image fails to load, proceed with animations after a very short delay
+            setTimeout(initializeAnimations, 100);
+        });
+
+        // Check if image is already loaded (from cache)
+        if (imgElement.complete) {
+            initializeAnimations();
+        }
+
+
+        function getAnimationAndInitialClipPathForStroke(imgElement) {
+            const svgRect = svgImagesContainer.getBoundingClientRect();
+            const svgCenterX = svgRect.left + svgRect.width / 2;
+
+            const imgRect = imgElement.getBoundingClientRect();
+            const imgCenterX = imgRect.left + imgRect.width / 2;
+
+            if (imgCenterX < svgCenterX) {
+                return {
+                    animationName: 'drawLineFromRightToLeft',
+                    initialClipPath: 'inset(0 0 0 100%)'
+                };
+            } else {
+                return {
+                    animationName: 'drawLineFromLeftToRight',
+                    initialClipPath: 'inset(0 100% 0 0)'
+                };
+            }
+        }
+
+        function startAnimations() {
+            console.log('Starting PNG phase (parallel to image shrink)...');
+
+            pngImages.forEach((img, index) => {
+                const delay = (index * delayBetweenPNGs / 1000); // Delay in seconds
+                const { animationName, initialClipPath } = getAnimationAndInitialClipPathForStroke(img);
+
+                img.style.clipPath = initialClipPath;
+                img.style.opacity = '0';
+
+                img.style.animation = `${animationName} ${pngFadeInDuration / 1000}s ease-out ${delay}s forwards`;
+                console.log(`PNG ${index + 1} animation '${animationName}' started with delay ${delay * 1000}ms.`);
+            });
+
+            setTimeout(() => {
+                console.log('Starting box phase (parallel and overlapping with PNGs)...');
+                glassBoxes.forEach((box) => {
+                    box.style.animation = `fadeInAndSlideUp ${boxFadeInDuration / 1000}s forwards ease-out`;
+                    console.log(`Box started.`);
+                });
+            }, boxAnimationStartDelay);
+
+            // Trigger the main title pop-up animation
+            setTimeout(() => {
+                console.log('Starting title pop-up animation...');
+                mainTitleContent.style.animation = `contentPopUp ${contentAnimationDuration / 1000}s forwards ease-out`;
+            }, contentAnimationStartDelay);
+        }
+    });
+    </script>
+</body>
+</html>

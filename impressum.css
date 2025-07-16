@@ -1,0 +1,58 @@
+/* Impressum-Container */
+.impressum-container {
+    max-width: 800px; /* Maximale Breite, passt sich deinem Design an */
+    margin: 40px auto; /* Zentriert den Inhalt und gibt oben/unten etwas Abstand */
+    padding: 20px;
+    font-family: Arial, sans-serif; /* Standard-Schriftart, kann an dein Branding angepasst werden */
+    line-height: 1.6;
+    color: #333; /* Standardtextfarbe */
+}
+
+/* Überschriften */
+.impressum-container h1 {
+    font-size: 2.2em; /* Größe der Hauptüberschrift */
+    color: #333; /* Farbe der Hauptüberschrift */
+    margin-bottom: 30px;
+    text-align: center; /* Zentriert die Hauptüberschrift */
+}
+
+.impressum-container h2 {
+    font-size: 1.4em; /* Größe der Unterüberschriften */
+    color: #555; /* Farbe der Unterüberschriften */
+    margin-top: 30px;
+    margin-bottom: 10px;
+    border-bottom: 1px solid #eee; /* Leichte Trennlinie unter H2 */
+    padding-bottom: 5px;
+}
+
+/* Absätze */
+.impressum-container p {
+    margin-bottom: 15px;
+}
+
+/* Links */
+.impressum-container a {
+    color: #007bff; /* Standardlinkfarbe, passe sie an dein Branding an */
+    text-decoration: none; /* Keine Unterstreichung */
+}
+
+.impressum-container a:hover {
+    text-decoration: underline; /* Unterstreichung beim Hover */
+}
+
+/* Optionale Anpassung für mobile Ansicht (Zeilenumbruch für OS-Plattform) */
+@media (max-width: 600px) {
+    .impressum-container {
+        margin: 20px 15px; /* Etwas weniger Seitenabstand auf kleinen Bildschirmen */
+        padding: 15px;
+    }
+    .impressum-container h1 {
+        font-size: 1.8em;
+    }
+    .impressum-container h2 {
+        font-size: 1.2em;
+    }
+    .impressum-container .mobile-break {
+        display: block; /* Zeilenumbruch auf kleinen Bildschirmen erzwingen */
+    }
+}

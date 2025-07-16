@@ -1,0 +1,161 @@
+<html lang="de">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Alle Produkte – True Vintage</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700&family=Roboto:wght@400;500&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="view-all.css" />
+</head>
+<body>
+    <header>
+        <h1 class="page-title">Alle Produkte</h1>
+        <div class="filters">
+            <div class="size-filter">
+                <button class="size-btn" data-size="all">Alle</button>
+                <button class="size-btn" data-size="XS">XS</button>
+                <button class="size-btn" data-size="S">S</button>
+                <button class="size-btn" data-size="M">M</button>
+                <button class="size-btn" data-size="L">L</button>
+                <button class="size-btn" data-size="XL">XL</button>
+            </div>
+
+            <select id="categoryFilter">
+                <option value="all">Alle Kategorien</option>
+                <option value="shoes">Schuhe</option>
+                <option value="shirts">Shirts</option>
+                <option value="accessories">Accessoires</option>
+            </select>
+            <select id="priceFilter">
+                <option value="all">Alle Preise</option>
+                <option value="low">Unter €100</option>
+                <option value="mid">€100 – €200</option>
+                <option value="high">Über €200</option>
+            </select>
+            <input type="text" id="searchInput" placeholder="Suche..." />
+        </div>
+        <div class="cart-icon-container">
+            <span class="cart-count" id="cartCount">0</span>
+            <button class="cart-button" id="openCartModal">&#128722;</button> </div>
+    </header>
+
+
+
+
+    <main class="product-grid">
+        <article class="product-card" data-category="shoes" data-price="high" data-size="XL" data-id="nike-airmax-97-xl-001">
+            <div class="product-image" style="background-image: url('coming-soon.png');">
+                <div class="badge-wrapper">
+                    <img class="corner-badge" src="watermark.png" alt="Badge">
+                    <div class="badge-tooltip">
+                        Property of True Vintage. Do not use without permission!</div>
+                </div>
+            </div>
+            <h3 style="margin-left: 2%;">Nike Air Max 97</h3>
+            <p style="margin-left: 2%;">Preis: €220</p>
+            <div class="favorite-btn-container">
+                <button class="favorite-btn" data-id="your-product-id">&#9825;</button>
+            </div>
+        </article>
+
+        <article class="product-card" data-category="shirts" data-price="mid" data-size="M" data-id="vintage-metallica-shirt-m-001">
+            <div class="product-image" style="background-image: url('coming-soon.png');">
+                <div class="badge-wrapper">
+                    <img class="corner-badge" src="watermark.png" alt="Badge">
+                    <div class="badge-tooltip">
+                        Property of True Vintage. Do not use without permission!</div>
+                </div>
+            </div>
+            <h3 style="margin-left: 2%;">Vintage Metallica Shirt</h3>
+            <p style="margin-left: 2%;">Preis: €150</p>
+            <div class="favorite-btn-container">
+                <button class="favorite-btn" data-id="your-product-id">&#9825;</button>
+            </div>
+        </article>
+
+        <article class="product-card" data-category="shoes" data-price="high" data-size="XL" data-id="nike-airmax-97-xl-001">
+            <div class="product-image" style="background-image: url('coming-soon.png');">
+                <div class="badge-wrapper">
+                    <img class="corner-badge" src="watermark.png" alt="Badge">
+                    <div class="badge-tooltip">
+                        Property of True Vintage. Do not use without permission!</div>
+                </div>
+            </div>
+            <h3 style="margin-left: 2%;">Nike Air Max 97</h3>
+            <p style="margin-left: 2%;">Preis: €220</p>
+            <div class="favorite-btn-container">
+                <button class="favorite-btn" data-id="your-product-id">&#9825;</button>
+            </div>
+        </article>
+
+        <article class="product-card" data-category="shirts" data-price="mid" data-size="M" data-id="vintage-metallica-shirt-m-001">
+            <div class="product-image" style="background-image: url('coming-soon.png');">
+                <div class="badge-wrapper">
+                    <img class="corner-badge" src="watermark.png" alt="Badge">
+                    <div class="badge-tooltip">
+                        Property of True Vintage. Do not use without permission!</div>
+                </div>
+            </div>
+            <h3 style="margin-left: 2%;">Vintage Metallica Shirt</h3>
+            <p style="margin-left: 2%;">Preis: €150</p>
+            <div class="favorite-btn-container">
+                <button class="favorite-btn" data-id="your-product-id">&#9825;</button>
+            </div>
+        </article>
+
+
+        <div class="modal-overlay" id="productModal">
+            <div class="modal-container">
+                <div class="modal-image-container">
+                    <img class="modal-image" src="" alt="Produktbild">
+                </div>
+                <div class="modal-content">
+                    <button class="close-modal">&times;</button>
+                    <h2 class="modal-title">Produkt Title</h2>
+                    <p class="product-size">Größe: </p>
+                    <div class="modal-price">19,99€ <span class="original-price">50€</span></div>
+                    <p class="modal-description">Premium Qualität mit langer Haltbarkeit.</p>
+
+                    <div class="modal-discount">
+                        <strong>Extra Rabatt: <span>0%</span></strong>
+                    </div>
+
+                    <hr class="modal-divider">
+
+                    <div class="modal-actions">
+                        <button class="add-to-cart">Warenkorb</button>
+                        <button class="buy-now">Kaufen</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <p>© 2024 Heavent</p>
+    </footer>
+
+    <div class="modal-overlay" id="cartModal">
+        <div class="modal-container">
+            <div class="modal-content">
+                <button class="close-modal" id="closeCartModal">&times;</button>
+                <h2 class="modal-title">Dein Warenkorb</h2>
+                <div id="cartItems">
+                    <p class="empty-cart-message">Dein Warenkorb ist leer.</p>
+                </div>
+                <hr class="modal-divider">
+                <div class="cart-summary">
+                    <p>Gesamtzahl Artikel: <span id="cartTotalItems">0</span></p>
+                    <p>Gesamtrabatt: <span id="cartTotalDiscount">0.00€</span></p>
+                    <p>Gesamtpreis: <span id="cartTotalPrice">0.00€</span></p>
+                </div>
+                <div class="modal-actions">
+                    <button class="buy-now" id="checkoutBtn">Zur Kasse</button>
+                    <button class="add-to-cart" id="clearCartBtn">Warenkorb leeren</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="view-all.js"></script>
+</body>
+</html>

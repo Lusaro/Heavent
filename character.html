@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Character Cards – Modemarke</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@900&display=swap" rel="stylesheet">
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background: #0e0e0e;
+            font-family: 'Arial', sans-serif;
+            color: white;
+            height: 100vh; 
+            overflow: hidden; /* Standardmäßig hidden auf der Character-Seite */
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        /* Klasse, die per JS hinzugefügt wird, um Scrollen zu erlauben */
+        body.scroll-allowed {
+            overflow: auto;
+        }
+
+        h1 {
+            width: 100%;
+            text-align: center;
+            font-family: 'Montserrat Black', sans-serif;
+            font-size: 3.5em;
+            margin-bottom: 50px;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            color: white;
+            flex-shrink: 0;
+            padding-bottom: 30px;
+            /* Startzustand für Animation */
+            opacity: 0;
+            transform: translateY(20px);
+            /* filter: blur(5px); -- DIESE ZEILE WIRD ENTFERNT ODER AUSKOMMENTIERT */
+            /* Transition für Animation (ohne delay) */
+            transition: opacity 1s ease-out, transform 1s ease-out; /* filter wurde entfernt */
+        }
+
+        .character-cards-wrapper {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 15px;
+            flex-shrink: 0;
+            padding: 10px;
+            box-sizing: border-box;
+            width: 100%;
+            padding-bottom: 5%;
+        }
+
+        .character-card {
+            width: 350px;
+            height: 420px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            backdrop-filter: blur(8px);
+            box-shadow: 0 0 20px rgba(255, 255, 255, 0.05);
+            /* Hover Transition bleibt bestehen */
+            transition: transform 0.3s ease; 
+            flex-shrink: 0;
+
+            /* Startzustand für Animation */
+            opacity: 0;
+            transform: translateY(20px);
+            filter: blur(5px); /* Hier bleibt der Blur bestehen */
+            /* Transition für Animation (ohne delay, wird per JS/nth-child gesteuert) */
+            transition: opacity 0.8s ease-out, transform 0.8s ease-out, filter 0.8s ease-out;
+        }
+
+        .character-card:hover {
+            transform: translateY(-10px);
+        }
+
+        .character-image {
+            width: 100%;
+            height: 60%;
+            background-size: contain; 
+            background-position: center;
+            background-repeat: no-repeat;
+        }
+
+        .character-info {
+            padding: 30px 15px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            flex-shrink: 0;
+            width: 100%;
+            box-sizing: border-box;
+        }
+
+        .character-name {
+            font-size: 1.4em;
+            font-weight: bold;
+            letter-spacing: 1px;
+        }
+
+        .character-slogan {
+            font-style: italic;
+            font-size: 0.9em;
+            opacity: 0.8;
+        }
+
+        .character-desc {
+            font-size: 0.9em;
+            opacity: 0.7;
+        }
+
+        /* --- Animationsziele (werden per JS erreicht) --- */
+
+        h1.animated { /* Für H1 wird nur opacity und transform animiert */
+            opacity: 1;
+            transform: translateY(0);
+            /* filter: blur(0) wird hier auch weggelassen */
+        }
+        
+        .character-card.animated { /* Für Karten bleibt der Blur erhalten */
+            opacity: 1;
+            transform: translateY(0);
+            filter: blur(0);
+        }
+
+        /* Gestaffelte Verzögerungen für die Karten-Animation */
+        .character-card:nth-child(1) { transition-delay: 0.2s; }
+        .character-card:nth-child(2) { transition-delay: 0.3s; }
+        .character-card:nth-child(3) { transition-delay: 0.4s; }
+        .character-card:nth-child(4) { transition-delay: 0.5s; }
+        /* Füge weitere hinzu, falls du mehr Karten hast: */
+        /* .character-card:nth-child(5) { transition-delay: 0.6s; } */
+        /* .character-card:nth-child(6) { transition-delay: 0.7s; } */
+    </style>
+</head>
+<body>
+    <h1>Character</h1>
+
+    <div class="character-cards-wrapper">
+        <div class="character-card">
+            <div class="character-image" style="background-image: url('nero.jpg');"></div>
+            <div class="character-info">
+                <div class="character-name">Nero</div>
+                <div class="character-slogan">"Ego höher als der Himmel es jemals war."</div>
+                <div class="character-desc">Kalt, dominant, stark, emotionslos - das Ideal eines Dreambodys.</div>
+            </div>
+        </div>
+
+        <div class="character-card">
+            <div class="character-image" style="background-image: url('darian.jpg');"></div>
+            <div class="character-info">
+                <div class="character-name">Zayden</div>
+                <div class="character-slogan">"Weiß etwas über Heavent, was du nicht weiß..."</div>
+                <div class="character-desc">Verletzlich & tödlich. Sanfte Outfits mit bedenklicher Haltung.</div>
+            </div>
+        </div>
+
+        <div class="character-card">
+            <div class="character-image" style="background-image: url('idea.png');"></div>
+            <div class="character-info">
+                <div class="character-name">Evelyn</div>
+                <div class="character-slogan">"Ein gefallener Engel."</div>
+                <div class="character-desc">Unnahbar, schön & sad. Der Himmel ist nicht mehr der, der er mal war.</div>
+            </div>
+        </div>
+
+        <div class="character-card">
+            <div class="character-image" style="background-image: url('Sylvia.png');"></div>
+            <div class="character-info">
+                <div class="character-name">Sylvia</div>
+                <div class="character-slogan">"Chaos never looked this polished."</div>
+                <div class="character-desc">Feuer in sich – Fashion als Waffe.</div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const characterTitle = document.querySelector('h1');
+            const characterCards = document.querySelectorAll('.character-card');
+            
+            const elementsToAnimate = [characterTitle, ...characterCards].filter(Boolean);
+
+            document.body.classList.add('no-scroll-temp'); // Alte Klasse, kann umbenannt werden, wenn body.scroll-allowed verwendet wird
+
+            setTimeout(() => {
+                elementsToAnimate.forEach(el => {
+                    el.classList.add('animated');
+                });
+                
+                const numberOfCards = characterCards.length;
+                let totalAnimationDurationMs = 0;
+                if (numberOfCards > 0) {
+                    const lastCardDelay = 0.2 + (numberOfCards - 1) * 0.1; 
+                    totalAnimationDurationMs = (lastCardDelay + 0.8) * 1000; // 0.8s ist die Karten-Transition-Dauer
+                } else {
+                    totalAnimationDurationMs = 1 * 1000; // 1s ist die h1-Transition-Dauer
+                }
+
+                setTimeout(() => {
+                    document.body.classList.add('scroll-allowed'); // Diese Klasse setzt overflow: auto
+                    // Wenn du die Klasse 'no-scroll-temp' entfernen möchtest, kannst du das hier tun,
+                    // aber 'scroll-allowed' überschreibt 'no-scroll-temp' ohnehin, wenn es später definiert ist.
+                    // document.body.classList.remove('no-scroll-temp'); 
+                }, totalAnimationDurationMs + 50); 
+
+            }, 50);
+        });
+    </script>
+</body>
+</html>
