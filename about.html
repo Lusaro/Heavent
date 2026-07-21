@@ -223,32 +223,6 @@
             padding: 0;
         }
 
-        /* --- Neuer Style für den Impressum-Link --- */
-        .impressum-link-container {
-            position: absolute; /* Position absolut zum Body */
-            bottom: 2vh; /* Abstand vom unteren Rand des Viewports */
-            left: 50%; /* Horizontal zentrieren */
-            transform: translateX(-50%); /* Exakte Zentrierung */
-            z-index: 10; /* Soll über allem anderen liegen */
-            text-align: center;
-            padding: 5px 10px;
-            background-color: rgba(0, 0, 0, 0.5); /* Leichter, transparenter Hintergrund */
-            border-radius: 5px;
-            pointer-events: auto; /* Muss klickbar sein */
-        }
-
-        .impressum-link-container a {
-            color: rgba(255, 255, 255, 0.7); /* Hellerer, leicht transparenter Text */
-            text-decoration: none; /* Keine Unterstreichung */
-            font-family: Arial, sans-serif;
-            font-size: 0.9em;
-            transition: color 0.3s ease; /* Übergang für Hover-Effekt */
-        }
-
-        .impressum-link-container a:hover {
-            color: white; /* Weiß bei Hover */
-            text-decoration: underline; /* Unterstreichung bei Hover */
-        }
     </style>
 </head>
 <body>
@@ -295,10 +269,6 @@
             <img src="idea.png" alt="Icon 4">
             <p class="box-text">Account</p>
         </div>
-    </div>
-
-    <div class="impressum-link-container">
-        <a href="impressum.html" target="_blank">Impressum</a>
     </div>
 
     <script>
