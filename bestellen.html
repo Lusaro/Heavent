@@ -1,0 +1,751 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Lieferando - Bestellung</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700;14..32,800&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="bestellen.css" />
+    <script src="preisliste.js"></script>
+</head>
+<body>
+    <!-- ===== HEADER ===== -->
+    <header>
+        <div class="container navbar">
+            <div class="Logo"><img src="Lieferando.png" alt="Lieferando Logo" style="height:150px; width:auto;" /></div>
+            <ul class="nav-links">
+                <li><a href="index.html">Startseite</a></li>
+                <li><a href="#">HEAVENT</a></li>
+                <li><a href="#" class="active">Bestellung</a></li>
+                <li><a href="partner.html">Partner</a></li>
+                <li><a href="#">Preise</a></li>
+            </ul>
+            <div class="nav-actions">
+                <button class="btn-login" id="loginBtnHeader">Anmelden</button>
+                <div class="header-avatar" id="headerAvatar">
+                    <img id="headerAvatarImg" src="" alt="Avatar">
+                    <span class="name" id="headerAvatarName">User</span>
+                </div>
+                <a href="https://discord.gg/utngw94B7b" class="btn btn-primary">Werde Teil vom Team!</a>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <!-- ===== BREADCRUMB ===== -->
+        <div class="container">
+            <nav class="breadcrumb">
+                <a href="index.html">🏠 Startseite</a> / <a href="lieferando.html"><span>Lieferando</span></a> / <span>Bestellung aufgeben</span>
+            </nav>
+        </div>
+
+        <!-- ===== HERO ===== -->
+        <section class="hero container" style="padding: 30px 0 20px;">
+            <span class="hero-badge" style="display: inline-flex; align-items: center; gap: 8px;">
+                🛒 Jetzt neu:
+                <a href="lieferando+.html"> <img src="Lieferando+.png" style="height: 50px; width: auto;"> </a>
+            </span>
+            <h1 style="font-size: clamp(2rem, 3vw, 2.8rem);">
+                Deine <span class="highlight">Bestellung</span>
+            </h1>
+            <p class="subtitle" style="max-width: 500px; margin: 0 auto 20px;">
+                Wähle Kistenart und Anzahl – der Preis wird automatisch berechnet.
+            </p>
+        </section>
+
+        <!-- ===== BESTELLFORMULAR ===== -->
+        <section class="container" style="padding-top: 0; padding-bottom: 40px;">
+            <div class="order-form-wrapper">
+                <div id="orderItems"></div>
+                <div class="add-row-wrapper">
+                    <button id="addItemBtn" class="btn-add-row">+</button>
+                </div>
+
+                <div class="order-summary">
+                    <div class="total-price">
+                        <span class="total-label">Gesamtpreis:</span>
+                        <span class="total-amount" id="totalPrice">0.00€</span>
+                    </div>
+                    <div class="order-actions">
+                        <button id="selfPickupBtn" class="btn btn-self" style="padding: 12px 24px; font-size: 1rem;">
+                            📦 Selbst abholen
+                        </button>
+                        <button id="deliveryBtn" class="btn btn-delivery" style="padding: 12px 24px; font-size: 1rem;">
+                            🚚 Lieferung
+                        </button>
+                        <button id="submitOrderBtn" class="btn btn-secondary" disabled style="padding: 12px 40px; font-size: 1.1rem;">
+                            Alle bestellen →
+                        </button>
+                    </div>
+                </div>
+
+                <!-- ===== PREIS-DETAILS ===== -->
+                <div id="priceDetails" class="price-details">
+                    <div class="price-detail-row">
+                        <span class="label">Versandkosten:</span>
+                        <span class="value" id="shippingCosts">
+                            0.00€ <span class="surcharge-info" id="surchargePercent">(+0%)</span>
+                        </span>
+                    </div>
+                    <div class="price-detail-row" style="border-top: 1px solid var(--border-color); padding-top: 8px; margin-top: 4px;">
+                        <span class="label" style="font-weight: 700;">Gültiger Preis:</span>
+                        <span class="value highlight" id="finalPrice" style="font-size: 1.6rem;">0.00€</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- ===== ACCOUNT MODAL ===== -->
+    <div id="accountModal" class="modal-overlay">
+        <div class="modal-content account-modal">
+            <button class="modal-close" id="closeModalBtn">&times;</button>
+            <h2>🔐 Account</h2>
+            <p id="modalSubtitle">Melde dich mit deinem Minecraft-Namen an</p>
+
+            <div id="loginView">
+                <div class="login-row">
+                    <div class="login-head">
+                        <img id="loginHeadImg" src="" alt="Head">
+                    </div>
+                    <div class="login-field">
+                        <label for="mcNameInput">Minecraft-Name</label>
+                        <input type="text" id="mcNameInput" placeholder="z.B. xLusaro" />
+                    </div>
+                </div>
+                <div class="error-msg" id="errorMsg">Bitte gib einen gültigen Namen ein.</div>
+                <button class="btn-submit" id="loginBtn">Anmelden</button>
+            </div>
+
+            <div id="profileView" class="profile-view">
+                <div class="profile-head">
+                    <img id="profileHead" src="" alt="Minecraft-Head">
+                </div>
+                <div class="profile-info">
+                    <div class="name" id="profileName">–</div>
+                    <div class="status"><span class="dot"></span>Online</div>
+                </div>
+                <button class="btn-logout" id="logoutBtn">Abmelden</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // ===== BESTELL-LOGIK (komplett) =====
+        const ITEMS_PER_DOUBLE_CHEST = 3456;
+        const ITEMS_PER_SINGLE_CHEST = 1728;
+        const FALLBACK_IMAGE = 'https://via.placeholder.com/48x48/2a3440/8b5cf6?text=?';
+        const TEXTURE_BASE_PATH = './minecraft/';
+
+        const NAME_MAPPING = {
+            'diamantblock': 'diamond_block',
+            'diamant': 'diamond',
+            'stein': 'stone',
+            'kohleblock': 'coal_block',
+            'eisenblock': 'iron_block',
+            'goldblock': 'gold_block',
+            'redstoneblock': 'redstone_block',
+            'smaragdblock': 'emerald_block',
+            'lapislazuliblock': 'lapis_block',
+            'netheritblock': 'netherite_block',
+            'kupferblock': 'copper_block',
+            'angelaufener_kupferblock': 'exposed_copper',
+            'verwitterter_kupferblock': 'weathered_copper',
+            'oxidierter_kupferblock': 'oxidized_copper',
+            'quarzblock': 'quartz_block',
+            'glatterquarzblock': 'smooth_quartz',
+            'amathystblock': 'amethyst_block',
+            'eichenstamm': 'oak_log',
+            'eichenholz': 'oak_log',
+            'eichenholzbretter': 'oak_planks',
+            'eichenholztreppe': 'oak_stairs',
+            'eichenholzstufe': 'oak_slab',
+            'eichenholzzaun': 'oak_fence',
+            'eichenholzzauntor': 'oak_fence_gate',
+            'eichenholztür': 'oak_door',
+            'eichenholzfalltür': 'oak_trapdoor',
+            'fichtenstamm': 'spruce_log',
+            'fichtenholz': 'spruce_log',
+            'fichtenholzbretter': 'spruce_planks',
+            'birkenstamm': 'birch_log',
+            'birkenholz': 'birch_log',
+            'tropenbaumstamm': 'jungle_log',
+            'tropenholz': 'jungle_log',
+            'akazienstamm': 'acacia_log',
+            'akazienholz': 'acacia_log',
+            'schwarzeichenstamm': 'dark_oak_log',
+            'schwarzeichenholz': 'dark_oak_log',
+            'mangrovenstamm': 'mangrove_log',
+            'mangrovenholz': 'mangrove_log',
+            'kirschstamm': 'cherry_log',
+            'kirschholz': 'cherry_log',
+            'blasseichenstamm': 'pale_oak_log',
+            'blasseichenholz': 'pale_oak_log',
+            'glas': 'glass',
+            'weißesglas': 'white_stained_glass',
+            'schwarzesglas': 'black_stained_glass',
+            'rotesglas': 'red_stained_glass',
+            'orangesglas': 'orange_stained_glass',
+            'gelbesglas': 'yellow_stained_glass',
+            'grünesglas': 'lime_stained_glass',
+            'türkisesglas': 'cyan_stained_glass',
+            'blauesglas': 'blue_stained_glass',
+            'violettesglas': 'purple_stained_glass',
+            'magenta_glss': 'magenta_stained_glass',
+            'rosaglas': 'pink_stained_glass',
+            'ofen': 'furnace',
+            'werkbank': 'crafting_table',
+            'truhe': 'chest',
+            'endertruhe': 'ender_chest',
+            'fackel': 'torch',
+            'laterne': 'lantern',
+            'seelenlaterne': 'soul_lantern',
+            'amboss': 'anvil',
+            'verzauberungstisch': 'enchanting_table',
+            'braustand': 'brewing_stand',
+            'kessel': 'cauldron',
+            'komposter': 'composter',
+            'notenblock': 'note_block',
+            'plattenspieler': 'jukebox',
+            'bücherregal': 'bookshelf',
+            'lesepult': 'lectern',
+            'leiter': 'ladder',
+            'gerüst': 'scaffolding',
+            'blitzableiter': 'lightning_rod',
+            'schleimblock': 'slime_block',
+            'honigblock': 'honey_block',
+            'honigwabenblock': 'honeycomb_block',
+            'kürbis': 'pumpkin',
+            'geschnitzterkürbis': 'carved_pumpkin',
+            'kürbislaterne': 'jack_o_lantern',
+            'melon': 'melon',
+            'strohballen': 'hay_bale',
+            'seelensand': 'soul_sand',
+            'seelenerde': 'soul_soil',
+            'knochenblock': 'bone_block',
+            'obsidian': 'obsidian',
+            'weinenderobsidian': 'crying_obsidian',
+            'endstein': 'end_stone',
+            'purpurblock': 'purpur_block',
+            'prismarin': 'prismarine',
+            'seelaterne': 'sea_lantern',
+            'leuchtstein': 'glowstone',
+            'basalt': 'basalt',
+            'glatterbasalt': 'smooth_basalt',
+            'polierterbasalt': 'polished_basalt',
+            'schwarzstein': 'blackstone',
+            'golddurchzogener_schwarzstein': 'gilded_blackstone',
+            'netherrack': 'netherrack',
+            'netherziegel': 'nether_bricks',
+            'rotenetherziegel': 'red_nether_bricks',
+            'kalzit': 'calcite',
+            'tropfsteinblock': 'dripstone_block',
+            'magmablock': 'magma_block',
+            'eis': 'ice',
+            'packeis': 'packed_ice',
+            'blaueis': 'blue_ice',
+            'schneeblock': 'snow_block',
+            'sand': 'sand',
+            'roter_sand': 'red_sand',
+            'kies': 'gravel',
+            'ton': 'clay',
+            'erde': 'dirt',
+            'grasblock': 'grass_block',
+            'podsol': 'podzol',
+            'myzel': 'mycelium',
+            'mossblock': 'moss_block',
+            'blassmoosblock': 'pale_moss_block',
+            'kohle': 'coal',
+            'eisenbarren': 'iron_ingot',
+            'goldbarren': 'gold_ingot',
+            'netheritbarren': 'netherite_ingot',
+            'smaragd': 'emerald',
+            'lapislazuli': 'lapis_lazuli',
+            'redstone': 'redstone',
+            'netherwarze': 'nether_wart',
+            'wirrwarze': 'warped_wart',
+            'karmesinwarze': 'crimson_fungus',
+            'brauner_pilz': 'brown_mushroom',
+            'roter_pilz': 'red_mushroom',
+            'zuckerrohr': 'sugar_cane',
+            'kaktus': 'cactus',
+            'bambus': 'bamboo',
+            'seetang': 'kelp',
+            'getrockneter_seetangblock': 'dried_kelp_block',
+            'seerosenblatt': 'lily_pad',
+            'spinnennetz': 'cobweb'
+        };
+
+        let itemDatabase = {};
+        let itemCounter = 0;
+        let selectedShipping = null;
+        let basePrice = 0;
+
+        const orderItemsContainer = document.getElementById('orderItems');
+        const addBtn = document.getElementById('addItemBtn');
+        const totalPriceDisplay = document.getElementById('totalPrice');
+        const submitBtn = document.getElementById('submitOrderBtn');
+        const selfPickupBtn = document.getElementById('selfPickupBtn');
+        const deliveryBtn = document.getElementById('deliveryBtn');
+        const priceDetails = document.getElementById('priceDetails');
+        const shippingCostsDisplay = document.getElementById('shippingCosts');
+        const finalPriceDisplay = document.getElementById('finalPrice');
+
+        function getPriceFromEntry(entry) {
+            let price = entry?.kunden_preis ?? entry?.farmer_preis ?? null;
+            if (typeof price === 'string') price = parseFloat(price.replace(',', '.'));
+            return (typeof price === 'number' && !isNaN(price)) ? price : null;
+        }
+
+        function getItemPrice(itemName) {
+            const name = itemName.trim();
+            if (!name) return null;
+            if (itemDatabase[name]) return getPriceFromEntry(itemDatabase[name]);
+            const lower = name.toLowerCase();
+            for (const [key, val] of Object.entries(itemDatabase)) {
+                if (key.toLowerCase() === lower) return getPriceFromEntry(val);
+            }
+            return null;
+        }
+
+        function normalizeItemName(name) {
+            return name.toLowerCase().replace(/[^a-z0-9]/g, '_').replace(/_+/g, '_').replace(/^_|_$/g, '');
+        }
+
+        function setImageWithFallback(imgElement, itemName) {
+            if (!itemName || !itemName.trim()) {
+                imgElement.src = FALLBACK_IMAGE;
+                return;
+            }
+            const norm = normalizeItemName(itemName);
+            const englishName = NAME_MAPPING[norm] || norm;
+            const blockPath = `${TEXTURE_BASE_PATH}block/${englishName}.png`;
+            const itemPath = `${TEXTURE_BASE_PATH}item/${englishName}.png`;
+            let currentTry = 0;
+            const urls = [blockPath, itemPath, FALLBACK_IMAGE];
+            function tryNext() {
+                if (currentTry >= urls.length) {
+                    imgElement.src = FALLBACK_IMAGE;
+                    return;
+                }
+                imgElement.src = urls[currentTry];
+                currentTry++;
+            }
+            imgElement.onerror = function() { tryNext(); };
+            imgElement.onload = function() {};
+            tryNext();
+        }
+
+        function loadItemDatabase() {
+            if (typeof PREISLISTE !== 'undefined' && PREISLISTE) {
+                const data = PREISLISTE.item_prices || PREISLISTE;
+                if (Object.keys(data).length > 0) {
+                    itemDatabase = data;
+                    console.log('✅ preisliste.js geladen:', Object.keys(itemDatabase).length, 'Einträge');
+                    return true;
+                }
+            }
+            console.warn('⚠️ preisliste.js nicht gefunden – verwende Fallback');
+            itemDatabase = {
+                "Diamantblock": { kunden_preis: 860.0 },
+                "Stein": { kunden_preis: 3.0 },
+                "Eichenholz": { kunden_preis: 7 },
+                "Eisenblock": { kunden_preis: 200 },
+                "Goldblock": { kunden_preis: 120 },
+                "Netheritblock": { kunden_preis: 65000 }
+            };
+            return false;
+        }
+
+        function updateRowPrice(row) {
+            const nameInput = row.querySelector('.block-name');
+            const chestType = row.querySelector('.chest-type');
+            const amountInput = row.querySelector('.chest-amount');
+            const priceDisplay = row.querySelector('.item-price');
+
+            const basePriceItem = getItemPrice(nameInput.value);
+            if (basePriceItem === null) {
+                priceDisplay.textContent = '0.00';
+                priceDisplay.style.color = '#ff4444';
+                return;
+            }
+
+            const itemsPerChest = chestType.value === 'double' ? ITEMS_PER_DOUBLE_CHEST : ITEMS_PER_SINGLE_CHEST;
+            const amount = parseInt(amountInput.value) || 1;
+            const total = basePriceItem * itemsPerChest * amount;
+
+            priceDisplay.textContent = total.toFixed(2);
+            priceDisplay.style.color = '';
+        }
+
+        function updateItemPreview(input, preview) {
+            const name = input.value.trim();
+            if (!name) {
+                preview.src = FALLBACK_IMAGE;
+                return;
+            }
+            setImageWithFallback(preview, name);
+        }
+
+        function createItemRow(index) {
+            return `
+                <div class="item-row" data-index="${index}">
+                    <div class="form-group image-group">
+                        <label>Item / Block</label>
+                        <div class="image-upload">
+                            <img class="item-preview" src="${FALLBACK_IMAGE}" alt="Vorschau" />
+                            <input type="file" class="item-image-input" accept="image/*" />
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="blockName_${index}">Blockname</label>
+                        <input type="text" class="block-name" id="blockName_${index}" placeholder="z.B. Diamantblock" />
+                    </div>
+                    <div class="form-group">
+                        <label for="chestType_${index}">Kistenmenge</label>
+                        <select class="chest-type" id="chestType_${index}">
+                            <option value="single">Kiste</option>
+                            <option value="double" selected>Doppelkiste</option>
+                        </select>
+                    </div>
+                    <div class="form-group amount-group">
+                        <label for="chestAmount_${index}">Anzahl Kisten</label>
+                        <input type="number" class="chest-amount" id="chestAmount_${index}" value="1" min="1" />
+                    </div>
+                    <div class="form-group price-group">
+                        <label>→ Preis</label>
+                        <div class="price-display">
+                            <span class="item-price">0.00</span> <span class="currency">€</span>
+                        </div>
+                    </div>
+                    <div class="form-group action-group">
+                        <label>&nbsp;</label>
+                        <button class="btn-remove-row" title="Zeile entfernen">✕</button>
+                    </div>
+                </div>
+            `;
+        }
+
+        function bindRowEvents(row) {
+            const nameInput = row.querySelector('.block-name');
+            const chestType = row.querySelector('.chest-type');
+            const amountInput = row.querySelector('.chest-amount');
+            const imageInput = row.querySelector('.item-image-input');
+            const preview = row.querySelector('.item-preview');
+
+            const recalc = () => {
+                updateRowPrice(row);
+                updateTotalPrice();
+                validateBlockNames();
+                updatePriceDetails();
+            };
+
+            nameInput.addEventListener('input', () => {
+                recalc();
+                updateItemPreview(nameInput, preview);
+            });
+
+            chestType.addEventListener('change', recalc);
+            amountInput.addEventListener('input', recalc);
+
+            imageInput.addEventListener('change', function(e) {
+                const file = e.target.files[0];
+                if (file) {
+                    const reader = new FileReader();
+                    reader.onload = (ev) => {
+                        preview.src = ev.target.result;
+                        preview.onerror = null;
+                    };
+                    reader.readAsDataURL(file);
+                }
+            });
+
+            const removeBtn = row.querySelector('.btn-remove-row');
+            removeBtn.addEventListener('click', function() {
+                if (orderItemsContainer.children.length <= 1) {
+                    alert('Mindestens eine Zeile muss vorhanden bleiben.');
+                    return;
+                }
+                row.remove();
+                updateRemoveButtons();
+                validateBlockNames();
+                updateTotalPrice();
+                updatePriceDetails();
+            });
+
+            if (nameInput.value.trim()) {
+                updateItemPreview(nameInput, preview);
+            }
+        }
+
+        function addItemRow() {
+            const index = itemCounter++;
+            const rowHtml = createItemRow(index);
+            const temp = document.createElement('div');
+            temp.innerHTML = rowHtml;
+            const row = temp.firstElementChild;
+            bindRowEvents(row);
+            orderItemsContainer.appendChild(row);
+            updateRowPrice(row);
+            updateTotalPrice();
+            updateRemoveButtons();
+            validateBlockNames();
+            const nameInput = row.querySelector('.block-name');
+            const preview = row.querySelector('.item-preview');
+            if (nameInput.value.trim()) {
+                updateItemPreview(nameInput, preview);
+            }
+        }
+
+        function updateTotalPrice() {
+            let total = 0;
+            document.querySelectorAll('.item-row .item-price').forEach(el => {
+                const val = parseFloat(el.textContent);
+                if (!isNaN(val)) total += val;
+            });
+            basePrice = total;
+            totalPriceDisplay.textContent = total.toFixed(2) + '€';
+            updatePriceDetails();
+        }
+
+        function validateBlockNames() {
+            const map = new Map();
+            let dup = false;
+            document.querySelectorAll('.item-row .block-name').forEach(input => {
+                const name = input.value.trim();
+                if (!name) return;
+                if (map.has(name)) {
+                    dup = true;
+                    input.classList.add('duplicate-error');
+                    map.get(name).classList.add('duplicate-error');
+                } else {
+                    input.classList.remove('duplicate-error');
+                    map.set(name, input);
+                }
+            });
+            submitBtn.disabled = dup || !selectedShipping;
+            submitBtn.title = dup ? 'Doppelte Blocknamen sind nicht erlaubt!' : (selectedShipping ? '' : 'Bitte wähle eine Versandart.');
+        }
+
+        function updateRemoveButtons() {
+            const count = orderItemsContainer.children.length;
+            document.querySelectorAll('.btn-remove-row').forEach(btn => btn.disabled = count <= 1);
+        }
+
+        function updatePriceDetails() {
+            if (!selectedShipping || basePrice === 0) {
+                priceDetails.classList.remove('visible');
+                return;
+            }
+
+            priceDetails.classList.add('visible');
+
+            const surcharge = selectedShipping === 'self' ? 0.20 : 0.30;
+            const shippingCost = basePrice * surcharge;
+            const finalPrice = basePrice + shippingCost;
+            const surchargePercent = surcharge * 100;
+
+            shippingCostsDisplay.innerHTML = shippingCost.toFixed(2) + '€ <span class="surcharge-info">(+' + surchargePercent + '%)</span>';
+            finalPriceDisplay.textContent = finalPrice.toFixed(2) + '€';
+        }
+
+        function selectShipping(type) {
+            selectedShipping = type;
+            selfPickupBtn.classList.remove('active');
+            deliveryBtn.classList.remove('active');
+            if (type === 'self') {
+                selfPickupBtn.classList.add('active');
+            } else if (type === 'delivery') {
+                deliveryBtn.classList.add('active');
+            }
+            submitBtn.disabled = false;
+            submitBtn.className = 'btn btn-primary glow';
+            validateBlockNames();
+            updatePriceDetails();
+        }
+
+        selfPickupBtn.addEventListener('click', function() { selectShipping('self'); });
+        deliveryBtn.addEventListener('click', function() { selectShipping('delivery'); });
+
+        function submitOrder() {
+            if (!selectedShipping) {
+                alert('Bitte wähle zuerst eine Versandart aus.');
+                return;
+            }
+
+            const rows = document.querySelectorAll('.item-row');
+            if (rows.length === 0) {
+                alert('Bitte füge mindestens ein Item hinzu.');
+                return;
+            }
+
+            let summary = '🛒 Deine Bestellung:\n\n';
+            let total = 0;
+            let error = false;
+            const names = [];
+
+            rows.forEach((row, i) => {
+                const input = row.querySelector('.block-name');
+                const name = input.value.trim();
+                if (!name || names.includes(name)) {
+                    error = true;
+                    input.classList.add('duplicate-error');
+                    return;
+                }
+                names.push(name);
+
+                const chestType = row.querySelector('.chest-type');
+                const amount = parseInt(row.querySelector('.chest-amount').value) || 1;
+                const price = parseFloat(row.querySelector('.item-price').textContent) || 0;
+                total += price;
+                const itemsPerChest = chestType.value === 'double' ? ITEMS_PER_DOUBLE_CHEST : ITEMS_PER_SINGLE_CHEST;
+                const totalItems = itemsPerChest * amount;
+                summary += `${i+1}. ${name} | ${chestType.options[chestType.selectedIndex].text} x${amount} (${totalItems.toLocaleString()} Stk) = ${price.toFixed(2)}€\n`;
+            });
+
+            if (error) {
+                alert('Bitte behebe die Fehler (leere oder doppelte Blocknamen).');
+                return;
+            }
+
+            const surcharge = selectedShipping === 'self' ? 0.20 : 0.30;
+            const shippingCost = basePrice * surcharge;
+            const finalPrice = basePrice + shippingCost;
+            const shippingText = selectedShipping === 'self' ? 'Selbstabholung (+20%)' : 'Lieferung (+30%)';
+
+            summary += `\n────────────────`;
+            summary += `\nVersandart: ${shippingText}`;
+            summary += `\nVersandkosten: ${shippingCost.toFixed(2)}€`;
+            summary += `\nGültiger Preis: ${finalPrice.toFixed(2)}€`;
+
+            alert(summary + '\n\n✅ Bestellung erfolgreich!');
+        }
+
+        function init() {
+            loadItemDatabase();
+            addItemRow();
+            addBtn.addEventListener('click', addItemRow);
+            submitBtn.addEventListener('click', submitOrder);
+        }
+        init();
+
+        // ===== ACCOUNT MODAL LOGIC (mit sessionStorage) =====
+        (function() {
+            const modal = document.getElementById('accountModal');
+            const closeBtn = document.getElementById('closeModalBtn');
+            const loginBtn = document.getElementById('loginBtn');
+            const logoutBtn = document.getElementById('logoutBtn');
+            const mcInput = document.getElementById('mcNameInput');
+            const errorMsg = document.getElementById('errorMsg');
+            const loginView = document.getElementById('loginView');
+            const profileView = document.getElementById('profileView');
+            const profileName = document.getElementById('profileName');
+            const profileHead = document.getElementById('profileHead');
+            const modalSubtitle = document.getElementById('modalSubtitle');
+            const loginHeadImg = document.getElementById('loginHeadImg');
+
+            const loginHeaderBtn = document.getElementById('loginBtnHeader');
+            const headerAvatar = document.getElementById('headerAvatar');
+            const headerAvatarImg = document.getElementById('headerAvatarImg');
+            const headerAvatarName = document.getElementById('headerAvatarName');
+
+            function updateHeaderUI() {
+                const user = sessionStorage.getItem('mc_user');
+                if (user) {
+                    loginHeaderBtn.classList.add('hidden');
+                    headerAvatar.classList.add('visible');
+                    headerAvatarImg.src = `https://mc-heads.net/head/${user}`;
+                    headerAvatarName.textContent = user;
+                } else {
+                    loginHeaderBtn.classList.remove('hidden');
+                    headerAvatar.classList.remove('visible');
+                }
+            }
+
+            function openModal() {
+                modal.classList.add('active');
+                document.body.style.overflow = 'hidden';
+                const user = sessionStorage.getItem('mc_user');
+                if (!user) {
+                    loginView.style.display = 'block';
+                    profileView.classList.remove('active');
+                    mcInput.value = '';
+                    loginHeadImg.src = '';
+                    loginHeadImg.style.display = 'none';
+                    errorMsg.classList.remove('visible');
+                    modalSubtitle.textContent = 'Melde dich mit deinem Minecraft-Namen an';
+                } else {
+                    showProfile(user);
+                }
+            }
+
+            function closeModal() {
+                modal.classList.remove('active');
+                document.body.style.overflow = '';
+            }
+
+            function showProfile(name) {
+                loginView.style.display = 'none';
+                profileView.classList.add('active');
+                profileName.textContent = name;
+                profileHead.src = `https://mc-heads.net/head/${name}`;
+                modalSubtitle.textContent = 'Du bist angemeldet';
+            }
+
+            function login() {
+                const name = mcInput.value.trim();
+                if (name.length < 2) {
+                    errorMsg.classList.add('visible');
+                    return;
+                }
+                errorMsg.classList.remove('visible');
+                sessionStorage.setItem('mc_user', name);
+                showProfile(name);
+                updateHeaderUI();
+                alert(`✅ Willkommen, ${name}!`);
+            }
+
+            function logout() {
+                sessionStorage.removeItem('mc_user');
+                loginView.style.display = 'block';
+                profileView.classList.remove('active');
+                mcInput.value = '';
+                loginHeadImg.src = '';
+                loginHeadImg.style.display = 'none';
+                modalSubtitle.textContent = 'Melde dich mit deinem Minecraft-Namen an';
+                updateHeaderUI();
+            }
+
+            mcInput.addEventListener('input', function() {
+                const name = this.value.trim();
+                if (name.length >= 2) {
+                    loginHeadImg.src = `https://mc-heads.net/head/${name}`;
+                    loginHeadImg.style.display = 'block';
+                } else {
+                    loginHeadImg.src = '';
+                    loginHeadImg.style.display = 'none';
+                }
+            });
+
+            if (loginHeaderBtn) loginHeaderBtn.addEventListener('click', openModal);
+            if (headerAvatar) headerAvatar.addEventListener('click', openModal);
+
+            closeBtn.addEventListener('click', closeModal);
+            modal.addEventListener('click', (e) => {
+                if (e.target === modal) closeModal();
+            });
+            document.addEventListener('keydown', (e) => {
+                if (e.key === 'Escape' && modal.classList.contains('active')) closeModal();
+            });
+
+            loginBtn.addEventListener('click', login);
+            mcInput.addEventListener('keydown', (e) => {
+                if (e.key === 'Enter') loginBtn.click();
+            });
+            logoutBtn.addEventListener('click', logout);
+
+            updateHeaderUI();
+        })();
+    </script>
+</body>
+</html>

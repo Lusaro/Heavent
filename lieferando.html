@@ -1,0 +1,457 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Lieferando - HVNT - OPSUCHT</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700;14..32,800&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="lieferando-style.css" />
+    <!-- Modal-Styles sind jetzt in lieferando-style.css integriert -->
+</head>
+<body>
+
+    <!-- ===== HEADER ===== -->
+    <header>
+        <div class="container navbar">
+            <div class="Logo"> <img src="Lieferando.png" alt="Lieferando Logo"/></div>
+            <ul class="nav-links">
+                <li><a href="index.html">Startseite</a></li>
+                <li><a href="#" class="active">HEAVENT</a></li>
+                <li><a href="partner.html">Partner</a></li>
+                <li><a href="#">Preise</a></li>
+            </ul>
+            <div class="nav-actions">
+                <button class="btn-login" id="loginBtnHeader">Anmelden</button>
+                <div class="header-avatar" id="headerAvatar">
+                    <img id="headerAvatarImg" src="" alt="Avatar">
+                    <span class="name" id="headerAvatarName">User</span>
+                </div>
+                <a href="https://discord.gg/utngw94B7b" class="btn btn-primary">Werde Teil vom HVNT!</a>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <!-- ===== BREADCRUMB ===== -->
+        <div class="container">
+            <nav class="breadcrumb">
+                <a href="index.html">🏠 Startseite</a> / <span>Lieferando</span>
+            </nav>
+        </div>
+
+        <!-- ===== HERO ===== -->
+        <section class="hero container">
+            <span class="hero-badge">🚀 Jetzt bestellen – Limited Slots</span>
+            <h1>
+                Der SCHNELLSTE <br />
+                <span class="highlight">Lieferant auf OPSUCHT</span>
+            </h1>
+            <p class="subtitle">
+                Lieferando ist euer zuverlässiger Partner für schnelle und unkomplizierte 
+                Materiallieferungen. Unser Ziel ist es, Spielern den Einkauf und Transport von Items so 
+                einfach wie möglich zu gestalten, damit ihr euch auf das Wesentliche konzentrieren könnt – 
+                eure Projekte.
+                Hier <a href="https://discord.gg/mFYD5Hj6mV" target="_blank">beitreten</a> und Teil der Community werden!
+            </p>
+            <div class="hero-buttons">
+                <a href="bestellen.html" class="btn btn-primary">Jetzt BESTELLEN →</a>
+                <a href="https://discord.gg/mFYD5Hj6mV" class="btn btn-outline-light">Bewerben</a>
+            </div>
+        </section>
+
+        <!-- ===== STATISTIKEN ===== -->
+        <section class="container">
+            <div class="stats-bar">
+                <div class="stat-item">
+                    <h3>$20M+</h3>
+                    <p>Umsatz</p>
+                </div>
+                <div class="stat-item">
+                    <h3>$4M+</h3>
+                    <p>Bonis</p>
+                </div>
+                <div class="stat-item">
+                    <h3>3</h3>
+                    <p>Offene Aufträge</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- ===== FEATURES ===== -->
+        <section>
+            <div class="container">
+                <div class="section-header">
+                    <h2>Warum bei <span class="highlight">Lieferando</span> bestellen?</h2>
+                    <p>Schnell, unkompliziert und preiswert!</p>
+                </div>
+                <div class="features-grid">
+                    <div class="feature-card">
+                        <span class="feature-icon">🤖</span>
+                        <h3>Top-KI</h3>
+                        <p>Alle Prozesse automatisiert.</p>
+                    </div>
+                    <div class="feature-card">
+                        <span class="feature-icon">💰</span>
+                        <h3>Faire Vergütung</h3>
+                        <p>Transparente Preise.</p>
+                    </div>
+                    <div class="feature-card">
+                        <span class="feature-icon">📆</span>
+                        <h3>Rekordzeit</h3>
+                        <p>Verlässlichster Lieferant. Jeden Tag.</p>
+                    </div>
+                    <div class="feature-card" id="openModalBtn">
+                        <span class="feature-icon">🚀</span>
+                        <h3 style="color: red;">Exklusives Angebot</h3>
+                        <p style="color: gold;">Lieferando+</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ===== TESTIMONIALS ===== -->
+        <section style="padding-top: 0">
+            <div class="container">
+                <div class="section-header">
+                    <h2>Rezensionen der <span class="highlight">Kunden</span></h2>
+                </div>
+                <div class="testimonials-grid">
+                    <div class="testimonial-card">
+                        <div class="stars">★★★★★</div>
+                        <blockquote>„War sehr schnell und unkompliziert. Die Lieferung wurde kurzfristig auch an einen anderen Ort gebracht.“</blockquote>
+                        <div class="author">
+                            <div class="author-avatar">AG</div>
+                            <div class="author-info">
+                                <strong>Agent Beere</strong>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="testimonial-card">
+                        <div class="stars">★★★★★</div>
+                        <blockquote>“war sehr schnell und unkompliziert. Die Lieferung wurde kurzfristig auch an einen anderen Ort gebracht”</blockquote>
+                        <div class="author">
+                            <div class="author-avatar">S</div>
+                            <div class="author-info">
+                                <strong>Snow</strong>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="testimonial-card">
+                        <div class="stars">★★★★★</div>
+                        <blockquote>“So schnell hätte ich das niemals geschafft und konnte deshalb mein Bauprojekt sehr schnell abschließen – der Preis ist auch sehr gut!”</blockquote>
+                        <div class="author">
+                            <div class="author-avatar">DM</div>
+                            <div class="author-info">
+                                <strong>Dr Melonee</strong>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ===== CTA ===== -->
+        <section style="padding-top: 0; padding-bottom: 40px">
+            <div class="container">
+                <div class="cta-banner">
+                    <h2>NOCH <span class="highlight">NICHT</span> BESTELLT?</h2>
+                    <a href="bestellen.html" class="btn btn-primary">Jetzt bestellen →</a>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- ===== KONZEPT MODAL (Lieferando+) ===== -->
+    <div id="konzeptModal" class="modal-overlay">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>📦 Lieferando+ – Konzept &amp; Angebot</h2>
+                <button class="modal-close" id="closeModalBtn">&times;</button>
+            </div>
+            <div class="modal-body">
+                <h3>Wer wir sind</h3>
+                <p>Lieferando ist euer zuverlässiger Partner für schnelle und unkomplizierte Materiallieferungen. Unser Ziel ist es, Spielern den Einkauf und Transport von Items so einfach wie möglich zu gestalten, damit ihr euch auf das Wesentliche konzentrieren könnt – eure Projekte.</p>
+                <p>Auf jedem Citybuild (CB) verfügen wir über einen eigenen Plot. Unser Hauptlager befindet sich aktuell auf:</p>
+                <p><strong>CB 6 – /sw lieferando</strong></p>
+                <p>Dort wird unser Lager kontinuierlich aufgefüllt, sodass wir viele Bestellungen direkt aus unserem Bestand bearbeiten und besonders kurze Lieferzeiten gewährleisten können.</p>
+
+                <h3>📦 Same Day Delivery</h3>
+                <p>Dank unseres dauerhaft gefüllten Lagers bieten wir einen Same-Day-Delivery-Service für Bestellungen mit einem Itemwert von bis zu 5.000.000 Coins an.</p>
+                <p>Unser Anspruch ist es, Bestellungen schnell, zuverlässig und unkompliziert auszuliefern – häufig noch am selben Tag.</p>
+
+                <h3>✅ Vorteile unseres Lieferservices</h3>
+                <ul>
+                    <li>⚡ Schnelle Bearbeitung und kurze Lieferzeiten</li>
+                    <li>📦 Großes, dauerhaft gefülltes Lager</li>
+                    <li>🌍 Lieferung auf allen Citybuilds</li>
+                    <li>📍 Flexible Lieferorte nach Absprache</li>
+                    <li>😊 Freundlicher und unkomplizierter Service</li>
+                </ul>
+
+                <h3>⭐ Lieferando Plus</h3>
+                <p>Für alle, die regelmäßig bestellen, bieten wir unser Lieferando Plus-Abo an.</p>
+                <p><strong>Kosten:</strong> 1.000.000 Coins pro Monat – monatlich kündbar, ideal für Vielbesteller, dauerhaft reduzierte Versandkosten.</p>
+
+                <h4>Versandkosten mit Lieferando Plus</h4>
+                <table>
+                    <tr><th>Bestellwert</th><th>Versandkosten</th></tr>
+                    <tr><td>bis 500.000 Coins</td><td>100.000 Coins</td></tr>
+                    <tr><td>über 500.000 Coins</td><td>250.000 Coins</td></tr>
+                </table>
+
+                <h4>Bestellung ohne Lieferando Plus</h4>
+                <p>Selbstverständlich könnt ihr auch ohne Lieferando Plus bestellen. Dann gelten folgende Lieferaufschläge:</p>
+                <ul>
+                    <li><strong>Abholung:</strong> 20 %</li>
+                    <li><strong>Lieferung:</strong> 30 %</li>
+                </ul>
+
+                <h3>💰 Unsere Preisgestaltung</h3>
+                <p>Unsere Preise orientieren sich jederzeit am aktuellen Ankaufspreis des offiziellen Marktsystems.</p>
+                <p>Für jedes Item wird ein individueller Farmerpreis festgelegt. Dieser liegt bewusst nur geringfügig über dem jeweiligen Server-Ankaufspreis, um den Aufwand für Produktion, Lagerhaltung und Logistik fair abzudecken.</p>
+                <p>So garantieren wir:</p>
+                <ul>
+                    <li>transparente Preisgestaltung</li>
+                    <li>marktgerechte Konditionen</li>
+                    <li>faire Preise für Käufer und Farmer</li>
+                </ul>
+                <p>Der jeweilige Farmerpreis bildet dabei die verbindliche Grundlage für jede Bestellung.</p>
+
+                <h3>🎁 Exklusiver Bestellcode</h3>
+                <p>Mit unserem exklusiven Bestellcode profitiert ihr dauerhaft von günstigeren Lieferkonditionen.</p>
+                <p>Anstelle des regulären Lieferaufschlags von 30 % zahlt ihr lediglich einen Aufschlag von <strong>10 %</strong> auf den Farmerpreis.</p>
+                <p><strong>Das bedeutet:</strong></p>
+                <ul>
+                    <li>dauerhaft günstiger bestellen</li>
+                    <li>attraktive Konditionen auch ohne Lieferando Plus</li>
+                    <li>maximale Ersparnis bei größeren Bestellungen</li>
+                </ul>
+
+                <h3>💳 Anzahlung bei Großbestellungen</h3>
+                <p>Bei Einzelbestellungen mit einem Gesamtwert ab 1.000.000 Coins ist eine Anzahlung von 500.000 Coins erforderlich.</p>
+                <p>Die Anzahlung dient ausschließlich der Auftragsabsicherung und wird selbstverständlich vollständig auf den Gesamtpreis angerechnet.</p>
+
+                <h3>🗣 Das sagen unsere Kunden</h3>
+                <blockquote>„War sehr schnell und unkompliziert. Die Lieferung wurde kurzfristig auch an einen anderen Ort gebracht.“</blockquote>
+                <blockquote>„5 Sterne für schnelle Lieferung.“</blockquote>
+                <blockquote>„So schnell hätte ich das niemals geschafft und konnte deshalb mein Bauprojekt sehr schnell abschließen – der Preis ist auch sehr gut!“</blockquote>
+
+                <h3>💪 Unser Versprechen</h3>
+                <p>Wir möchten mehr sein als nur ein Lieferdienst. Unser Ziel ist es, der schnellste und zuverlässigste Anbieter auf dem Server zu sein.</p>
+                <p>Durch unser großes Warenlager, transparente Preise und kurze Lieferzeiten ermöglichen wir euch einen Service, auf den ihr euch jederzeit verlassen könnt.</p>
+
+                <h3>Lieferando steht für:</h3>
+                <ul>
+                    <li>⚡ Geschwindigkeit</li>
+                    <li>🤝 Zuverlässigkeit</li>
+                    <li>💎 Faire und transparente Preise</li>
+                    <li>📦 Große Warenverfügbarkeit</li>
+                    <li>❤️ Kundenorientierten Service</li>
+                </ul>
+
+                <p><strong>Ihr findet uns auf jedem Citybuild.</strong><br>Hauptlager: CB 6 Warp: <code>/sw lieferando</code></p>
+            </div>
+            <div class="modal-footer">
+                <button class="btn-secondary" id="closeModalFooterBtn">Schließen</button>
+                <a href="https://discord.gg/TbRGu9664E" target="_blank" class="btn-success">
+                    🔔 Abonnieren
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- ===== ACCOUNT MODAL ===== -->
+    <div id="accountModal" class="modal-overlay">
+        <div class="modal-content account-modal">
+            <button class="modal-close" id="closeAccountModalBtn">&times;</button>
+            <h2>🔐 Account</h2>
+            <p id="modalSubtitle">Melde dich mit deinem Minecraft-Namen an</p>
+
+            <div id="loginView">
+                <div class="login-row">
+                    <div class="login-head">
+                        <img id="loginHeadImg" src="" alt="Head">
+                    </div>
+                    <div class="login-field">
+                        <label for="mcNameInput">Minecraft-Name</label>
+                        <input type="text" id="mcNameInput" placeholder="z.B. xLusaro" />
+                    </div>
+                </div>
+                <div class="error-msg" id="errorMsg">Bitte gib einen gültigen Namen ein.</div>
+                <button class="btn-submit" id="loginBtn">Anmelden</button>
+            </div>
+
+            <div id="profileView" class="profile-view">
+                <div class="profile-head">
+                    <img id="profileHead" src="" alt="Minecraft-Head">
+                </div>
+                <div class="profile-info">
+                    <div class="name" id="profileName">–</div>
+                    <div class="status"><span class="dot"></span>Online</div>
+                </div>
+                <button class="btn-logout" id="logoutBtn">Abmelden</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // ===== MODAL LOGIC (Konzept) =====
+        document.addEventListener('DOMContentLoaded', () => {
+            const modal = document.getElementById('konzeptModal');
+            const openBtns = document.querySelectorAll('#openModalBtn, #openModalFromHero, #openModalFromCTA');
+            const closeBtns = document.querySelectorAll('#closeModalBtn, #closeModalFooterBtn');
+
+            openBtns.forEach(btn => {
+                btn.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    modal.classList.add('active');
+                    document.body.style.overflow = 'hidden';
+                });
+            });
+
+            closeBtns.forEach(btn => {
+                btn.addEventListener('click', function() {
+                    modal.classList.remove('active');
+                    document.body.style.overflow = '';
+                });
+            });
+
+            modal.addEventListener('click', function(e) {
+                if (e.target === modal) {
+                    modal.classList.remove('active');
+                    document.body.style.overflow = '';
+                }
+            });
+
+            document.addEventListener('keydown', function(e) {
+                if (e.key === 'Escape' && modal.classList.contains('active')) {
+                    modal.classList.remove('active');
+                    document.body.style.overflow = '';
+                }
+            });
+        });
+
+        // ===== ACCOUNT MODAL LOGIC (mit sessionStorage) =====
+        (function() {
+            const modal = document.getElementById('accountModal');
+            const loginBtn = document.getElementById('loginBtn');
+            const logoutBtn = document.getElementById('logoutBtn');
+            const mcInput = document.getElementById('mcNameInput');
+            const errorMsg = document.getElementById('errorMsg');
+            const loginView = document.getElementById('loginView');
+            const profileView = document.getElementById('profileView');
+            const profileName = document.getElementById('profileName');
+            const profileHead = document.getElementById('profileHead');
+            const modalSubtitle = document.getElementById('modalSubtitle');
+            const loginHeadImg = document.getElementById('loginHeadImg');
+
+            const loginHeaderBtn = document.getElementById('loginBtnHeader');
+            const headerAvatar = document.getElementById('headerAvatar');
+            const headerAvatarImg = document.getElementById('headerAvatarImg');
+            const headerAvatarName = document.getElementById('headerAvatarName');
+
+            function updateHeaderUI() {
+                const user = sessionStorage.getItem('mc_user');
+                if (user) {
+                    loginHeaderBtn.classList.add('hidden');
+                    headerAvatar.classList.add('visible');
+                    headerAvatarImg.src = `https://mc-heads.net/head/${user}`;
+                    headerAvatarName.textContent = user;
+                } else {
+                    loginHeaderBtn.classList.remove('hidden');
+                    headerAvatar.classList.remove('visible');
+                }
+            }
+
+            function openModal() {
+                if (!modal) return;
+                modal.classList.add('active');
+                document.body.style.overflow = 'hidden';
+                const user = sessionStorage.getItem('mc_user');
+                if (!user) {
+                    loginView.style.display = 'block';
+                    profileView.classList.remove('active');
+                    mcInput.value = '';
+                    loginHeadImg.src = '';
+                    loginHeadImg.style.display = 'none';
+                    errorMsg.classList.remove('visible');
+                    modalSubtitle.textContent = 'Melde dich mit deinem Minecraft-Namen an';
+                } else {
+                    showProfile(user);
+                }
+            }
+
+            function closeModal() {
+                if (!modal) return;
+                modal.classList.remove('active');
+                document.body.style.overflow = '';
+            }
+
+            function showProfile(name) {
+                loginView.style.display = 'none';
+                profileView.classList.add('active');
+                profileName.textContent = name;
+                profileHead.src = `https://mc-heads.net/head/${name}`;
+                modalSubtitle.textContent = 'Du bist angemeldet';
+            }
+
+            function login() {
+                const name = mcInput.value.trim();
+                if (name.length < 2) {
+                    errorMsg.classList.add('visible');
+                    return;
+                }
+                errorMsg.classList.remove('visible');
+                sessionStorage.setItem('mc_user', name);
+                showProfile(name);
+                updateHeaderUI();
+                alert(`✅ Willkommen, ${name}!`);
+            }
+
+            function logout() {
+                sessionStorage.removeItem('mc_user');
+                loginView.style.display = 'block';
+                profileView.classList.remove('active');
+                mcInput.value = '';
+                loginHeadImg.src = '';
+                loginHeadImg.style.display = 'none';
+                modalSubtitle.textContent = 'Melde dich mit deinem Minecraft-Namen an';
+                updateHeaderUI();
+            }
+
+            mcInput.addEventListener('input', function() {
+                const name = this.value.trim();
+                if (name.length >= 2) {
+                    loginHeadImg.src = `https://mc-heads.net/head/${name}`;
+                    loginHeadImg.style.display = 'block';
+                } else {
+                    loginHeadImg.src = '';
+                    loginHeadImg.style.display = 'none';
+                }
+            });
+
+            if (loginHeaderBtn) loginHeaderBtn.addEventListener('click', openModal);
+            if (headerAvatar) headerAvatar.addEventListener('click', openModal);
+
+            const closeBtn = document.getElementById('closeAccountModalBtn');
+            if (closeBtn) closeBtn.addEventListener('click', closeModal);
+
+            if (modal) modal.addEventListener('click', (e) => {
+                if (e.target === modal) closeModal();
+            });
+
+            document.addEventListener('keydown', (e) => {
+                if (e.key === 'Escape' && modal && modal.classList.contains('active')) closeModal();
+            });
+
+            if (loginBtn) loginBtn.addEventListener('click', login);
+            if (mcInput) mcInput.addEventListener('keydown', (e) => {
+                if (e.key === 'Enter') loginBtn.click();
+            });
+            if (logoutBtn) logoutBtn.addEventListener('click', logout);
+
+            updateHeaderUI();
+        })();
+    </script>
+</body>
+</html>

@@ -1,0 +1,805 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link rel="icon" href="./img/TU_navicon.png" type="image/x-icon">
+    <link rel="shortcut icon" href="./img/TU_navicon.png" type="image/x-icon">
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css"
+        integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous">
+
+    <title>Heavent - Team</title>
+
+    <style>
+        /* ===== NEUE FARBEN (Lieferando-Stil) ===== */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --bg-primary: #0b0d0f;
+            --bg-secondary: #14181c;
+            --bg-card: #1a1f26;
+            --bg-card-hover: #242c36;
+            --bg-elevated: #1e242b;
+            --text-primary: #ffffff;
+            --text-secondary: #b0b8c4;
+            --text-muted: #6b7a8f;
+            --accent-purple: #8b5cf6;
+            --accent-blue: #3b82f6;
+            --gradient-main: linear-gradient(135deg, #8b5cf6, #3b82f6);
+            --border-color: #2a3440;
+            --shadow-light: 0 2px 16px rgba(0,0,0,0.3);
+            --shadow-hover: 0 8px 40px rgba(139,92,246,0.15);
+            --font: 'Inter', sans-serif;
+            --radius: 16px;
+        }
+
+        body {
+            background-color: var(--bg-primary);
+            overflow-y: scroll;
+            overflow-x: hidden;
+            scrollbar-width: none;
+            -ms-overflow-style: none;
+            color: var(--text-primary);
+            font-family: 'Inter', sans-serif;
+        }
+
+        body::-webkit-scrollbar {
+            display: none;
+        }
+
+        /* ===== HEADER MIT VIDEO (zentriert) ===== */
+        header {
+            position: relative;
+            height: 100vh;
+            min-height: 100vh;
+            overflow: hidden;
+            margin: 0;
+            padding: 0;
+        }
+
+        #header-video {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            z-index: 0;
+        }
+
+        #header-poster {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url('img/blätter.jpg');
+            background-size: cover;
+            background-position: center;
+            z-index: 0;
+            display: none;
+            opacity: 0;
+            transition: opacity 0.5s ease;
+        }
+
+        #header-poster.visible {
+            display: block;
+            opacity: 1;
+            z-index: 1;
+        }
+
+        .header-overlay {
+            background-color: rgba(0, 0, 0, 0.4);
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 2;
+        }
+
+        .header-text {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -100%);
+            font-family: "Playfair Display", serif;
+            font-style: italic;
+            font-weight: normal;
+            font-size: 150px;
+            color: white;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+            z-index: 3;
+            opacity: 0;
+            transition: opacity 1.5s ease;
+        }
+
+        a {
+            text-decoration: none;
+        }
+
+        /* ===== BUTTONS (oben links & rechts) ===== */
+        .impressum-box {
+            position: absolute;
+            top: 20px;
+            background-color: transparent;
+            border: 2px solid var(--text-secondary);
+            border-radius: 10px;
+            padding: 10px 20px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
+            z-index: 4;
+        }
+
+        .impressum-box-left {
+            left: 20px;
+            right: auto;
+        }
+
+        .impressum-box-right {
+            right: 20px;
+            left: auto;
+        }
+
+        .impressum-text {
+            font-size: 18px;
+            font-weight: bold;
+            margin: 0;
+            color: var(--text-primary);
+        }
+
+        /* ===== INHALT (linksbündig) ===== */
+        .content-container {
+            max-width: 1400px;
+            margin: 0;
+            padding: 0 20px;
+        }
+
+        /* ===== SLIDER (linksbündig) ===== */
+        .slider-container {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            justify-content: center;
+            position: relative;
+            width: 100%;
+            padding: 0 60px;
+            box-sizing: border-box;
+            overflow: hidden;
+        }
+
+        .slider-wrapper {
+            display: flex;
+            justify-content: flex-start;
+            height: auto;
+            min-height: 200px;
+            width: 100%;
+            transition: transform 0.5s ease-in-out;
+            gap: 0;
+            transform: translateX(0);
+            flex-wrap: nowrap;
+            overflow: visible;
+            padding: 20px 0;
+        }
+
+        .slider {
+            margin: 0.5rem 1rem;
+            width: 90%;
+            min-width: 280px;
+            max-width: 320px;
+            flex-shrink: 0;
+            border-radius: 2rem;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6);
+            background: linear-gradient(to bottom, rgba(255, 255, 255, 0.05), rgba(77, 77, 77, 0.2));
+            backdrop-filter: blur(100px);
+            border: 1px solid var(--border-color);
+            display: flex;
+            flex-direction: column;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .slider:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 15px 40px rgba(139, 92, 246, 0.2);
+            border-color: var(--accent-purple);
+        }
+
+        .image {
+            position: relative;
+        }
+
+        .image img {
+            padding: 10px;
+            width: 100%;
+            height: auto;
+            aspect-ratio: 1 / 1;
+            object-fit: cover;
+            box-sizing: border-box;
+            display: block;
+        }
+
+        .product-details {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 20px;
+            box-sizing: border-box;
+        }
+
+        .product-name {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+        }
+
+        .product-name a {
+            color: var(--text-primary);
+            margin: 2px 0;
+            font-size: 18px;
+            font-weight: bolder;
+        }
+
+        .product-name span {
+            color: var(--text-secondary);
+            font-size: 14px;
+        }
+
+        .price {
+            font-size: 17px;
+            font-weight: bold;
+            color: var(--accent-purple);
+        }
+
+        /* ===== PFEILE ===== */
+        .arrow {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 40px;
+            color: var(--text-secondary);
+            cursor: pointer;
+            z-index: 10;
+            transition: all 0.3s ease;
+            padding: 10px 16px;
+            background: rgba(0, 0, 0, 0.5);
+            border-radius: 50%;
+            border: 1px solid var(--border-color);
+        }
+
+        .arrow:hover {
+            color: #fff;
+            background: rgba(139, 92, 246, 0.2);
+            border-color: var(--accent-purple);
+            box-shadow: 0 0 20px rgba(139, 92, 246, 0.3);
+        }
+
+        .arrow-left {
+            left: 0;
+        }
+
+        .arrow-right {
+            right: 0;
+        }
+
+        /* ===== SECTION HEADER (linksbündig) ===== */
+        .section-header {
+            display: flex;
+            align-items: center;
+            justify-content: flex-start;
+            font-size: 24px;
+            color: var(--text-primary);
+            text-decoration: underline;
+            text-decoration-color: transparent;
+            text-decoration-thickness: 2px;
+            text-underline-offset: 6px;
+            transition: text-decoration-color 0.3s ease-in-out;
+            z-index: 2;
+            padding: 30px 0 10px 20px;
+        }
+
+        .section-title {
+            display: inline-block;
+            position: relative;
+        }
+
+        .section-title::before {
+            content: '';
+            position: absolute;
+            width: 100%;
+            height: 2px;
+            background: linear-gradient(90deg, transparent 45%, var(--accent-purple) 45%, var(--accent-purple) 55%, transparent 55%);
+            background-size: 200% 100%;
+            background-position: 50% 100%;
+            animation: underline 2s infinite;
+            bottom: 0;
+        }
+
+        @keyframes underline {
+            0% { background-position: 100% 100%; }
+            100% { background-position: 0 100%; }
+        }
+
+        .pokemon-icon {
+            width: 48px;
+            height: 48px;
+            margin-right: 10px;
+        }
+
+        /* ===== FOOTER ===== */
+        .site-footer {
+            position: relative;
+            left: 0;
+            right: 0;
+            bottom: -200;
+            height: 200px;
+            background-color: var(--bg-secondary);
+            color: var(--text-primary);
+            text-align: center;
+            padding: 20px;
+            transition: bottom 0.3s ease-in-out;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 1;
+            border-top: 1px solid var(--border-color);
+        }
+
+        .footer-line {
+            width: 50%;
+            height: 1px;
+            background: var(--text-secondary);
+            background-size: 8px 1px;
+            background-repeat: repeat-x;
+            margin-top: 5px;
+        }
+
+        .social-media {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 30px;
+            height: 60px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .social-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .social-item:not(:last-child) {
+            margin-right: 20px;
+        }
+
+        .social-text {
+            color: var(--text-secondary);
+            margin-top: 10px;
+            font-size: 14px;
+        }
+
+        #tiktok-item,
+        #youtube-item,
+        #instagram-item {
+            font-size: 20px;
+            color: var(--text-primary);
+        }
+
+        #instagram-item .social-text {
+            color: var(--text-secondary);
+        }
+
+        .youtube-bar,
+        .insta-bar,
+        .tiktok-bar {
+            background-size: 100% 100%;
+            background-position: center bottom;
+            transition: transform 0.3s, background-color 0.3s;
+            position: absolute;
+            margin-bottom: -300px;
+            width: 100%;
+            z-index: 1;
+            height: 0;
+        }
+
+        .youtube-bar {
+            background-image: url('./img/youtuberbanner.png');
+        }
+        .insta-bar {
+            background-image: url('./img/instagrambanner.png');
+        }
+        .tiktok-bar {
+            background-image: url('./img/tiktokbanner.png');
+        }
+
+        /* ===== RESPONSIVE ===== */
+        @media (max-width: 768px) {
+            .header-text {
+                font-size: 80px;
+            }
+            .section-header {
+                padding: 20px 0 10px 10px;
+                font-size: 18px;
+            }
+            .slider {
+                min-width: 220px;
+                max-width: 260px;
+            }
+            .slider-container {
+                padding: 0 40px;
+            }
+            .arrow {
+                font-size: 28px;
+                padding: 6px 12px;
+            }
+            .product-name a {
+                font-size: 16px;
+            }
+            .price {
+                font-size: 15px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .slider {
+                min-width: 160px;
+                max-width: 200px;
+            }
+            .slider-container {
+                padding: 0 20px;
+            }
+            .arrow {
+                font-size: 20px;
+                padding: 4px 10px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <header>
+        <!-- Overlay für Abdunkelung -->
+        <div class="header-overlay"></div>
+
+        <!-- Video (einmal abspielen) – MUTED MUSS BLEIBEN für Autoplay! -->
+        <video id="header-video" autoplay muted playsinline>
+            <source src="HVNT-Video.mp4" type="video/mp4">
+            <source src="video.webm" type="video/webm">
+        </video>
+
+        <!-- Poster-Bild (wird nach Video-Ende eingeblendet) -->
+        <div id="header-poster"></div>
+
+        <!-- BUTTON: ZURÜCK – LINKS -->
+        <div class="impressum-box impressum-box-left">
+            <a href="index.html">
+                <p class="impressum-text">Zurück</p>
+            </a>
+        </div>
+
+        <!-- BUTTON: BEWERBEN – RECHTS -->
+        <div class="impressum-box impressum-box-right">
+            <a href="https://discord.gg/utngw94B7b">
+                <p class="impressum-text">Bewerben</p>
+            </a>
+        </div>
+
+        <!-- Hauptüberschrift (initial ausgeblendet, erscheint bei ~85% der Videolänge) -->
+        <div class="header-text">Das Team</div>
+    </header>
+
+    <script>
+        // ===== Header-Overlay beim Scrollen =====
+        const headerOverlay = document.querySelector('.header-overlay');
+        window.addEventListener('scroll', () => {
+            const scrollY = window.scrollY;
+            const opacity = Math.min(2, scrollY / 1000);
+            headerOverlay.style.backgroundColor = `rgba(0, 0, 0, ${opacity})`;
+        });
+
+        // ===== Video: einmal abspielen, dann Poster einblenden + Text-Fade =====
+        const video = document.getElementById('header-video');
+        const poster = document.getElementById('header-poster');
+        const text = document.querySelector('.header-text');
+
+        function showPoster() {
+            // Video ausblenden
+            video.style.display = 'none';
+            video.style.visibility = 'hidden';
+            // Poster einblenden
+            poster.classList.add('visible');
+            // Text sichtbar machen (falls noch nicht passiert)
+            text.style.opacity = '1';
+        }
+
+        // Text bei 85% der Videolänge einblenden (sanfter Fade)
+        video.addEventListener('timeupdate', function() {
+            if (video.duration && (video.currentTime / video.duration) >= 0.85) {
+                text.style.opacity = '1';
+            }
+        });
+
+        // Wenn das Video zu Ende ist – Poster anzeigen
+        video.addEventListener('ended', showPoster);
+
+        // Falls das Video nicht geladen werden kann
+        video.addEventListener('error', showPoster);
+
+        // Falls das Video nicht startet (Browser blockiert) – nach 5 Sekunden Poster + Text
+        setTimeout(() => {
+            if (video.paused) {
+                showPoster();
+                text.style.opacity = '1';
+            }
+        }, 5000);
+
+        // Sicherheitsfallback: bei 95% der Videolänge Poster + Text
+        video.addEventListener('timeupdate', function() {
+            if (video.duration && (video.currentTime / video.duration) >= 0.95) {
+                showPoster();
+            }
+        });
+    </script>
+
+    <!-- ===== INHALT (linksbündig) ===== -->
+    <div class="content-container">
+
+        <!-- ===== LEITUNG ===== -->
+        <div class="section-header" style="margin-top: 60px;">
+            <img src="crown.png" alt="Krone" class="pokemon-icon">
+            <h1 class="section-title">Leitung</h1>
+        </div>
+
+        <div class="slider-container">
+            <div class="slider-wrapper" id="sliderWrapper1">
+                <div class="slider">
+                    <div class="image">
+                        <img src="" alt="Head" data-player="xLusaro">
+                    </div>
+                    <div class="product-details">
+                        <div class="product-name">
+                            <a href="#">xLusaro</a>
+                            <span>Anführer von Heavent</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="slider">
+                    <div class="image">
+                        <img src="" alt="Head" data-player="Snow263">
+                    </div>
+                    <div class="product-details">
+                        <div class="product-name">
+                            <a href="#">Snow263</a>
+                            <span>Orga von Heavent</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <i class="fas fa-chevron-left arrow arrow-left" onclick="scrollSlider('sliderWrapper1', -1)"></i>
+            <i class="fas fa-chevron-right arrow arrow-right" onclick="scrollSlider('sliderWrapper1', 1)"></i>
+        </div>
+
+        <!-- ===== FARMER ===== -->
+        <div class="section-header" style="margin-top: 40px;">
+            <img src="picke.png" alt="Farmer Icon" style="height: 35px; width: auto; margin-right: 10px;">
+            <h1 class="section-title">Farmer</h1>
+        </div>
+
+        <div class="slider-container">
+            <div class="slider-wrapper" id="sliderWrapper2">
+                <div class="slider">
+                    <div class="image">
+                        <img src="" alt="Head" data-player="xZuno">
+                    </div>
+                    <div class="product-details">
+                        <div class="product-name">
+                            <a>xZuno</a>
+                            <span>Farmer</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="slider">
+                    <div class="image">
+                        <img src="" alt="Head" data-player="Niklas131">
+                    </div>
+                    <div class="product-details">
+                        <div class="product-name">
+                            <a>Niklas131</a>
+                            <span>Farmer</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="slider">
+                    <div class="image">
+                        <img src="" alt="Head" data-player="PannamaSabel92">
+                    </div>
+                    <div class="product-details">
+                        <div class="product-name">
+                            <a>PannamaSabel92</a>
+                            <span>Farmer</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="slider">
+                    <div class="image">
+                        <img src="" alt="Head" data-player="ConanKoleo">
+                    </div>
+                    <div class="product-details">
+                        <div class="product-name">
+                            <a>ConanKoleo</a>
+                            <span>Farmer</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="slider">
+                    <div class="image">
+                        <img src="" alt="Head" data-player="jxnnik220">
+                    </div>
+                    <div class="product-details">
+                        <div class="product-name">
+                            <a>jxnnik220</a>
+                            <span>Farmer</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="slider">
+                    <div class="image">
+                        <img src="" alt="Head" data-player="Klatschkaffe_JE">
+                    </div>
+                    <div class="product-details">
+                        <div class="product-name">
+                            <a>Klatschkaffe_JE</a>
+                            <span>Farmer</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="slider">
+                    <div class="image">
+                        <img src="" alt="Head" data-player="TheoTheGuenther">
+                    </div>
+                    <div class="product-details">
+                        <div class="product-name">
+                            <a>TheoTheGuenther</a>
+                            <span>Farmer</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <i class="fas fa-chevron-left arrow arrow-left" onclick="scrollSlider('sliderWrapper2', -1)"></i>
+            <i class="fas fa-chevron-right arrow arrow-right" onclick="scrollSlider('sliderWrapper2', 1)"></i>
+        </div>
+
+        <!-- ===== BUILDER ===== -->
+        <div class="section-header" style="margin-top: 40px;">
+            <img src="block.png" alt="Builder Icon" style="height: 35px; width: auto; margin-right: 10px;">
+            <h1 class="section-title">Builder</h1>
+        </div>
+
+        <div class="slider-container">
+            <div class="slider-wrapper" id="sliderWrapper3">
+                <div class="slider">
+                    <div class="image">
+                        <img src="" alt="Head" data-player="TanjaBowsten">
+                    </div>
+                    <div class="product-details">
+                        <div class="product-name">
+                            <a>TanjaBowsten</a>
+                            <span>Builder</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="slider">
+                    <div class="image">
+                        <img src="" alt="Head" data-player="fatN6XT">
+                    </div>
+                    <div class="product-details">
+                        <div class="product-name">
+                            <a>fatN6XT</a>
+                            <span>Builder</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <i class="fas fa-chevron-left arrow arrow-left" onclick="scrollSlider('sliderWrapper3', -1)"></i>
+            <i class="fas fa-chevron-right arrow arrow-right" onclick="scrollSlider('sliderWrapper3', 1)"></i>
+        </div>
+
+    </div>
+
+    <script type="text/javascript">
+        // ===== Slider-Funktionalität =====
+        function scrollSlider(wrapperId, direction) {
+            const wrapper = document.getElementById(wrapperId);
+            if (!wrapper) return;
+
+            const slider = wrapper.querySelector('.slider');
+            if (!slider) return;
+
+            const sliderWidth = slider.offsetWidth;
+            const style = window.getComputedStyle(slider);
+            const marginLeft = parseFloat(style.marginLeft) || 0;
+            const marginRight = parseFloat(style.marginRight) || 0;
+            const totalWidth = sliderWidth + marginLeft + marginRight;
+
+            const wrapperStyle = window.getComputedStyle(wrapper);
+            const wrapperWidth = wrapper.clientWidth - parseFloat(wrapperStyle.paddingLeft) - parseFloat(wrapperStyle.paddingRight);
+
+            const visibleCards = Math.floor(wrapperWidth / totalWidth);
+            if (visibleCards <= 0) return;
+
+            let currentTransform = 0;
+            const transform = wrapper.style.transform;
+            if (transform) {
+                const match = transform.match(/translateX\(([^)]+)\)/);
+                if (match) {
+                    currentTransform = parseFloat(match[1]);
+                }
+            }
+
+            const totalCards = wrapper.children.length;
+            const maxScroll = Math.max(0, (totalCards - visibleCards) * totalWidth);
+            const step = totalWidth;
+
+            let newTransform = currentTransform - (direction * step);
+            newTransform = Math.max(-maxScroll, Math.min(0, newTransform));
+
+            wrapper.style.transform = `translateX(${newTransform}px)`;
+            wrapper.style.transition = 'transform 0.5s ease-in-out';
+        }
+
+        // ===== Minecraft-Heads per data-player setzen =====
+        document.addEventListener('DOMContentLoaded', function() {
+            const headImages = document.querySelectorAll('.image img[data-player]');
+            headImages.forEach(img => {
+                const player = img.getAttribute('data-player');
+                if (player) {
+                    img.src = `https://mc-heads.net/head/${player}`;
+                    img.alt = `Head von ${player}`;
+                }
+            });
+        });
+    </script>
+
+    <!-- FOOTER (ausgeblendet) -->
+    <!--<footer class="site-footer">
+        <div class="footer-line"></div>
+        <div class="social-media">
+            <div class="social-item" id="instagram-item">
+                <a href="https://www.instagram.com/ascendwear.ofc/">
+                    <div class="sozial-icon" style="color: var(--text-primary);">
+                        <i class="fab fa-instagram"></i>
+                    </div>
+                    <span class="social-text">Instagram</span>
+                </a>
+            </div>
+            <div class="social-item" id="tiktok-item">
+                <i class="fab fa-tiktok"></i>
+                <span class="social-text">TikTok</span>
+            </div>
+            <div class="social-item" id="youtube-item">
+                <i class="fab fa-youtube"></i>
+                <span class="social-text">YouTube Reels</span>
+            </div>
+        </div>
+        <div class="youtube-bar"></div>
+        <div class="insta-bar"></div>
+        <div class="tiktok-bar"></div>
+    </footer>-->
+
+</body>
+
+</html>

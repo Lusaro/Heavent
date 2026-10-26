@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Heavent</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="image-wrapper">
+        <img src="Logo.png" alt="Hintergrundbild" class="background-image">
+    </div>
+
+    <div class="content" id="mainTitleContent">
+        <div>
+            <h1>Heavent</h1>
+            <p>Ein Clan wie aus dem Himmel</p>
+        </div>
+    </div>
+
+    <svg class="svg-images-container" viewBox="0 0 1000 1000" preserveAspectRatio="xMidYMid meet">
+        <image id="strich1" href="strich.png" x="50" y="400" width="150" height="20"
+                transform="rotate(30 225 310) translate(0, 0)"></image>
+        <image id="strich2" href="strich.png" x="800" y="400" width="150" height="20"
+                transform="rotate(-30 775 310) translate(0, 0)"></image>
+        <image id="strich3" href="strich.png" x="10" y="600" width="150" height="20"
+                transform="rotate(-30 225 710) translate(0, 0)"></image>
+        <image id="strich4" href="strich.png" x="850" y="600" width="150" height="20"
+                transform="rotate(30 775 710) translate(0, 0)"></image>
+    </svg>
+
+    <div class="glass-box-container">
+        <!-- Lieferando – lila Glow -->
+        <div id="box1" class="glass-box box-top-left">
+            <a href="lieferando.html" target="_blank">
+                <img src="Lieferando.png" alt="Lieferando Logo">
+            </a>
+        </div>
+        <!-- HVNT – heller Glow & weiter links -->
+        <div id="box2" class="glass-box box-top-right">
+            <a href="team.html">
+                <img src="hvnt_logo.png" alt="HVNT Logo">
+            </a>
+        </div>
+        <!-- Partner – Glasbox -->
+        <div id="box3" class="glass-box box-bottom-left">
+            <a href="partner.html">
+                <img src="hvnt_logo.png" alt="Partner">
+            </a>
+        </div>
+        <!-- Account – DYNAMISCH (wird per JS befüllt) -->
+        <div id="box4" class="glass-box box-bottom-right" style="cursor: pointer;">
+            <img id="accountBoxImg" src="steve.png" alt="Account">
+            <p id="accountBoxText" class="box-text">Account</p>
+        </div>
+    </div>
+
+    <!-- ===== ACCOUNT MODAL ===== -->
+    <div id="accountModal" class="modal-overlay">
+        <div class="modal-content">
+            <button class="modal-close" id="closeModalBtn">&times;</button>
+            <h2>🔐 Account</h2>
+            <p id="modalSubtitle">Melde dich mit deinem Minecraft-Namen an</p>
+
+            <!-- Login-Ansicht -->
+            <div id="loginView">
+                <div class="login-row">
+                    <div class="login-head">
+                        <img id="loginHeadImg" src="" alt="Head">
+                    </div>
+                    <div class="login-field">
+                        <label for="mcNameInput">Minecraft-Name</label>
+                        <input type="text" id="mcNameInput" placeholder="z.B. xLusaro" />
+                    </div>
+                </div>
+                <div class="error-msg" id="errorMsg">Bitte gib einen gültigen Namen ein.</div>
+                <button class="btn-submit" id="loginBtn">Anmelden</button>
+            </div>
+
+            <!-- Profil-Ansicht (nach Anmeldung) -->
+            <div id="profileView" class="profile-view">
+                <div class="profile-head">
+                    <img id="profileHead" src="" alt="Minecraft-Head">
+                </div>
+                <div class="profile-info">
+                    <div class="name" id="profileName">–</div>
+                    <div class="status"><span class="dot"></span>Online</div>
+                </div>
+                <button class="btn-logout" id="logoutBtn">Abmelden</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+    document.addEventListener('DOMContentLoaded', () => {
+        // ===== Animation (Original) =====
+        const imageWrapper = document.querySelector('.image-wrapper');
+        const svgImagesContainer = document.querySelector('.svg-images-container');
+        const glassBoxes = document.querySelectorAll('.glass-box');
+        const pngImages = document.querySelectorAll('.svg-images-container image');
+        const mainTitleContent = document.getElementById('mainTitleContent');
+
+        const initialImageShrinkDuration = 700;
+        const pngFadeInDuration = 800;
+        const delayBetweenPNGs = 50;
+        const boxAnimationStartDelay = 400;
+        const boxFadeInDuration = 800;
+        const contentAnimationStartDelay = initialImageShrinkDuration - 100;
+        const contentAnimationDuration = 800;
+
+        const imgElement = document.querySelector('.background-image');
+
+        const initializeAnimations = () => {
+            console.log('Background image loaded or animation readiness reached. Starting animation sequence...');
+            startAnimations();
+        };
+
+        imgElement.addEventListener('load', initializeAnimations);
+        imgElement.addEventListener('error', () => {
+            console.error('Error loading background image! Check path: ' + imgElement.src);
+            setTimeout(initializeAnimations, 100);
+        });
+
+        if (imgElement.complete) {
+            initializeAnimations();
+        }
+
+        function getAnimationAndInitialClipPathForStroke(imgElement) {
+            const svgRect = svgImagesContainer.getBoundingClientRect();
+            const svgCenterX = svgRect.left + svgRect.width / 2;
+            const imgRect = imgElement.getBoundingClientRect();
+            const imgCenterX = imgRect.left + imgRect.width / 2;
+
+            if (imgCenterX < svgCenterX) {
+                return {
+                    animationName: 'drawLineFromRightToLeft',
+                    initialClipPath: 'inset(0 0 0 100%)'
+                };
+            } else {
+                return {
+                    animationName: 'drawLineFromLeftToRight',
+                    initialClipPath: 'inset(0 100% 0 0)'
+                };
+            }
+        }
+
+        function startAnimations() {
+            console.log('Starting PNG phase (parallel to image shrink)...');
+
+            pngImages.forEach((img, index) => {
+                const delay = (index * delayBetweenPNGs / 1000);
+                const { animationName, initialClipPath } = getAnimationAndInitialClipPathForStroke(img);
+
+                img.style.clipPath = initialClipPath;
+                img.style.opacity = '0';
+
+                img.style.animation = `${animationName} ${pngFadeInDuration / 1000}s ease-out ${delay}s forwards`;
+                console.log(`PNG ${index + 1} animation '${animationName}' started with delay ${delay * 1000}ms.`);
+            });
+
+            setTimeout(() => {
+                console.log('Starting box phase (parallel and overlapping with PNGs)...');
+                glassBoxes.forEach((box) => {
+                    box.style.animation = `fadeInAndSlideUp ${boxFadeInDuration / 1000}s forwards ease-out`;
+                    console.log(`Box started.`);
+                });
+            }, boxAnimationStartDelay);
+
+            setTimeout(() => {
+                console.log('Starting title pop-up animation...');
+                mainTitleContent.style.animation = `contentPopUp ${contentAnimationDuration / 1000}s forwards ease-out`;
+            }, contentAnimationStartDelay);
+        }
+
+        // ===== ACCOUNT MODAL LOGIC (mit sessionStorage) =====
+        const modal = document.getElementById('accountModal');
+        const openModalBtn = document.getElementById('box4');
+        const closeModalBtn = document.getElementById('closeModalBtn');
+        const loginBtn = document.getElementById('loginBtn');
+        const logoutBtn = document.getElementById('logoutBtn');
+        const mcInput = document.getElementById('mcNameInput');
+        const errorMsg = document.getElementById('errorMsg');
+        const loginView = document.getElementById('loginView');
+        const profileView = document.getElementById('profileView');
+        const profileName = document.getElementById('profileName');
+        const profileHead = document.getElementById('profileHead');
+        const modalSubtitle = document.getElementById('modalSubtitle');
+        const loginHeadImg = document.getElementById('loginHeadImg');
+
+        // Box4-Elemente
+        const accountBoxImg = document.getElementById('accountBoxImg');
+        const accountBoxText = document.getElementById('accountBoxText');
+
+        // ===== HELFER: UI aktualisieren =====
+        function updateUI() {
+            const user = sessionStorage.getItem('mc_user');
+            if (user) {
+                // Box4: Avatar + Name
+                accountBoxImg.src = `https://mc-heads.net/head/${user}`;
+                accountBoxText.textContent = user;
+                // Modal: Profil-Ansicht
+                loginView.style.display = 'none';
+                profileView.classList.add('active');
+                profileName.textContent = user;
+                profileHead.src = `https://mc-heads.net/head/${user}`;
+                modalSubtitle.textContent = 'Du bist angemeldet';
+            } else {
+                // Box4: Standard
+                accountBoxImg.src = 'steve.png';
+                accountBoxText.textContent = 'Account';
+                // Modal: Login-Ansicht
+                loginView.style.display = 'block';
+                profileView.classList.remove('active');
+                mcInput.value = '';
+                loginHeadImg.src = '';
+                loginHeadImg.style.display = 'none';
+                errorMsg.classList.remove('visible');
+                modalSubtitle.textContent = 'Melde dich mit deinem Minecraft-Namen an';
+            }
+        }
+
+        // ===== Modal öffnen =====
+        function openModal() {
+            modal.classList.add('active');
+            document.body.style.overflow = 'hidden';
+            // Wenn eingeloggt, Profil anzeigen, sonst Login
+            const user = sessionStorage.getItem('mc_user');
+            if (user) {
+                loginView.style.display = 'none';
+                profileView.classList.add('active');
+                profileName.textContent = user;
+                profileHead.src = `https://mc-heads.net/head/${user}`;
+                modalSubtitle.textContent = 'Du bist angemeldet';
+            } else {
+                loginView.style.display = 'block';
+                profileView.classList.remove('active');
+                mcInput.value = '';
+                loginHeadImg.src = '';
+                loginHeadImg.style.display = 'none';
+                errorMsg.classList.remove('visible');
+                modalSubtitle.textContent = 'Melde dich mit deinem Minecraft-Namen an';
+            }
+        }
+
+        function closeModal() {
+            modal.classList.remove('active');
+            document.body.style.overflow = '';
+        }
+
+        // ===== Login / Logout =====
+        function login() {
+            const name = mcInput.value.trim();
+            if (name.length < 2) {
+                errorMsg.classList.add('visible');
+                return;
+            }
+            errorMsg.classList.remove('visible');
+            sessionStorage.setItem('mc_user', name);
+            updateUI();
+            alert(`✅ Willkommen, ${name}!`);
+            // Modal bleibt offen – Nutzer schließt es manuell
+        }
+
+        function logout() {
+            sessionStorage.removeItem('mc_user');
+            updateUI();
+            // Wenn modal offen ist, auf Login-Ansicht umschalten
+            if (modal.classList.contains('active')) {
+                loginView.style.display = 'block';
+                profileView.classList.remove('active');
+                mcInput.value = '';
+                loginHeadImg.src = '';
+                loginHeadImg.style.display = 'none';
+                errorMsg.classList.remove('visible');
+                modalSubtitle.textContent = 'Melde dich mit deinem Minecraft-Namen an';
+            }
+        }
+
+        // ===== Live-Vorschau beim Tippen =====
+        mcInput.addEventListener('input', function() {
+            const name = this.value.trim();
+            if (name.length >= 2) {
+                loginHeadImg.src = `https://mc-heads.net/head/${name}`;
+                loginHeadImg.style.display = 'block';
+            } else {
+                loginHeadImg.src = '';
+                loginHeadImg.style.display = 'none';
+            }
+        });
+
+        // ===== Event-Listener =====
+        openModalBtn.addEventListener('click', openModal);
+        closeModalBtn.addEventListener('click', closeModal);
+        modal.addEventListener('click', (e) => {
+            if (e.target === modal) closeModal();
+        });
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && modal.classList.contains('active')) closeModal();
+        });
+
+        loginBtn.addEventListener('click', login);
+        mcInput.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter') loginBtn.click();
+        });
+        logoutBtn.addEventListener('click', logout);
+
+        // ===== Initial UI setzen =====
+        updateUI();
+
+
+        function doPost(e) {
+  try {
+    const data = JSON.parse(e.postData.contents);
+    const username = data.username.trim();
+    if (!username) return respond(false, 'Benutzername fehlt');
+
+    const sheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName('Websitebesucher');
+    if (!sheet) return respond(false, 'Tabellenblatt "Websitebesucher" nicht gefunden');
+
+    // Prüfen, ob Name bereits existiert
+    const existing = sheet.getRange('A:A').getValues().flat().filter(v => v);
+    if (existing.includes(username)) {
+      return respond(true, 'Bereits registriert');
+    }
+
+    // Neuer Name → Zeile anhängen
+    sheet.appendRow([username, new Date()]);
+    return respond(true, 'Neu registriert');
+  } catch (err) {
+    return respond(false, err.toString());
+  }
+}
+
+function respond(success, message) {
+  return ContentService.createTextOutput(JSON.stringify({ success, message }))
+    .setMimeType(ContentService.MimeType.JSON);
+}
+
+const WEB_APP_URL = 'https://docs.google.com/spreadsheets/d/1xFkBU1N4oVrJAt_ftVBu9lAKT5MRgFd_ryOQcL4--c4/edit?usp=sharing';
+
+    });
+    </script>
+</body>
+</html>
