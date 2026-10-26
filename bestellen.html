@@ -15,10 +15,10 @@
             <div class="Logo"><img src="Lieferando.png" alt="Lieferando Logo" style="height:150px; width:auto;" /></div>
             <ul class="nav-links">
                 <li><a href="index.html">Startseite</a></li>
-                <li><a href="#">HEAVENT</a></li>
+                <li><a href="team.html">HEAVENT</a></li>
                 <li><a href="#" class="active">Bestellung</a></li>
                 <li><a href="partner.html">Partner</a></li>
-                <li><a href="#">Preise</a></li>
+                <li><a href="lieferando.html">Preise</a></li>
             </ul>
             <div class="nav-actions">
                 <button class="btn-login" id="loginBtnHeader">Anmelden</button>
@@ -96,6 +96,9 @@
         </section>
     </main>
 
+    <!-- Auto-Complete Liste -->
+    <datalist id="itemList"></datalist>
+
     <!-- ===== ACCOUNT MODAL ===== -->
     <div id="accountModal" class="modal-overlay">
         <div class="modal-content account-modal">
@@ -131,183 +134,66 @@
     </div>
 
     <script>
-        // ===== BESTELL-LOGIK (komplett) =====
+        // ===== BESTELL-LOGIK =====
         const ITEMS_PER_DOUBLE_CHEST = 3456;
         const ITEMS_PER_SINGLE_CHEST = 1728;
 
-        // ===== TEXTUR-QUELLEN (keine lokalen Minecraft-Texturen nötig) =====
-        // Diese CDNs hosten die Vanilla-Texturen – du musst sie NICHT in dein Repo legen.
         const MINECRAFT_VERSION = '1.21.4';
         const TEXTURE_BASE_URLS = [
-            // 1. mcasset.cloud – dedizierter Minecraft-Asset-Mirror
             `https://mcasset.cloud/${MINECRAFT_VERSION}/assets/minecraft/textures`,
-            // 2. jsDelivr CDN (schnell) für InventivetalentDev/minecraft-assets
             `https://cdn.jsdelivr.net/gh/InventivetalentDev/minecraft-assets@${MINECRAFT_VERSION}/assets/minecraft/textures`,
-            // 3. GitHub raw als dritte Quelle
             `https://raw.githubusercontent.com/InventivetalentDev/minecraft-assets/${MINECRAFT_VERSION}/assets/minecraft/textures`,
-            // Optional (nur falls du sie lokal testen willst):
-            // './minecraft',
         ];
 
-        // Inline-SVG-Platzhalter (kein externer Dienst wie via.placeholder.com nötig)
         const FALLBACK_IMAGE = 'data:image/svg+xml;charset=UTF-8,' + encodeURIComponent(
-            '<svg xmlns="http://www.w3.org/2000/svg" width="48" height="48">' +
-            '<rect width="48" height="48" rx="6" fill="#2a3440"/>' +
-            '<text x="24" y="31" font-family="Arial, sans-serif" font-size="22" ' +
-            'font-weight="bold" fill="#8b5cf6" text-anchor="middle">?</text>' +
-            '</svg>'
+            '<svg xmlns="http://www.w3.org/2000/svg" width="48" height="48"><rect width="48" height="48" rx="6" fill="#2a3440"/><text x="24" y="31" font-family="Arial" font-size="22" font-weight="bold" fill="#8b5cf6" text-anchor="middle">?</text></svg>'
         );
 
-        // Items, die in textures/item/ liegen (statt block/) – spart 404-Requests
         const ITEM_ONLY = new Set([
-            'diamond', 'coal', 'emerald', 'redstone', 'lapis_lazuli',
-            'iron_ingot', 'gold_ingot', 'netherite_ingot', 'netherite_scrap',
-            'nether_wart', 'sugar_cane', 'kelp', 'bamboo', 'cactus', 'stick',
-            'apple', 'wheat', 'paper', 'book', 'flint', 'charcoal', 'string',
-            'feather', 'leather', 'bone', 'bone_meal', 'slime_ball', 'snowball',
-            'egg', 'blaze_rod', 'blaze_powder', 'ender_pearl', 'ender_eye',
-            'ghast_tear', 'magma_cream', 'gunpowder', 'glowstone_dust',
-            'nether_star', 'nautilus_shell', 'prismarine_shard',
-            'prismarine_crystals', 'shulker_shell', 'phantom_membrane',
+            'diamond', 'coal', 'emerald', 'redstone', 'lapis_lazuli', 'iron_ingot', 'gold_ingot', 
+            'netherite_ingot', 'netherite_scrap', 'nether_wart', 'sugar_cane', 'kelp', 'bamboo', 
+            'cactus', 'stick', 'apple', 'wheat', 'paper', 'book', 'flint', 'charcoal', 'string',
+            'feather', 'leather', 'bone', 'bone_meal', 'slime_ball', 'snowball', 'egg', 'blaze_rod', 
+            'blaze_powder', 'ender_pearl', 'ender_eye', 'ghast_tear', 'magma_cream', 'gunpowder', 
+            'glowstone_dust', 'nether_star', 'nautilus_shell', 'prismarine_shard', 'prismarine_crystals', 
+            'shulker_shell', 'phantom_membrane'
         ]);
 
         const NAME_MAPPING = {
-            'diamantblock': 'diamond_block',
-            'diamant': 'diamond',
-            'stein': 'stone',
-            'kohleblock': 'coal_block',
-            'eisenblock': 'iron_block',
-            'goldblock': 'gold_block',
-            'redstoneblock': 'redstone_block',
-            'smaragdblock': 'emerald_block',
-            'lapislazuliblock': 'lapis_block',
-            'netheritblock': 'netherite_block',
-            'kupferblock': 'copper_block',
-            'angelaufener_kupferblock': 'exposed_copper',
-            'verwitterter_kupferblock': 'weathered_copper',
-            'oxidierter_kupferblock': 'oxidized_copper',
-            'quarzblock': 'quartz_block',
-            'glatterquarzblock': 'smooth_quartz',
-            'amathystblock': 'amethyst_block',
-            'eichenstamm': 'oak_log',
-            'eichenholz': 'oak_log',
-            'eichenholzbretter': 'oak_planks',
-            'eichenholztreppe': 'oak_stairs',
-            'eichenholzstufe': 'oak_slab',
-            'eichenholzzaun': 'oak_fence',
-            'eichenholzzauntor': 'oak_fence_gate',
-            'eichenholztür': 'oak_door',
-            'eichenholzfalltür': 'oak_trapdoor',
-            'fichtenstamm': 'spruce_log',
-            'fichtenholz': 'spruce_log',
-            'fichtenholzbretter': 'spruce_planks',
-            'birkenstamm': 'birch_log',
-            'birkenholz': 'birch_log',
-            'tropenbaumstamm': 'jungle_log',
-            'tropenholz': 'jungle_log',
-            'akazienstamm': 'acacia_log',
-            'akazienholz': 'acacia_log',
-            'schwarzeichenstamm': 'dark_oak_log',
-            'schwarzeichenholz': 'dark_oak_log',
-            'mangrovenstamm': 'mangrove_log',
-            'mangrovenholz': 'mangrove_log',
-            'kirschstamm': 'cherry_log',
-            'kirschholz': 'cherry_log',
-            'blasseichenstamm': 'pale_oak_log',
-            'blasseichenholz': 'pale_oak_log',
-            'glas': 'glass',
-            'weißesglas': 'white_stained_glass',
-            'schwarzesglas': 'black_stained_glass',
-            'rotesglas': 'red_stained_glass',
-            'orangesglas': 'orange_stained_glass',
-            'gelbesglas': 'yellow_stained_glass',
-            'grünesglas': 'lime_stained_glass',
-            'türkisesglas': 'cyan_stained_glass',
-            'blauesglas': 'blue_stained_glass',
-            'violettesglas': 'purple_stained_glass',
-            'magenta_glss': 'magenta_stained_glass',
-            'rosaglas': 'pink_stained_glass',
-            'ofen': 'furnace',
-            'werkbank': 'crafting_table',
-            'truhe': 'chest',
-            'endertruhe': 'ender_chest',
-            'fackel': 'torch',
-            'laterne': 'lantern',
-            'seelenlaterne': 'soul_lantern',
-            'amboss': 'anvil',
-            'verzauberungstisch': 'enchanting_table',
-            'braustand': 'brewing_stand',
-            'kessel': 'cauldron',
-            'komposter': 'composter',
-            'notenblock': 'note_block',
-            'plattenspieler': 'jukebox',
-            'bücherregal': 'bookshelf',
-            'lesepult': 'lectern',
-            'leiter': 'ladder',
-            'gerüst': 'scaffolding',
-            'blitzableiter': 'lightning_rod',
-            'schleimblock': 'slime_block',
-            'honigblock': 'honey_block',
-            'honigwabenblock': 'honeycomb_block',
-            'kürbis': 'pumpkin',
-            'geschnitzterkürbis': 'carved_pumpkin',
-            'kürbislaterne': 'jack_o_lantern',
-            'melon': 'melon',
-            'strohballen': 'hay_bale',
-            'seelensand': 'soul_sand',
-            'seelenerde': 'soul_soil',
-            'knochenblock': 'bone_block',
-            'obsidian': 'obsidian',
-            'weinenderobsidian': 'crying_obsidian',
-            'endstein': 'end_stone',
-            'purpurblock': 'purpur_block',
-            'prismarin': 'prismarine',
-            'seelaterne': 'sea_lantern',
-            'leuchtstein': 'glowstone',
-            'basalt': 'basalt',
-            'glatterbasalt': 'smooth_basalt',
-            'polierterbasalt': 'polished_basalt',
-            'schwarzstein': 'blackstone',
-            'golddurchzogener_schwarzstein': 'gilded_blackstone',
-            'netherrack': 'netherrack',
-            'netherziegel': 'nether_bricks',
-            'rotenetherziegel': 'red_nether_bricks',
-            'kalzit': 'calcite',
-            'tropfsteinblock': 'dripstone_block',
-            'magmablock': 'magma_block',
-            'eis': 'ice',
-            'packeis': 'packed_ice',
-            'blaueis': 'blue_ice',
-            'schneeblock': 'snow_block',
-            'sand': 'sand',
-            'roter_sand': 'red_sand',
-            'kies': 'gravel',
-            'ton': 'clay',
-            'erde': 'dirt',
-            'grasblock': 'grass_block',
-            'podsol': 'podzol',
-            'myzel': 'mycelium',
-            'mossblock': 'moss_block',
-            'blassmoosblock': 'pale_moss_block',
-            'kohle': 'coal',
-            'eisenbarren': 'iron_ingot',
-            'goldbarren': 'gold_ingot',
-            'netheritbarren': 'netherite_ingot',
-            'smaragd': 'emerald',
-            'lapislazuli': 'lapis_lazuli',
-            'redstone': 'redstone',
-            'netherwarze': 'nether_wart',
-            'wirrwarze': 'warped_wart',
-            'karmesinwarze': 'crimson_fungus',
-            'brauner_pilz': 'brown_mushroom',
-            'roter_pilz': 'red_mushroom',
-            'zuckerrohr': 'sugar_cane',
-            'kaktus': 'cactus',
-            'bambus': 'bamboo',
-            'seetang': 'kelp',
-            'getrockneter_seetangblock': 'dried_kelp_block',
-            'seerosenblatt': 'lily_pad',
-            'spinnennetz': 'cobweb'
+            'diamantblock': 'diamond_block', 'diamant': 'diamond', 'stein': 'stone', 'kohleblock': 'coal_block',
+            'eisenblock': 'iron_block', 'goldblock': 'gold_block', 'redstoneblock': 'redstone_block',
+            'smaragdblock': 'emerald_block', 'lapislazuliblock': 'lapis_block', 'netheritblock': 'netherite_block',
+            'kupferblock': 'copper_block', 'angelaufener_kupferblock': 'exposed_copper', 'verwitterter_kupferblock': 'weathered_copper',
+            'oxidierter_kupferblock': 'oxidized_copper', 'quarzblock': 'quartz_block', 'glatterquarzblock': 'smooth_quartz',
+            'amathystblock': 'amethyst_block', 'eichenstamm': 'oak_log', 'eichenholz': 'oak_log', 'eichenholzbretter': 'oak_planks',
+            'eichenholztreppe': 'oak_stairs', 'eichenholzstufe': 'oak_slab', 'eichenholzzaun': 'oak_fence', 'eichenholzzauntor': 'oak_fence_gate',
+            'eichenholztür': 'oak_door', 'eichenholzfalltür': 'oak_trapdoor', 'fichtenstamm': 'spruce_log', 'fichtenholz': 'spruce_log',
+            'fichtenholzbretter': 'spruce_planks', 'birkenstamm': 'birch_log', 'birkenholz': 'birch_log', 'tropenbaumstamm': 'jungle_log',
+            'tropenholz': 'jungle_log', 'akazienstamm': 'acacia_log', 'akazienholz': 'acacia_log', 'schwarzeichenstamm': 'dark_oak_log',
+            'schwarzeichenholz': 'dark_oak_log', 'mangrovenstamm': 'mangrove_log', 'mangrovenholz': 'mangrove_log', 'kirschstamm': 'cherry_log',
+            'kirschholz': 'cherry_log', 'blasseichenstamm': 'pale_oak_log', 'blasseichenholz': 'pale_oak_log', 'glas': 'glass',
+            'weißesglas': 'white_stained_glass', 'schwarzesglas': 'black_stained_glass', 'rotesglas': 'red_stained_glass',
+            'orangesglas': 'orange_stained_glass', 'gelbesglas': 'yellow_stained_glass', 'grünesglas': 'lime_stained_glass',
+            'türkisesglas': 'cyan_stained_glass', 'blauesglas': 'blue_stained_glass', 'violettesglas': 'purple_stained_glass',
+            'magenta_glss': 'magenta_stained_glass', 'rosaglas': 'pink_stained_glass', 'ofen': 'furnace', 'werkbank': 'crafting_table',
+            'truhe': 'chest', 'endertruhe': 'ender_chest', 'fackel': 'torch', 'laterne': 'lantern', 'seelenlaterne': 'soul_lantern',
+            'amboss': 'anvil', 'verzauberungstisch': 'enchanting_table', 'braustand': 'brewing_stand', 'kessel': 'cauldron',
+            'komposter': 'composter', 'notenblock': 'note_block', 'plattenspieler': 'jukebox', 'bücherregal': 'bookshelf',
+            'lesepult': 'lectern', 'leiter': 'ladder', 'gerüst': 'scaffolding', 'blitzableiter': 'lightning_rod', 'schleimblock': 'slime_block',
+            'honigblock': 'honey_block', 'honigwabenblock': 'honeycomb_block', 'kürbis': 'pumpkin', 'geschnitzterkürbis': 'carved_pumpkin',
+            'kürbislaterne': 'jack_o_lantern', 'melon': 'melon', 'strohballen': 'hay_bale', 'seelensand': 'soul_sand', 'seelenerde': 'soul_soil',
+            'knochenblock': 'bone_block', 'obsidian': 'obsidian', 'weinenderobsidian': 'crying_obsidian', 'endstein': 'end_stone',
+            'purpurblock': 'purpur_block', 'prismarin': 'prismarine', 'seelaterne': 'sea_lantern', 'leuchtstein': 'glowstone',
+            'basalt': 'basalt', 'glatterbasalt': 'smooth_basalt', 'polierterbasalt': 'polished_basalt', 'schwarzstein': 'blackstone',
+            'golddurchzogener_schwarzstein': 'gilded_blackstone', 'netherrack': 'netherrack', 'netherziegel': 'nether_bricks',
+            'rotenetherziegel': 'red_nether_bricks', 'kalzit': 'calcite', 'tropfsteinblock': 'dripstone_block', 'magmablock': 'magma_block',
+            'eis': 'ice', 'packeis': 'packed_ice', 'blaueis': 'blue_ice', 'schneeblock': 'snow_block', 'sand': 'sand', 'roter_sand': 'red_sand',
+            'kies': 'gravel', 'ton': 'clay', 'erde': 'dirt', 'grasblock': 'grass_block', 'podsol': 'podzol', 'myzel': 'mycelium',
+            'mossblock': 'moss_block', 'blassmoosblock': 'pale_moss_block', 'kohle': 'coal', 'eisenbarren': 'iron_ingot', 'goldbarren': 'gold_ingot',
+            'netheritbarren': 'netherite_ingot', 'smaragd': 'emerald', 'lapislazuli': 'lapis_lazuli', 'redstone': 'redstone',
+            'netherwarze': 'nether_wart', 'wirrwarze': 'warped_wart', 'karmesinwarze': 'crimson_fungus', 'brauner_pilz': 'brown_mushroom',
+            'roter_pilz': 'red_mushroom', 'zuckerrohr': 'sugar_cane', 'kaktus': 'cactus', 'bambus': 'bamboo', 'seetang': 'kelp',
+            'getrockneter_seetangblock': 'dried_kelp_block', 'seerosenblatt': 'lily_pad', 'spinnennetz': 'cobweb'
         };
 
         let itemDatabase = {};
@@ -324,6 +210,28 @@
         const priceDetails = document.getElementById('priceDetails');
         const shippingCostsDisplay = document.getElementById('shippingCosts');
         const finalPriceDisplay = document.getElementById('finalPrice');
+
+        // ===== TOAST SYSTEM =====
+        function showToast(message, type = 'info') {
+            let container = document.querySelector('.toast-container');
+            if (!container) {
+                container = document.createElement('div');
+                container.className = 'toast-container';
+                document.body.appendChild(container);
+            }
+            const toast = document.createElement('div');
+            toast.className = `toast ${type}`;
+            toast.textContent = message;
+            if (type === 'error') toast.style.borderColor = '#ff4444';
+            if (type === 'success') toast.style.borderColor = '#10b981';
+            container.appendChild(toast);
+            setTimeout(() => {
+                toast.style.opacity = '0';
+                toast.style.transform = 'translateX(100%)';
+                toast.style.transition = 'all 0.3s ease';
+                setTimeout(() => toast.remove(), 300);
+            }, 3000);
+        }
 
         function getPriceFromEntry(entry) {
             let price = entry?.kunden_preis ?? entry?.farmer_preis ?? null;
@@ -346,17 +254,13 @@
             return name.toLowerCase().replace(/[^a-z0-9]/g, '_').replace(/_+/g, '_').replace(/^_|_$/g, '');
         }
 
-        // Baut alle möglichen CDN-URLs für ein Item (Block- und Item-Ordner, alle CDNs)
         function buildTextureUrlCandidates(itemName) {
             const norm = normalizeItemName(itemName);
             const englishName = NAME_MAPPING[norm] || norm;
-            // Reihenfolge: bei reinen Items erst item/, sonst block/
             const types = ITEM_ONLY.has(englishName) ? ['item', 'block'] : ['block', 'item'];
             const urls = [];
             for (const base of TEXTURE_BASE_URLS) {
-                for (const type of types) {
-                    urls.push(`${base}/${type}/${englishName}.png`);
-                }
+                for (const type of types) urls.push(`${base}/${type}/${englishName}.png`);
             }
             urls.push(FALLBACK_IMAGE);
             return urls;
@@ -372,12 +276,8 @@
             let i = 0;
             imgElement.onerror = function() {
                 i++;
-                if (i < urls.length) {
-                    imgElement.src = urls[i];
-                } else {
-                    imgElement.onerror = null;
-                    imgElement.src = FALLBACK_IMAGE;
-                }
+                if (i < urls.length) imgElement.src = urls[i];
+                else { imgElement.onerror = null; imgElement.src = FALLBACK_IMAGE; }
             };
             imgElement.src = urls[0];
         }
@@ -387,19 +287,54 @@
                 const data = PREISLISTE.item_prices || PREISLISTE;
                 if (Object.keys(data).length > 0) {
                     itemDatabase = data;
-                    console.log('✅ preisliste.js geladen:', Object.keys(itemDatabase).length, 'Einträge');
                     return true;
                 }
             }
-            console.warn('⚠️ preisliste.js nicht gefunden – verwende Fallback');
             itemDatabase = {
-                "Diamantblock": { kunden_preis: 860.0 },
-                "Stein": { kunden_preis: 3.0 },
-                "Eichenholz": { kunden_preis: 7 },
-                "Eisenblock": { kunden_preis: 200 },
-                "Goldblock": { kunden_preis: 120 },
-                "Netheritblock": { kunden_preis: 65000 }
+                "Diamantblock": { kunden_preis: 860.0 }, "Stein": { kunden_preis: 3.0 },
+                "Eichenholz": { kunden_preis: 7 }, "Eisenblock": { kunden_preis: 200 },
+                "Goldblock": { kunden_preis: 120 }, "Netheritblock": { kunden_preis: 65000 }
             };
+            return false;
+        }
+
+        function populateDatalist() {
+            const datalist = document.getElementById('itemList');
+            if (!datalist) return;
+            datalist.innerHTML = '';
+            Object.keys(itemDatabase).sort().forEach(item => {
+                const option = document.createElement('option');
+                option.value = item;
+                datalist.appendChild(option);
+            });
+        }
+
+        // ===== LOCAL STORAGE (Warenkorb speichern) =====
+        function saveOrderToLocalStorage() {
+            const rows = document.querySelectorAll('.item-row');
+            const order = [];
+            rows.forEach(row => {
+                const name = row.querySelector('.block-name').value.trim();
+                const chestType = row.querySelector('.chest-type').value;
+                const amount = row.querySelector('.chest-amount').value;
+                if (name) order.push({ name, chestType, amount });
+            });
+            localStorage.setItem('heavent_order', JSON.stringify(order));
+        }
+
+        function loadOrderFromLocalStorage() {
+            const saved = localStorage.getItem('heavent_order');
+            if (!saved) return false;
+            try {
+                const order = JSON.parse(saved);
+                if (order.length > 0) {
+                    orderItemsContainer.innerHTML = '';
+                    order.forEach(item => {
+                        addItemRow(item.name, item.chestType, item.amount);
+                    });
+                    return true;
+                }
+            } catch(e) {}
             return false;
         }
 
@@ -415,26 +350,19 @@
                 priceDisplay.style.color = '#ff4444';
                 return;
             }
-
             const itemsPerChest = chestType.value === 'double' ? ITEMS_PER_DOUBLE_CHEST : ITEMS_PER_SINGLE_CHEST;
             const amount = parseInt(amountInput.value) || 1;
-            const total = basePriceItem * itemsPerChest * amount;
-
-            priceDisplay.textContent = total.toFixed(2);
+            priceDisplay.textContent = (basePriceItem * itemsPerChest * amount).toFixed(2);
             priceDisplay.style.color = '';
         }
 
         function updateItemPreview(input, preview) {
             const name = input.value.trim();
-            if (!name) {
-                preview.onerror = null;
-                preview.src = FALLBACK_IMAGE;
-                return;
-            }
+            if (!name) { preview.onerror = null; preview.src = FALLBACK_IMAGE; return; }
             setImageWithFallback(preview, name);
         }
 
-        function createItemRow(index) {
+        function createItemRow(index, defaultName = '', defaultType = 'double', defaultAmount = 1) {
             return `
                 <div class="item-row" data-index="${index}">
                     <div class="form-group image-group">
@@ -446,18 +374,18 @@
                     </div>
                     <div class="form-group">
                         <label for="blockName_${index}">Blockname</label>
-                        <input type="text" class="block-name" id="blockName_${index}" placeholder="z.B. Diamantblock" />
+                        <input type="text" class="block-name" id="blockName_${index}" placeholder="z.B. Diamantblock" list="itemList" autocomplete="off" value="${defaultName}" />
                     </div>
                     <div class="form-group">
                         <label for="chestType_${index}">Kistenmenge</label>
                         <select class="chest-type" id="chestType_${index}">
-                            <option value="single">Kiste</option>
-                            <option value="double" selected>Doppelkiste</option>
+                            <option value="single" ${defaultType === 'single' ? 'selected' : ''}>Kiste</option>
+                            <option value="double" ${defaultType === 'double' ? 'selected' : ''}>Doppelkiste</option>
                         </select>
                     </div>
                     <div class="form-group amount-group">
                         <label for="chestAmount_${index}">Anzahl Kisten</label>
-                        <input type="number" class="chest-amount" id="chestAmount_${index}" value="1" min="1" />
+                        <input type="number" class="chest-amount" id="chestAmount_${index}" value="${defaultAmount}" min="1" />
                     </div>
                     <div class="form-group price-group">
                         <label>→ Preis</label>
@@ -485,13 +413,10 @@
                 updateTotalPrice();
                 validateBlockNames();
                 updatePriceDetails();
+                saveOrderToLocalStorage();
             };
 
-            nameInput.addEventListener('input', () => {
-                recalc();
-                updateItemPreview(nameInput, preview);
-            });
-
+            nameInput.addEventListener('input', () => { recalc(); updateItemPreview(nameInput, preview); });
             chestType.addEventListener('change', recalc);
             amountInput.addEventListener('input', recalc);
 
@@ -499,10 +424,7 @@
                 const file = e.target.files[0];
                 if (file) {
                     const reader = new FileReader();
-                    reader.onload = (ev) => {
-                        preview.src = ev.target.result;
-                        preview.onerror = null;
-                    };
+                    reader.onload = (ev) => { preview.src = ev.target.result; preview.onerror = null; };
                     reader.readAsDataURL(file);
                 }
             });
@@ -510,7 +432,7 @@
             const removeBtn = row.querySelector('.btn-remove-row');
             removeBtn.addEventListener('click', function() {
                 if (orderItemsContainer.children.length <= 1) {
-                    alert('Mindestens eine Zeile muss vorhanden bleiben.');
+                    showToast('Mindestens eine Zeile muss vorhanden bleiben.', 'error');
                     return;
                 }
                 row.remove();
@@ -518,18 +440,16 @@
                 validateBlockNames();
                 updateTotalPrice();
                 updatePriceDetails();
+                saveOrderToLocalStorage();
             });
 
-            if (nameInput.value.trim()) {
-                updateItemPreview(nameInput, preview);
-            }
+            if (nameInput.value.trim()) updateItemPreview(nameInput, preview);
         }
 
-        function addItemRow() {
+        function addItemRow(defaultName = '', defaultType = 'double', defaultAmount = 1) {
             const index = itemCounter++;
-            const rowHtml = createItemRow(index);
             const temp = document.createElement('div');
-            temp.innerHTML = rowHtml;
+            temp.innerHTML = createItemRow(index, defaultName, defaultType, defaultAmount);
             const row = temp.firstElementChild;
             bindRowEvents(row);
             orderItemsContainer.appendChild(row);
@@ -539,9 +459,7 @@
             validateBlockNames();
             const nameInput = row.querySelector('.block-name');
             const preview = row.querySelector('.item-preview');
-            if (nameInput.value.trim()) {
-                updateItemPreview(nameInput, preview);
-            }
+            if (nameInput.value.trim()) updateItemPreview(nameInput, preview);
         }
 
         function updateTotalPrice() {
@@ -584,15 +502,11 @@
                 priceDetails.classList.remove('visible');
                 return;
             }
-
             priceDetails.classList.add('visible');
-
             const surcharge = selectedShipping === 'self' ? 0.20 : 0.30;
             const shippingCost = basePrice * surcharge;
             const finalPrice = basePrice + shippingCost;
-            const surchargePercent = surcharge * 100;
-
-            shippingCostsDisplay.innerHTML = shippingCost.toFixed(2) + '€ <span class="surcharge-info">(+' + surchargePercent + '%)</span>';
+            shippingCostsDisplay.innerHTML = shippingCost.toFixed(2) + '€ <span class="surcharge-info">(+' + (surcharge * 100) + '%)</span>';
             finalPriceDisplay.textContent = finalPrice.toFixed(2) + '€';
         }
 
@@ -600,31 +514,22 @@
             selectedShipping = type;
             selfPickupBtn.classList.remove('active');
             deliveryBtn.classList.remove('active');
-            if (type === 'self') {
-                selfPickupBtn.classList.add('active');
-            } else if (type === 'delivery') {
-                deliveryBtn.classList.add('active');
-            }
+            if (type === 'self') selfPickupBtn.classList.add('active');
+            else if (type === 'delivery') deliveryBtn.classList.add('active');
             submitBtn.disabled = false;
             submitBtn.className = 'btn btn-primary glow';
             validateBlockNames();
             updatePriceDetails();
         }
 
-        selfPickupBtn.addEventListener('click', function() { selectShipping('self'); });
-        deliveryBtn.addEventListener('click', function() { selectShipping('delivery'); });
+        selfPickupBtn.addEventListener('click', () => selectShipping('self'));
+        deliveryBtn.addEventListener('click', () => selectShipping('delivery'));
 
+        // ===== FAKE CHECKOUT =====
         function submitOrder() {
-            if (!selectedShipping) {
-                alert('Bitte wähle zuerst eine Versandart aus.');
-                return;
-            }
-
+            if (!selectedShipping) { showToast('Bitte wähle zuerst eine Versandart aus.', 'error'); return; }
             const rows = document.querySelectorAll('.item-row');
-            if (rows.length === 0) {
-                alert('Bitte füge mindestens ein Item hinzu.');
-                return;
-            }
+            if (rows.length === 0) { showToast('Bitte füge mindestens ein Item hinzu.', 'error'); return; }
 
             let summary = '🛒 Deine Bestellung:\n\n';
             let total = 0;
@@ -640,20 +545,15 @@
                     return;
                 }
                 names.push(name);
-
                 const chestType = row.querySelector('.chest-type');
                 const amount = parseInt(row.querySelector('.chest-amount').value) || 1;
                 const price = parseFloat(row.querySelector('.item-price').textContent) || 0;
                 total += price;
                 const itemsPerChest = chestType.value === 'double' ? ITEMS_PER_DOUBLE_CHEST : ITEMS_PER_SINGLE_CHEST;
-                const totalItems = itemsPerChest * amount;
-                summary += `${i+1}. ${name} | ${chestType.options[chestType.selectedIndex].text} x${amount} (${totalItems.toLocaleString()} Stk) = ${price.toFixed(2)}€\n`;
+                summary += `${i+1}. ${name} | ${chestType.options[chestType.selectedIndex].text} x${amount} (${(itemsPerChest * amount).toLocaleString()} Stk) = ${price.toFixed(2)}€\n`;
             });
 
-            if (error) {
-                alert('Bitte behebe die Fehler (leere oder doppelte Blocknamen).');
-                return;
-            }
+            if (error) { showToast('Bitte behebe die Fehler (leere oder doppelte Blocknamen).', 'error'); return; }
 
             const surcharge = selectedShipping === 'self' ? 0.20 : 0.30;
             const shippingCost = basePrice * surcharge;
@@ -665,18 +565,53 @@
             summary += `\nVersandkosten: ${shippingCost.toFixed(2)}€`;
             summary += `\nGültiger Preis: ${finalPrice.toFixed(2)}€`;
 
-            alert(summary + '\n\n✅ Bestellung erfolgreich!');
+            // Fake Ladescreen
+            const overlay = document.createElement('div');
+            overlay.className = 'checkout-overlay';
+            overlay.innerHTML = `
+                <div class="checkout-box">
+                    <div class="spinner"></div>
+                    <h3>Bestellung wird bearbeitet...</h3>
+                    <p>Verbinde mit dem Lieferando-Netzwerk...</p>
+                </div>
+            `;
+            document.body.appendChild(overlay);
+
+            setTimeout(() => {
+                overlay.innerHTML = `
+                    <div class="checkout-box">
+                        <h3 style="color:#10b981; margin-bottom: 15px;">✅ Bestellung erfolgreich!</h3>
+                        <p style="margin-bottom: 20px; font-size: 0.9rem;">Deine Bestellung wurde an das Team weitergeleitet.</p>
+                        <div class="checkout-actions">
+                            <button class="btn-copy" id="copyOrderBtn">📋 In Zwischenablage kopieren</button>
+                            <button class="btn-close-checkout" id="closeCheckoutBtn">Schließen</button>
+                        </div>
+                    </div>
+                `;
+                document.getElementById('copyOrderBtn').onclick = () => {
+                    navigator.clipboard.writeText(summary);
+                    showToast('In Zwischenablage kopiert!', 'success');
+                };
+                document.getElementById('closeCheckoutBtn').onclick = () => {
+                    document.body.removeChild(overlay);
+                    // Optional: Warenkorb leeren nach Bestellung
+                    // localStorage.removeItem('heavent_order');
+                };
+            }, 2500);
         }
 
         function init() {
             loadItemDatabase();
-            addItemRow();
-            addBtn.addEventListener('click', addItemRow);
+            populateDatalist();
+            if (!loadOrderFromLocalStorage()) {
+                addItemRow(); // Wenn nichts gespeichert, erste Zeile anlegen
+            }
+            addBtn.addEventListener('click', () => addItemRow());
             submitBtn.addEventListener('click', submitOrder);
         }
         init();
 
-        // ===== ACCOUNT MODAL LOGIC (mit sessionStorage) =====
+        // ===== ACCOUNT MODAL LOGIC =====
         (function() {
             const modal = document.getElementById('accountModal');
             const closeBtn = document.getElementById('closeModalBtn');
@@ -690,7 +625,6 @@
             const profileHead = document.getElementById('profileHead');
             const modalSubtitle = document.getElementById('modalSubtitle');
             const loginHeadImg = document.getElementById('loginHeadImg');
-
             const loginHeaderBtn = document.getElementById('loginBtnHeader');
             const headerAvatar = document.getElementById('headerAvatar');
             const headerAvatarImg = document.getElementById('headerAvatarImg');
@@ -741,15 +675,12 @@
 
             function login() {
                 const name = mcInput.value.trim();
-                if (name.length < 2) {
-                    errorMsg.classList.add('visible');
-                    return;
-                }
+                if (name.length < 2) { errorMsg.classList.add('visible'); return; }
                 errorMsg.classList.remove('visible');
                 sessionStorage.setItem('mc_user', name);
                 showProfile(name);
                 updateHeaderUI();
-                alert(`✅ Willkommen, ${name}!`);
+                showToast(`✅ Willkommen, ${name}!`, 'success');
             }
 
             function logout() {
@@ -776,21 +707,12 @@
 
             if (loginHeaderBtn) loginHeaderBtn.addEventListener('click', openModal);
             if (headerAvatar) headerAvatar.addEventListener('click', openModal);
-
             closeBtn.addEventListener('click', closeModal);
-            modal.addEventListener('click', (e) => {
-                if (e.target === modal) closeModal();
-            });
-            document.addEventListener('keydown', (e) => {
-                if (e.key === 'Escape' && modal.classList.contains('active')) closeModal();
-            });
-
+            modal.addEventListener('click', (e) => { if (e.target === modal) closeModal(); });
+            document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && modal.classList.contains('active')) closeModal(); });
             loginBtn.addEventListener('click', login);
-            mcInput.addEventListener('keydown', (e) => {
-                if (e.key === 'Enter') loginBtn.click();
-            });
+            mcInput.addEventListener('keydown', (e) => { if (e.key === 'Enter') loginBtn.click(); });
             logoutBtn.addEventListener('click', logout);
-
             updateHeaderUI();
         })();
     </script>
