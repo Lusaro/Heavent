@@ -134,8 +134,42 @@
         // ===== BESTELL-LOGIK (komplett) =====
         const ITEMS_PER_DOUBLE_CHEST = 3456;
         const ITEMS_PER_SINGLE_CHEST = 1728;
-        const FALLBACK_IMAGE = 'https://via.placeholder.com/48x48/2a3440/8b5cf6?text=?';
-        const TEXTURE_BASE_PATH = './minecraft/';
+
+        // ===== TEXTUR-QUELLEN (keine lokalen Minecraft-Texturen nötig) =====
+        // Diese CDNs hosten die Vanilla-Texturen – du musst sie NICHT in dein Repo legen.
+        const MINECRAFT_VERSION = '1.21.4';
+        const TEXTURE_BASE_URLS = [
+            // 1. mcasset.cloud – dedizierter Minecraft-Asset-Mirror
+            `https://mcasset.cloud/${MINECRAFT_VERSION}/assets/minecraft/textures`,
+            // 2. jsDelivr CDN (schnell) für InventivetalentDev/minecraft-assets
+            `https://cdn.jsdelivr.net/gh/InventivetalentDev/minecraft-assets@${MINECRAFT_VERSION}/assets/minecraft/textures`,
+            // 3. GitHub raw als dritte Quelle
+            `https://raw.githubusercontent.com/InventivetalentDev/minecraft-assets/${MINECRAFT_VERSION}/assets/minecraft/textures`,
+            // Optional (nur falls du sie lokal testen willst):
+            // './minecraft',
+        ];
+
+        // Inline-SVG-Platzhalter (kein externer Dienst wie via.placeholder.com nötig)
+        const FALLBACK_IMAGE = 'data:image/svg+xml;charset=UTF-8,' + encodeURIComponent(
+            '<svg xmlns="http://www.w3.org/2000/svg" width="48" height="48">' +
+            '<rect width="48" height="48" rx="6" fill="#2a3440"/>' +
+            '<text x="24" y="31" font-family="Arial, sans-serif" font-size="22" ' +
+            'font-weight="bold" fill="#8b5cf6" text-anchor="middle">?</text>' +
+            '</svg>'
+        );
+
+        // Items, die in textures/item/ liegen (statt block/) – spart 404-Requests
+        const ITEM_ONLY = new Set([
+            'diamond', 'coal', 'emerald', 'redstone', 'lapis_lazuli',
+            'iron_ingot', 'gold_ingot', 'netherite_ingot', 'netherite_scrap',
+            'nether_wart', 'sugar_cane', 'kelp', 'bamboo', 'cactus', 'stick',
+            'apple', 'wheat', 'paper', 'book', 'flint', 'charcoal', 'string',
+            'feather', 'leather', 'bone', 'bone_meal', 'slime_ball', 'snowball',
+            'egg', 'blaze_rod', 'blaze_powder', 'ender_pearl', 'ender_eye',
+            'ghast_tear', 'magma_cream', 'gunpowder', 'glowstone_dust',
+            'nether_star', 'nautilus_shell', 'prismarine_shard',
+            'prismarine_crystals', 'shulker_shell', 'phantom_membrane',
+        ]);
 
         const NAME_MAPPING = {
             'diamantblock': 'diamond_block',
@@ -312,28 +346,40 @@
             return name.toLowerCase().replace(/[^a-z0-9]/g, '_').replace(/_+/g, '_').replace(/^_|_$/g, '');
         }
 
+        // Baut alle möglichen CDN-URLs für ein Item (Block- und Item-Ordner, alle CDNs)
+        function buildTextureUrlCandidates(itemName) {
+            const norm = normalizeItemName(itemName);
+            const englishName = NAME_MAPPING[norm] || norm;
+            // Reihenfolge: bei reinen Items erst item/, sonst block/
+            const types = ITEM_ONLY.has(englishName) ? ['item', 'block'] : ['block', 'item'];
+            const urls = [];
+            for (const base of TEXTURE_BASE_URLS) {
+                for (const type of types) {
+                    urls.push(`${base}/${type}/${englishName}.png`);
+                }
+            }
+            urls.push(FALLBACK_IMAGE);
+            return urls;
+        }
+
         function setImageWithFallback(imgElement, itemName) {
             if (!itemName || !itemName.trim()) {
+                imgElement.onerror = null;
                 imgElement.src = FALLBACK_IMAGE;
                 return;
             }
-            const norm = normalizeItemName(itemName);
-            const englishName = NAME_MAPPING[norm] || norm;
-            const blockPath = `${TEXTURE_BASE_PATH}block/${englishName}.png`;
-            const itemPath = `${TEXTURE_BASE_PATH}item/${englishName}.png`;
-            let currentTry = 0;
-            const urls = [blockPath, itemPath, FALLBACK_IMAGE];
-            function tryNext() {
-                if (currentTry >= urls.length) {
+            const urls = buildTextureUrlCandidates(itemName);
+            let i = 0;
+            imgElement.onerror = function() {
+                i++;
+                if (i < urls.length) {
+                    imgElement.src = urls[i];
+                } else {
+                    imgElement.onerror = null;
                     imgElement.src = FALLBACK_IMAGE;
-                    return;
                 }
-                imgElement.src = urls[currentTry];
-                currentTry++;
-            }
-            imgElement.onerror = function() { tryNext(); };
-            imgElement.onload = function() {};
-            tryNext();
+            };
+            imgElement.src = urls[0];
         }
 
         function loadItemDatabase() {
@@ -381,6 +427,7 @@
         function updateItemPreview(input, preview) {
             const name = input.value.trim();
             if (!name) {
+                preview.onerror = null;
                 preview.src = FALLBACK_IMAGE;
                 return;
             }
