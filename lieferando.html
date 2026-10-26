@@ -7,6 +7,16 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700;14..32,800&display=swap" rel="stylesheet" />
     <link rel="stylesheet" href="lieferando-style.css" />
     <!-- Modal-Styles sind jetzt in lieferando-style.css integriert -->
+    <style>
+        /* Spezifische Anpassung für die neuen runden MC-Köpfe in den Rezensionen */
+        .author-avatar {
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 2px solid var(--border-color);
+        }
+    </style>
 </head>
 <body>
 
@@ -16,9 +26,10 @@
             <div class="Logo"> <img src="Lieferando.png" alt="Lieferando Logo"/></div>
             <ul class="nav-links">
                 <li><a href="index.html">Startseite</a></li>
-                <li><a href="#" class="active">HEAVENT</a></li>
+                <li><a href="team.html">HEAVENT</a></li>
+                <li><a href="bestellen.html">Bestellung</a></li>
                 <li><a href="partner.html">Partner</a></li>
-                <li><a href="#">Preise</a></li>
+                <li><a href="#" class="active">Preise</a></li>
             </ul>
             <div class="nav-actions">
                 <button class="btn-login" id="loginBtnHeader">Anmelden</button>
@@ -59,19 +70,19 @@
             </div>
         </section>
 
-        <!-- ===== STATISTIKEN ===== -->
+        <!-- ===== STATISTIKEN (Mit Hochzähl-Animation) ===== -->
         <section class="container">
             <div class="stats-bar">
                 <div class="stat-item">
-                    <h3>$20M+</h3>
+                    <h3 class="counter" data-target="20" data-prefix="$" data-suffix="M+">$0M+</h3>
                     <p>Umsatz</p>
                 </div>
                 <div class="stat-item">
-                    <h3>$4M+</h3>
+                    <h3 class="counter" data-target="4" data-prefix="$" data-suffix="M+">$0M+</h3>
                     <p>Bonis</p>
                 </div>
                 <div class="stat-item">
-                    <h3>3</h3>
+                    <h3 class="counter" data-target="3">0</h3>
                     <p>Offene Aufträge</p>
                 </div>
             </div>
@@ -109,7 +120,7 @@
             </div>
         </section>
 
-        <!-- ===== TESTIMONIALS ===== -->
+        <!-- ===== TESTIMONIALS (Mit echten Minecraft-Köpfen) ===== -->
         <section style="padding-top: 0">
             <div class="container">
                 <div class="section-header">
@@ -120,7 +131,7 @@
                         <div class="stars">★★★★★</div>
                         <blockquote>„War sehr schnell und unkompliziert. Die Lieferung wurde kurzfristig auch an einen anderen Ort gebracht.“</blockquote>
                         <div class="author">
-                            <div class="author-avatar">AG</div>
+                            <img src="https://mc-heads.net/head/AgentBeere" class="author-avatar" alt="Agent Beere">
                             <div class="author-info">
                                 <strong>Agent Beere</strong>
                             </div>
@@ -130,7 +141,7 @@
                         <div class="stars">★★★★★</div>
                         <blockquote>“war sehr schnell und unkompliziert. Die Lieferung wurde kurzfristig auch an einen anderen Ort gebracht”</blockquote>
                         <div class="author">
-                            <div class="author-avatar">S</div>
+                            <img src="https://mc-heads.net/head/Snow263" class="author-avatar" alt="Snow">
                             <div class="author-info">
                                 <strong>Snow</strong>
                             </div>
@@ -140,7 +151,7 @@
                         <div class="stars">★★★★★</div>
                         <blockquote>“So schnell hätte ich das niemals geschafft und konnte deshalb mein Bauprojekt sehr schnell abschließen – der Preis ist auch sehr gut!”</blockquote>
                         <div class="author">
-                            <div class="author-avatar">DM</div>
+                            <img src="https://mc-heads.net/head/DrMelonee" class="author-avatar" alt="Dr Melonee">
                             <div class="author-info">
                                 <strong>Dr Melonee</strong>
                             </div>
@@ -294,7 +305,33 @@
         </div>
     </div>
 
+    <!-- ===== JAVASCRIPT ===== -->
     <script>
+        // ===== STATISTIK COUNTER ANIMATION =====
+        document.addEventListener('DOMContentLoaded', () => {
+            const counters = document.querySelectorAll('.counter');
+            
+            counters.forEach(counter => {
+                const target = +counter.getAttribute('data-target');
+                const prefix = counter.getAttribute('data-prefix') || '';
+                const suffix = counter.getAttribute('data-suffix') || '';
+                const duration = 2000; // 2 Sekunden Animation
+                const steps = 50;
+                const stepTime = Math.abs(Math.floor(duration / steps));
+                let current = 0;
+                const increment = target / steps;
+
+                const timer = setInterval(() => {
+                    current += increment;
+                    if (current >= target) {
+                        current = target;
+                        clearInterval(timer);
+                    }
+                    counter.innerText = prefix + Math.floor(current) + suffix;
+                }, stepTime);
+            });
+        });
+
         // ===== MODAL LOGIC (Konzept) =====
         document.addEventListener('DOMContentLoaded', () => {
             const modal = document.getElementById('konzeptModal');
