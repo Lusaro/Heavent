@@ -7,6 +7,49 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700;14..32,800&display=swap" rel="stylesheet" />
     <link rel="stylesheet" href="bestellen.css" />
     <script src="preisliste.js"></script>
+    <style>
+        /* ===== CUSTOM OTP INPUT STYLES ===== */
+        .otp-container {
+            display: flex; justify-content: center; gap: 8px; margin: 20px 0;
+        }
+        .otp-slot {
+            width: 45px; height: 50px; border: 1px solid var(--border-color);
+            border-radius: 8px; background: var(--bg-primary); display: flex;
+            align-items: center; justify-content: center; font-size: 1.2rem;
+            font-weight: 600; color: var(--text-primary);
+            transition: all 0.2s cubic-bezier(0.22, 1, 0.36, 1);
+            position: relative; overflow: hidden;
+        }
+        .otp-slot.active {
+            border-color: var(--accent-purple); box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.2); z-index: 10;
+        }
+        .otp-slot.filled {
+            transform: scale(1.05); border-color: var(--accent-purple);
+        }
+        .otp-slot .char { animation: popIn 0.2s cubic-bezier(0.22, 1, 0.36, 1) forwards; }
+        @keyframes popIn {
+            0% { transform: scale(0) rotateY(-90deg); opacity: 0; }
+            100% { transform: scale(1) rotateY(0deg); opacity: 1; }
+        }
+        .otp-slot .caret {
+            position: absolute; width: 2px; height: 20px; background: var(--text-primary);
+            animation: blink 1s infinite;
+        }
+        @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0; } }
+        
+        .otp-error { animation: shake 0.4s ease-in-out; border-color: #ff4444 !important; }
+        @keyframes shake {
+            0% { transform: translateX(0); } 25% { transform: translateX(-10px); }
+            50% { transform: translateX(10px); } 75% { transform: translateX(-10px); }
+            100% { transform: translateX(0); }
+        }
+        .otp-hidden-input { position: absolute; opacity: 0; pointer-events: none; }
+        
+        .modal-content.shake {
+            animation: shake 0.4s ease-in-out; border-color: #ff4444 !important;
+            box-shadow: 0 0 30px rgba(255, 68, 68, 0.4) !important;
+        }
+    </style>
 </head>
 <body>
     <!-- ===== HEADER ===== -->
@@ -94,14 +137,15 @@
 
     <datalist id="itemList"></datalist>
 
-    <!-- ===== ACCOUNT MODAL (Mit Discord ID) ===== -->
+    <!-- ===== ACCOUNT MODAL (Mit PIN Schritt) ===== -->
     <div id="accountModal" class="modal-overlay">
-        <div class="modal-content account-modal">
+        <div class="modal-content account-modal" id="accountModalContent">
             <button class="modal-close" id="closeModalBtn">&times;</button>
             <h2>🔐 Account</h2>
-            <p id="modalSubtitle">Melde dich an (Nur für Discord-Mitglieder)</p>
+            <p id="modalSubtitle">Melde dich an oder registriere dich</p>
 
-            <div id="loginView">
+            <!-- Schritt 1 -->
+            <div id="loginStep1">
                 <div class="login-row" style="margin-bottom: 12px;">
                     <div class="login-field">
                         <label for="mcNameInput">Minecraft-Name</label>
@@ -114,11 +158,26 @@
                         <input type="text" id="discordIdInput" placeholder="z.B. 123456789012345678" />
                     </div>
                 </div>
-                <div class="error-msg" id="errorMsg">Bitte gib gültige Daten ein oder tritt dem Discord bei.</div>
-                <button class="btn-submit" id="loginBtn">Anmelden</button>
+                <div class="error-msg" id="errorMsg1">Bitte fülle beide Felder aus.</div>
+                <button class="btn-submit" id="nextToPinBtn">Weiter zum PIN →</button>
                 <p style="font-size:0.75rem; margin-top:10px; color:#6b7a8f;">Du musst auf dem <a href="https://discord.gg/utngw94B7b" target="_blank" style="color:#8b5cf6;">Heavent Discord</a> sein.</p>
             </div>
 
+            <!-- Schritt 2 -->
+            <div id="loginStep2" style="display: none;">
+                <p style="font-size: 0.9rem; color: #b0b8c4; margin-bottom: 15px;">
+                    Gib deinen 6-stelligen PIN ein.<br>
+                    <span style="font-size: 0.75rem; color: #6b7a8f;">(Beim ersten Mal wird dieser als dein neuer PIN gespeichert)</span>
+                </p>
+                
+                <div class="otp-container" id="otpContainer"></div>
+                
+                <div class="error-msg" id="errorMsg2">Falscher PIN!</div>
+                <button class="btn-submit" id="loginWithPinBtn" disabled>Anmelden</button>
+                <button class="btn-logout" id="backToStep1Btn" style="width:100%; margin-top: 10px; background: transparent; border: none; color: #6b7a8f;">← Zurück</button>
+            </div>
+
+            <!-- Schritt 3 -->
             <div id="profileView" class="profile-view">
                 <div class="profile-head">
                     <img id="profileHead" src="" alt="Minecraft-Head">
@@ -138,20 +197,14 @@
 
         const ITEMS_PER_DOUBLE_CHEST = 3456;
         const ITEMS_PER_SINGLE_CHEST = 1728;
-
+        const FALLBACK_IMAGE = 'data:image/svg+xml;charset=UTF-8,' + encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" width="48" height="48"><rect width="48" height="48" rx="6" fill="#2a3440"/><text x="24" y="31" font-family="Arial" font-size="22" font-weight="bold" fill="#8b5cf6" text-anchor="middle">?</text></svg>');
         const MINECRAFT_VERSION = '1.21.4';
         const TEXTURE_BASE_URLS = [
             `https://mcasset.cloud/${MINECRAFT_VERSION}/assets/minecraft/textures`,
             `https://cdn.jsdelivr.net/gh/InventivetalentDev/minecraft-assets@${MINECRAFT_VERSION}/assets/minecraft/textures`,
             `https://raw.githubusercontent.com/InventivetalentDev/minecraft-assets/${MINECRAFT_VERSION}/assets/minecraft/textures`,
         ];
-
-        const FALLBACK_IMAGE = 'data:image/svg+xml;charset=UTF-8,' + encodeURIComponent(
-            '<svg xmlns="http://www.w3.org/2000/svg" width="48" height="48"><rect width="48" height="48" rx="6" fill="#2a3440"/><text x="24" y="31" font-family="Arial" font-size="22" font-weight="bold" fill="#8b5cf6" text-anchor="middle">?</text></svg>'
-        );
-
         const ITEM_ONLY = new Set(['diamond', 'coal', 'emerald', 'redstone', 'lapis_lazuli', 'iron_ingot', 'gold_ingot', 'netherite_ingot', 'netherite_scrap', 'nether_wart', 'sugar_cane', 'kelp', 'bamboo', 'cactus', 'stick', 'apple', 'wheat', 'paper', 'book', 'flint', 'charcoal', 'string', 'feather', 'leather', 'bone', 'bone_meal', 'slime_ball', 'snowball', 'egg', 'blaze_rod', 'blaze_powder', 'ender_pearl', 'ender_eye', 'ghast_tear', 'magma_cream', 'gunpowder', 'glowstone_dust', 'nether_star', 'nautilus_shell', 'prismarine_shard', 'prismarine_crystals', 'shulker_shell', 'phantom_membrane']);
-
         const NAME_MAPPING = {
             'diamantblock': 'diamond_block', 'diamant': 'diamond', 'stein': 'stone', 'kohleblock': 'coal_block', 'eisenblock': 'iron_block', 'goldblock': 'gold_block', 'redstoneblock': 'redstone_block', 'smaragdblock': 'emerald_block', 'lapislazuliblock': 'lapis_block', 'netheritblock': 'netherite_block', 'kupferblock': 'copper_block', 'angelaufener_kupferblock': 'exposed_copper', 'verwitterter_kupferblock': 'weathered_copper', 'oxidierter_kupferblock': 'oxidized_copper', 'quarzblock': 'quartz_block', 'glatterquarzblock': 'smooth_quartz', 'amathystblock': 'amethyst_block', 'eichenstamm': 'oak_log', 'eichenholz': 'oak_log', 'eichenholzbretter': 'oak_planks', 'eichenholztreppe': 'oak_stairs', 'eichenholzstufe': 'oak_slab', 'eichenholzzaun': 'oak_fence', 'eichenholzzauntor': 'oak_fence_gate', 'eichenholztür': 'oak_door', 'eichenholzfalltür': 'oak_trapdoor', 'fichtenstamm': 'spruce_log', 'fichtenholz': 'spruce_log', 'fichtenholzbretter': 'spruce_planks', 'birkenstamm': 'birch_log', 'birkenholz': 'birch_log', 'tropenbaumstamm': 'jungle_log', 'tropenholz': 'jungle_log', 'akazienstamm': 'acacia_log', 'akazienholz': 'acacia_log', 'schwarzeichenstamm': 'dark_oak_log', 'schwarzeichenholz': 'dark_oak_log', 'mangrovenstamm': 'mangrove_log', 'mangrovenholz': 'mangrove_log', 'kirschstamm': 'cherry_log', 'kirschholz': 'cherry_log', 'blasseichenstamm': 'pale_oak_log', 'blasseichenholz': 'pale_oak_log', 'glas': 'glass', 'weißesglas': 'white_stained_glass', 'schwarzesglas': 'black_stained_glass', 'rotesglas': 'red_stained_glass', 'orangesglas': 'orange_stained_glass', 'gelbesglas': 'yellow_stained_glass', 'grünesglas': 'lime_stained_glass', 'türkisesglas': 'cyan_stained_glass', 'blauesglas': 'blue_stained_glass', 'violettesglas': 'purple_stained_glass', 'magenta_glss': 'magenta_stained_glass', 'rosaglas': 'pink_stained_glass', 'ofen': 'furnace', 'werkbank': 'crafting_table', 'truhe': 'chest', 'endertruhe': 'ender_chest', 'fackel': 'torch', 'laterne': 'lantern', 'seelenlaterne': 'soul_lantern', 'amboss': 'anvil', 'verzauberungstisch': 'enchanting_table', 'braustand': 'brewing_stand', 'kessel': 'cauldron', 'komposter': 'composter', 'notenblock': 'note_block', 'plattenspieler': 'jukebox', 'bücherregal': 'bookshelf', 'lesepult': 'lectern', 'leiter': 'ladder', 'gerüst': 'scaffolding', 'blitzableiter': 'lightning_rod', 'schleimblock': 'slime_block', 'honigblock': 'honey_block', 'honigwabenblock': 'honeycomb_block', 'kürbis': 'pumpkin', 'geschnitzterkürbis': 'carved_pumpkin', 'kürbislaterne': 'jack_o_lantern', 'melon': 'melon', 'strohballen': 'hay_bale', 'seelensand': 'soul_sand', 'seelenerde': 'soul_soil', 'knochenblock': 'bone_block', 'obsidian': 'obsidian', 'weinenderobsidian': 'crying_obsidian', 'endstein': 'end_stone', 'purpurblock': 'purpur_block', 'prismarin': 'prismarine', 'seelaterne': 'sea_lantern', 'leuchtstein': 'glowstone', 'basalt': 'basalt', 'glatterbasalt': 'smooth_basalt', 'polierterbasalt': 'polished_basalt', 'schwarzstein': 'blackstone', 'golddurchzogener_schwarzstein': 'gilded_blackstone', 'netherrack': 'netherrack', 'netherziegel': 'nether_bricks', 'rotenetherziegel': 'red_nether_bricks', 'kalzit': 'calcite', 'tropfsteinblock': 'dripstone_block', 'magmablock': 'magma_block', 'eis': 'ice', 'packeis': 'packed_ice', 'blaueis': 'blue_ice', 'schneeblock': 'snow_block', 'sand': 'sand', 'roter_sand': 'red_sand', 'kies': 'gravel', 'ton': 'clay', 'erde': 'dirt', 'grasblock': 'grass_block', 'podsol': 'podzol', 'myzel': 'mycelium', 'mossblock': 'moss_block', 'blassmoosblock': 'pale_moss_block', 'kohle': 'coal', 'eisenbarren': 'iron_ingot', 'goldbarren': 'gold_ingot', 'netheritbarren': 'netherite_ingot', 'smaragd': 'emerald', 'lapislazuli': 'lapis_lazuli', 'redstone': 'redstone', 'netherwarze': 'nether_wart', 'wirrwarze': 'warped_wart', 'karmesinwarze': 'crimson_fungus', 'brauner_pilz': 'brown_mushroom', 'roter_pilz': 'red_mushroom', 'zuckerrohr': 'sugar_cane', 'kaktus': 'cactus', 'bambus': 'bamboo', 'seetang': 'kelp', 'getrockneter_seetangblock': 'dried_kelp_block', 'seerosenblatt': 'lily_pad', 'spinnennetz': 'cobweb'
         };
@@ -184,12 +237,7 @@
             if (type === 'error') toast.style.borderColor = '#ff4444';
             if (type === 'success') toast.style.borderColor = '#10b981';
             container.appendChild(toast);
-            setTimeout(() => {
-                toast.style.opacity = '0';
-                toast.style.transform = 'translateX(100%)';
-                toast.style.transition = 'all 0.3s ease';
-                setTimeout(() => toast.remove(), 300);
-            }, 3000);
+            setTimeout(() => { toast.style.opacity = '0'; toast.style.transform = 'translateX(100%)'; setTimeout(() => toast.remove(), 300); }, 3000);
         }
 
         function getPriceFromEntry(entry) {
@@ -461,10 +509,20 @@
 
         // ===== ECHTE BESTELLUNG AN DISCORD SENDEN =====
         async function submitOrder() {
-            if (!selectedShipping) { showToast('Bitte wähle zuerst eine Versandart aus.', 'error'); return; }
             const user = sessionStorage.getItem('mc_user');
-            if (!user) { showToast('Bitte logge dich zuerst ein!', 'error'); return; }
+            const discordId = sessionStorage.getItem('discord_id');
 
+            // Login-Zwang mit grafischem Shake-Effekt
+            if (!user || !discordId) {
+                showToast('Du musst dich einloggen, um zu bestellen!', 'error');
+                document.getElementById('loginBtnHeader').click();
+                const modalContent = document.getElementById('accountModalContent');
+                modalContent.classList.add('shake');
+                setTimeout(() => modalContent.classList.remove('shake'), 500);
+                return;
+            }
+
+            if (!selectedShipping) { showToast('Bitte wähle zuerst eine Versandart aus.', 'error'); return; }
             const rows = document.querySelectorAll('.item-row');
             if (rows.length === 0) { showToast('Bitte füge mindestens ein Item hinzu.', 'error'); return; }
 
@@ -497,7 +555,6 @@
             const finalPrice = basePrice + shippingCost;
             const shippingText = selectedShipping === 'self' ? 'Selbstabholung (+20%)' : 'Lieferung (+30%)';
 
-            // Fake Ladescreen
             const overlay = document.createElement('div');
             overlay.className = 'checkout-overlay';
             overlay.innerHTML = `<div class="checkout-box"><div class="spinner"></div><h3>Bestellung wird gesendet...</h3><p>Verbinde mit dem Discord-Server...</p></div>`;
@@ -509,6 +566,7 @@
                     body: JSON.stringify({
                         action: "order",
                         mcName: user,
+                        discordId: discordId,
                         shippingType: shippingText,
                         totalPrice: finalPrice.toFixed(2) + '€',
                         items: summary
@@ -521,7 +579,7 @@
                     overlay.innerHTML = `
                         <div class="checkout-box">
                             <h3 style="color:#10b981; margin-bottom: 15px;">✅ Bestellung erfolgreich!</h3>
-                            <p style="margin-bottom: 20px; font-size: 0.9rem;">Deine Bestellung ist im Discord eingegangen.</p>
+                            <p style="margin-bottom: 20px; font-size: 0.9rem;">Deine Bestellung ist im Discord eingegangen. Prüfe deine DMs!</p>
                             <button class="btn-close-checkout" id="closeCheckoutBtn">Schließen</button>
                         </div>
                     `;
@@ -550,25 +608,89 @@
         }
         init();
 
+        // ===== OTP PIN LOGIK =====
+        const otpContainer = document.getElementById('otpContainer');
+        const hiddenInput = document.createElement('input');
+        hiddenInput.type = 'tel';
+        hiddenInput.className = 'otp-hidden-input';
+        hiddenInput.maxLength = 6;
+        otpContainer.appendChild(hiddenInput);
+        
+        let otpValue = [];
+        
+        for (let i = 0; i < 6; i++) {
+            const slot = document.createElement('div');
+            slot.className = 'otp-slot';
+            slot.dataset.index = i;
+            otpContainer.appendChild(slot);
+        }
+
+        const slots = document.querySelectorAll('.otp-slot');
+        
+        otpContainer.addEventListener('click', () => hiddenInput.focus());
+
+        hiddenInput.addEventListener('input', (e) => {
+            const val = e.target.value.replace(/[^0-9]/g, '');
+            otpValue = val.split('');
+            updateOTPSlots();
+        });
+
+        function updateOTPSlots() {
+            slots.forEach((slot, index) => {
+                slot.innerHTML = '';
+                slot.classList.remove('active', 'filled', 'otp-error');
+                
+                if (index === otpValue.length) {
+                    slot.classList.add('active');
+                    const caret = document.createElement('div');
+                    caret.className = 'caret';
+                    slot.appendChild(caret);
+                }
+                
+                if (otpValue[index]) {
+                    const charSpan = document.createElement('span');
+                    charSpan.className = 'char';
+                    charSpan.textContent = otpValue[index];
+                    slot.appendChild(charSpan);
+                    slot.classList.add('filled');
+                }
+            });
+
+            const btn = document.getElementById('loginWithPinBtn');
+            if (otpValue.length === 6) {
+                btn.disabled = false;
+                btn.className = 'btn-submit btn-primary glow';
+            } else {
+                btn.disabled = true;
+                btn.className = 'btn-submit';
+            }
+        }
+
+        updateOTPSlots();
+
         // ===== ACCOUNT MODAL LOGIC =====
         (function() {
             const modal = document.getElementById('accountModal');
+            const modalContent = document.getElementById('accountModalContent');
             const closeBtn = document.getElementById('closeModalBtn');
-            const loginBtn = document.getElementById('loginBtn');
-            const logoutBtn = document.getElementById('logoutBtn');
-            const mcInput = document.getElementById('mcNameInput');
-            const discordInput = document.getElementById('discordIdInput');
-            const errorMsg = document.getElementById('errorMsg');
-            const loginView = document.getElementById('loginView');
-            const profileView = document.getElementById('profileView');
-            const profileName = document.getElementById('profileName');
-            const profileHead = document.getElementById('profileHead');
-            const modalSubtitle = document.getElementById('modalSubtitle');
-            
             const loginHeaderBtn = document.getElementById('loginBtnHeader');
             const headerAvatar = document.getElementById('headerAvatar');
             const headerAvatarImg = document.getElementById('headerAvatarImg');
             const headerAvatarName = document.getElementById('headerAvatarName');
+
+            const step1 = document.getElementById('loginStep1');
+            const step2 = document.getElementById('loginStep2');
+            const profileView = document.getElementById('profileView');
+            
+            const mcInput = document.getElementById('mcNameInput');
+            const discordInput = document.getElementById('discordIdInput');
+            const nextToPinBtn = document.getElementById('nextToPinBtn');
+            const backToStep1Btn = document.getElementById('backToStep1Btn');
+            const loginWithPinBtn = document.getElementById('loginWithPinBtn');
+            const logoutBtn = document.getElementById('logoutBtn');
+
+            const errorMsg1 = document.getElementById('errorMsg1');
+            const errorMsg2 = document.getElementById('errorMsg2');
 
             function updateHeaderUI() {
                 const user = sessionStorage.getItem('mc_user');
@@ -588,14 +710,22 @@
                 document.body.style.overflow = 'hidden';
                 const user = sessionStorage.getItem('mc_user');
                 if (!user) {
-                    loginView.style.display = 'block';
+                    step1.style.display = 'block';
+                    step2.style.display = 'none';
                     profileView.classList.remove('active');
+                    errorMsg1.classList.remove('visible');
+                    errorMsg2.classList.remove('visible');
                     mcInput.value = '';
                     discordInput.value = '';
-                    errorMsg.classList.remove('visible');
-                    modalSubtitle.textContent = 'Melde dich an (Nur für Discord-Mitglieder)';
+                    otpValue = [];
+                    hiddenInput.value = '';
+                    updateOTPSlots();
                 } else {
-                    showProfile(user);
+                    step1.style.display = 'none';
+                    step2.style.display = 'none';
+                    profileView.classList.add('active');
+                    document.getElementById('profileName').textContent = user;
+                    document.getElementById('profileHead').src = `https://mc-heads.net/head/${user}`;
                 }
             }
 
@@ -604,71 +734,101 @@
                 document.body.style.overflow = '';
             }
 
-            function showProfile(name) {
-                loginView.style.display = 'none';
-                profileView.classList.add('active');
-                profileName.textContent = name;
-                profileHead.src = `https://mc-heads.net/head/${name}`;
-                modalSubtitle.textContent = 'Erfolgreich verifiziert';
-            }
-
-            async function login() {
+            nextToPinBtn.addEventListener('click', () => {
                 const mcName = mcInput.value.trim();
                 const discordId = discordInput.value.trim();
                 
                 if (mcName.length < 2 || !discordId) {
-                    errorMsg.textContent = 'Bitte fülle beide Felder aus.';
-                    errorMsg.classList.add('visible');
+                    errorMsg1.textContent = 'Bitte fülle beide Felder aus.';
+                    errorMsg1.classList.add('visible');
+                    modalContent.classList.add('shake');
+                    setTimeout(() => modalContent.classList.remove('shake'), 500);
                     return;
                 }
+                
+                errorMsg1.classList.remove('visible');
+                step1.style.display = 'none';
+                step2.style.display = 'block';
+                
+                setTimeout(() => hiddenInput.focus(), 100);
+            });
 
-                loginBtn.textContent = 'Prüfe...';
-                loginBtn.disabled = true;
-                errorMsg.classList.remove('visible');
+            backToStep1Btn.addEventListener('click', () => {
+                step2.style.display = 'none';
+                step1.style.display = 'block';
+                otpValue = [];
+                hiddenInput.value = '';
+                updateOTPSlots();
+                errorMsg2.classList.remove('visible');
+            });
+
+            loginWithPinBtn.addEventListener('click', async () => {
+                if (otpValue.length < 6) return;
+                
+                const mcName = mcInput.value.trim();
+                const discordId = discordInput.value.trim();
+                const pin = otpValue.join('');
+
+                loginWithPinBtn.textContent = 'Prüfe...';
+                loginWithPinBtn.disabled = true;
+                errorMsg2.classList.remove('visible');
+                slots.forEach(s => s.classList.remove('otp-error'));
 
                 try {
                     const response = await fetch(APPS_SCRIPT_URL, {
                         method: 'POST',
-                        body: JSON.stringify({ action: "login", discordId: discordId }),
+                        body: JSON.stringify({ action: "login", discordId: discordId, pin: pin, mcName: mcName }),
                         headers: { 'Content-Type': 'text/plain;charset=utf-8' }
                     });
                     const result = await response.json();
 
                     if (result.success) {
                         sessionStorage.setItem('mc_user', mcName);
-                        showProfile(mcName);
+                        sessionStorage.setItem('discord_id', discordId);
+                        step2.style.display = 'none';
+                        profileView.classList.add('active');
+                        document.getElementById('profileName').textContent = mcName;
+                        document.getElementById('profileHead').src = `https://mc-heads.net/head/${mcName}`;
                         updateHeaderUI();
-                        showToast(`✅ Willkommen, ${mcName}!`, 'success');
+                        showToast(`✅ ${result.message}`, 'success');
                     } else {
                         throw new Error(result.message);
                     }
                 } catch (err) {
-                    errorMsg.textContent = err.message || 'Du bist nicht auf dem Discord Server!';
-                    errorMsg.classList.add('visible');
+                    errorMsg2.textContent = err.message || 'Fehler beim Login.';
+                    errorMsg2.classList.add('visible');
+                    slots.forEach(s => s.classList.add('otp-error'));
+                    setTimeout(() => slots.forEach(s => s.classList.remove('otp-error')), 500);
+                    
+                    otpValue = [];
+                    hiddenInput.value = '';
+                    updateOTPSlots();
                 } finally {
-                    loginBtn.textContent = 'Anmelden';
-                    loginBtn.disabled = false;
+                    loginWithPinBtn.textContent = 'Anmelden';
+                    loginWithPinBtn.disabled = false;
                 }
-            }
+            });
 
-            function logout() {
+            logoutBtn.addEventListener('click', () => {
                 sessionStorage.removeItem('mc_user');
-                loginView.style.display = 'block';
+                sessionStorage.removeItem('discord_id');
+                step1.style.display = 'block';
+                step2.style.display = 'none';
                 profileView.classList.remove('active');
                 mcInput.value = '';
                 discordInput.value = '';
-                errorMsg.classList.remove('visible');
-                modalSubtitle.textContent = 'Melde dich an (Nur für Discord-Mitglieder)';
+                otpValue = [];
+                hiddenInput.value = '';
+                updateOTPSlots();
                 updateHeaderUI();
-            }
+            });
 
             if (loginHeaderBtn) loginHeaderBtn.addEventListener('click', openModal);
             if (headerAvatar) headerAvatar.addEventListener('click', openModal);
             closeBtn.addEventListener('click', closeModal);
             modal.addEventListener('click', (e) => { if (e.target === modal) closeModal(); });
             document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && modal.classList.contains('active')) closeModal(); });
-            loginBtn.addEventListener('click', login);
-            logoutBtn.addEventListener('click', logout);
+            
             updateHeaderUI();
         })();
     </script>
