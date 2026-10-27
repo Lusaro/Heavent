@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <title>Login läuft...</title>
+    <style>
+        body {
+            background: #0b0d0f;
+            color: #fff;
+            font-family: 'Inter', sans-serif;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+        }
+        .loading {
+            text-align: center;
+        }
+        .spinner {
+            width: 48px;
+            height: 48px;
+            border: 3px solid #2a3440;
+            border-top-color: #8b5cf6;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 20px;
+        }
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+        .error {
+            color: #ff4444;
+            padding: 20px;
+            max-width: 500px;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <div class="loading">
+        <div class="spinner"></div>
+        <p>Login wird verarbeitet...</p>
+    </div>
+
+    <script>
+        (function() {
+            // Implicit Grant: Token kommt im URL-Fragment (#access_token=...)
+            const hash = window.location.hash.substring(1);
+            const params = new URLSearchParams(hash);
+            const accessToken = params.get('access_token');
+            const expiresIn = params.get('expires_in');
+            const error = params.get('error');
+
+            if (error) {
+                document.body.innerHTML = `<div class="error">
+                    <h2>❌ Login fehlgeschlagen</h2>
+                    <p>${error}</p>
+                    <p><a href="bestellen.html" style="color:#8b5cf6;">Zurück zur Bestellung</a></p>
+                </div>`;
+                return;
+            }
+
+            if (!accessToken) {
+                document.body.innerHTML = `<div class="error">
+                    <h2>❌ Kein Token erhalten</h2>
+                    <p>Bitte versuche es erneut.</p>
+                    <p><a href="bestellen.html" style="color:#8b5cf6;">Zurück zur Bestellung</a></p>
+                </div>`;
+                return;
+            }
+
+            // Token + Ablaufzeit speichern
+            try {
+                const expiresAt = Date.now() + (parseInt(expiresIn || '604800') * 1000);
+                localStorage.setItem('discord_token', accessToken);
+                localStorage.setItem('discord_token_expires', expiresAt.toString());
+            } catch (e) {
+                console.error('Speichern fehlgeschlagen:', e);
+            }
+
+            // Zurück zu bestellen.html
+            setTimeout(() => {
+                window.location.href = 'bestellen.html?login=ok';
+            }, 500);
+        })();
+    </script>
+</body>
+</html>
