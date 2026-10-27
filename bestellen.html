@@ -8,45 +8,166 @@
     <link rel="stylesheet" href="bestellen.css" />
     <script src="preisliste.js"></script>
     <style>
-        /* ===== CUSTOM OTP INPUT STYLES ===== */
+        /* ===== LIVE MC-HEAD + NAME INPUT ===== */
+        .mc-input-row {
+            display: flex; align-items: center; gap: 12px; margin-bottom: 14px;
+        }
+        .mc-head-live {
+            width: 52px; height: 52px; border-radius: 8px;
+            border: 1px solid var(--border-color);
+            background: var(--bg-primary);
+            image-rendering: pixelated;
+            flex-shrink: 0;
+            object-fit: cover;
+            transition: transform 0.2s ease;
+        }
+        .mc-head-live.visible {
+            animation: popIn 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+        }
+        .mc-input-row .login-field { flex: 1; margin: 0 !important; }
+
+        /* ===== OTP SLOTS (React-Stil: 3 + Minus + 3) ===== */
         .otp-container {
-            display: flex; justify-content: center; gap: 8px; margin: 20px 0;
+            display: flex; justify-content: center; align-items: center;
+            gap: 8px; margin: 24px 0 16px;
+        }
+        .otp-group {
+            display: flex; gap: 8px;
+        }
+        .otp-separator {
+            display: flex; align-items: center; justify-content: center;
+            color: var(--text-muted); margin: 0 4px;
+            animation: fadeInSep 0.3s ease-out 0.15s forwards;
+            opacity: 0;
+        }
+        @keyframes fadeInSep {
+            to { opacity: 1; transform: scale(1); }
+            from { opacity: 0; transform: scale(0.8); }
         }
         .otp-slot {
-            width: 45px; height: 50px; border: 1px solid var(--border-color);
-            border-radius: 8px; background: var(--bg-primary); display: flex;
-            align-items: center; justify-content: center; font-size: 1.2rem;
-            font-weight: 600; color: var(--text-primary);
+            width: 42px; height: 42px;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            background: var(--bg-primary);
+            display: flex; align-items: center; justify-content: center;
+            font-size: 1.15rem; font-weight: 600; color: var(--text-primary);
             transition: all 0.2s cubic-bezier(0.22, 1, 0.36, 1);
             position: relative; overflow: hidden;
+            box-shadow: 0 1px 2px rgba(0,0,0,0.2);
+            cursor: text;
+            animation: slotPopIn 0.2s cubic-bezier(0.22, 1, 0.36, 1) backwards;
         }
+        @keyframes slotPopIn {
+            from { opacity: 0; transform: scale(0.8) translateY(10px); }
+            to { opacity: 1; transform: scale(1) translateY(0); }
+        }
+        .otp-slot:nth-child(1) { animation-delay: 0s; }
+        .otp-slot:nth-child(2) { animation-delay: 0.05s; }
+        .otp-slot:nth-child(3) { animation-delay: 0.10s; }
+        .otp-slot:nth-child(4) { animation-delay: 0.15s; }
+        .otp-slot:nth-child(5) { animation-delay: 0.20s; }
+        .otp-slot:nth-child(6) { animation-delay: 0.25s; }
+
+        .otp-slot:hover { transform: scale(1.02); }
+        .otp-slot:active { transform: scale(0.98); }
         .otp-slot.active {
-            border-color: var(--accent-purple); box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.2); z-index: 10;
+            border-color: var(--accent-purple);
+            box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.2);
+            z-index: 10;
         }
         .otp-slot.filled {
-            transform: scale(1.05); border-color: var(--accent-purple);
+            transform: scale(1.05);
+            border-color: var(--accent-purple);
         }
-        .otp-slot .char { animation: popIn 0.2s cubic-bezier(0.22, 1, 0.36, 1) forwards; }
-        @keyframes popIn {
+        .otp-slot .char {
+            animation: charPopIn 0.2s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+        }
+        @keyframes charPopIn {
             0% { transform: scale(0) rotateY(-90deg); opacity: 0; }
             100% { transform: scale(1) rotateY(0deg); opacity: 1; }
         }
         .otp-slot .caret {
-            position: absolute; width: 2px; height: 20px; background: var(--text-primary);
+            position: absolute; width: 1px; height: 18px;
+            background: var(--text-primary);
             animation: blink 1s infinite;
         }
         @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0; } }
-        
-        .otp-error { animation: shake 0.4s ease-in-out; border-color: #ff4444 !important; }
+
+        .otp-slot.otp-error {
+            animation: shake 0.4s ease-in-out;
+            border-color: #ff4444 !important;
+            box-shadow: 0 0 0 3px rgba(255, 68, 68, 0.2);
+        }
         @keyframes shake {
-            0% { transform: translateX(0); } 25% { transform: translateX(-10px); }
-            50% { transform: translateX(10px); } 75% { transform: translateX(-10px); }
+            0% { transform: translateX(0); }
+            25% { transform: translateX(-8px); }
+            50% { transform: translateX(8px); }
+            75% { transform: translateX(-8px); }
             100% { transform: translateX(0); }
         }
-        .otp-hidden-input { position: absolute; opacity: 0; pointer-events: none; }
+        .otp-hidden-input {
+            position: absolute; opacity: 0; pointer-events: none;
+            width: 1px; height: 1px;
+        }
         
+        /* ===== VERIFY STATUS ===== */
+        .verify-status {
+            display: flex; align-items: center; justify-content: center;
+            gap: 8px; margin: 16px 0; padding: 12px;
+            border-radius: 10px; font-size: 0.9rem;
+            animation: statusFadeIn 0.3s ease-out;
+        }
+        @keyframes statusFadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .verify-status.loading { color: var(--text-muted); }
+        .verify-status.success { color: #10b981; background: rgba(16, 185, 129, 0.08); border: 1px solid rgba(16, 185, 129, 0.2); }
+        .verify-status.error { color: #ff4444; background: rgba(255, 68, 68, 0.08); border: 1px solid rgba(255, 68, 68, 0.2); }
+        .verify-status .spinner-mini {
+            width: 14px; height: 14px;
+            border: 2px solid var(--text-muted);
+            border-top-color: transparent;
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+        }
+        @keyframes spin { to { transform: rotate(360deg); } }
+
+        /* ===== SMOOTH BUTTON (Reset / Verify) ===== */
+        .smooth-btn {
+            width: 100%; padding: 14px;
+            background: linear-gradient(135deg, #8b5cf6, #3b82f6);
+            border: 1px solid transparent;
+            border-radius: 50px;
+            color: #fff; font-size: 1rem; font-weight: 700;
+            cursor: pointer;
+            transition: all 0.25s cubic-bezier(0.22, 1, 0.36, 1);
+            box-shadow: 0 4px 20px rgba(139, 92, 246, 0.3);
+            display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+        }
+        .smooth-btn:hover:not(:disabled) {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 35px rgba(139, 92, 246, 0.5);
+        }
+        .smooth-btn:active:not(:disabled) { transform: scale(0.98); }
+        .smooth-btn:disabled { opacity: 0.4; cursor: not-allowed; }
+
+        .smooth-btn.outline {
+            background: transparent;
+            border: 1px solid var(--border-color);
+            color: var(--text-secondary);
+            box-shadow: none;
+        }
+        .smooth-btn.outline:hover:not(:disabled) {
+            background: rgba(255,255,255,0.05);
+            color: #fff;
+            box-shadow: none;
+            transform: none;
+        }
+
         .modal-content.shake {
-            animation: shake 0.4s ease-in-out; border-color: #ff4444 !important;
+            animation: shake 0.4s ease-in-out;
+            border-color: #ff4444 !important;
             box-shadow: 0 0 30px rgba(255, 68, 68, 0.4) !important;
         }
     </style>
@@ -100,31 +221,21 @@
                 <div class="add-row-wrapper">
                     <button id="addItemBtn" class="btn-add-row">+</button>
                 </div>
-
                 <div class="order-summary">
                     <div class="total-price">
                         <span class="total-label">Gesamtpreis:</span>
                         <span class="total-amount" id="totalPrice">0.00€</span>
                     </div>
                     <div class="order-actions">
-                        <button id="selfPickupBtn" class="btn btn-self" style="padding: 12px 24px; font-size: 1rem;">
-                            📦 Selbst abholen
-                        </button>
-                        <button id="deliveryBtn" class="btn btn-delivery" style="padding: 12px 24px; font-size: 1rem;">
-                            🚚 Lieferung
-                        </button>
-                        <button id="submitOrderBtn" class="btn btn-secondary" disabled style="padding: 12px 40px; font-size: 1.1rem;">
-                            Alle bestellen →
-                        </button>
+                        <button id="selfPickupBtn" class="btn btn-self" style="padding: 12px 24px; font-size: 1rem;">📦 Selbst abholen</button>
+                        <button id="deliveryBtn" class="btn btn-delivery" style="padding: 12px 24px; font-size: 1rem;">🚚 Lieferung</button>
+                        <button id="submitOrderBtn" class="btn btn-secondary" disabled style="padding: 12px 40px; font-size: 1.1rem;">Alle bestellen →</button>
                     </div>
                 </div>
-
                 <div id="priceDetails" class="price-details">
                     <div class="price-detail-row">
                         <span class="label">Versandkosten:</span>
-                        <span class="value" id="shippingCosts">
-                            0.00€ <span class="surcharge-info" id="surchargePercent">(+0%)</span>
-                        </span>
+                        <span class="value" id="shippingCosts">0.00€ <span class="surcharge-info" id="surchargePercent">(+0%)</span></span>
                     </div>
                     <div class="price-detail-row" style="border-top: 1px solid var(--border-color); padding-top: 8px; margin-top: 4px;">
                         <span class="label" style="font-weight: 700;">Gültiger Preis:</span>
@@ -137,47 +248,64 @@
 
     <datalist id="itemList"></datalist>
 
-    <!-- ===== ACCOUNT MODAL (Mit PIN Schritt) ===== -->
+    <!-- ===== ACCOUNT MODAL ===== -->
     <div id="accountModal" class="modal-overlay">
         <div class="modal-content account-modal" id="accountModalContent">
             <button class="modal-close" id="closeModalBtn">&times;</button>
             <h2>🔐 Account</h2>
             <p id="modalSubtitle">Melde dich an oder registriere dich</p>
 
-            <!-- Schritt 1 -->
+            <!-- Schritt 1: MC-Name + Live-Head -->
             <div id="loginStep1">
-                <div class="login-row" style="margin-bottom: 12px;">
+                <div class="mc-input-row">
+                    <img id="loginHeadImg" class="mc-head-live" src="https://mc-heads.net/head/Steve" alt="Minecraft Head" />
                     <div class="login-field">
                         <label for="mcNameInput">Minecraft-Name</label>
-                        <input type="text" id="mcNameInput" placeholder="z.B. xLusaro" />
+                        <input type="text" id="mcNameInput" placeholder="z.B. xLusaro" autocomplete="off" />
                     </div>
                 </div>
-                <div class="login-row">
-                    <div class="login-field">
-                        <label for="discordIdInput">Discord-ID (Rechtsklick auf dich -> ID kopieren)</label>
-                        <input type="text" id="discordIdInput" placeholder="z.B. 123456789012345678" />
-                    </div>
-                </div>
-                <div class="error-msg" id="errorMsg1">Bitte fülle beide Felder aus.</div>
-                <button class="btn-submit" id="nextToPinBtn">Weiter zum PIN →</button>
-                <p style="font-size:0.75rem; margin-top:10px; color:#6b7a8f;">Du musst auf dem <a href="https://discord.gg/utngw94B7b" target="_blank" style="color:#8b5cf6;">Heavent Discord</a> sein.</p>
-            </div>
-
-            <!-- Schritt 2 -->
-            <div id="loginStep2" style="display: none;">
-                <p style="font-size: 0.9rem; color: #b0b8c4; margin-bottom: 15px;">
-                    Gib deinen 6-stelligen PIN ein.<br>
-                    <span style="font-size: 0.75rem; color: #6b7a8f;">(Beim ersten Mal wird dieser als dein neuer PIN gespeichert)</span>
+                <div class="error-msg" id="errorMsg1">Bitte gib deinen Minecraft-Namen ein.</div>
+                <button class="smooth-btn" id="nextToPinBtn">Weiter zum PIN →</button>
+                <p style="font-size:0.75rem; margin-top:14px; color:#6b7a8f; text-align:center;">
+                    Dein Nickname auf dem <a href="https://discord.gg/utngw94B7b" target="_blank" style="color:#8b5cf6;">Heavent Discord</a> muss deinen MC-Namen enthalten.
                 </p>
-                
-                <div class="otp-container" id="otpContainer"></div>
-                
-                <div class="error-msg" id="errorMsg2">Falscher PIN!</div>
-                <button class="btn-submit" id="loginWithPinBtn" disabled>Anmelden</button>
-                <button class="btn-logout" id="backToStep1Btn" style="width:100%; margin-top: 10px; background: transparent; border: none; color: #6b7a8f;">← Zurück</button>
             </div>
 
-            <!-- Schritt 3 -->
+            <!-- Schritt 2: OTP PIN -->
+            <div id="loginStep2" style="display: none;">
+                <p style="font-size: 0.9rem; color: #b0b8c4; margin-bottom: 5px;">
+                    Gib deinen 6-stelligen PIN ein.
+                </p>
+                <p style="font-size: 0.75rem; color: #6b7a8f; margin-bottom: 5px;">
+                    (Beim ersten Mal wird dieser als dein neuer PIN gespeichert)
+                </p>
+
+                <div class="otp-container" id="otpContainer">
+                    <div class="otp-group">
+                        <div class="otp-slot" data-index="0"></div>
+                        <div class="otp-slot" data-index="1"></div>
+                        <div class="otp-slot" data-index="2"></div>
+                    </div>
+                    <div class="otp-separator">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+                    </div>
+                    <div class="otp-group">
+                        <div class="otp-slot" data-index="3"></div>
+                        <div class="otp-slot" data-index="4"></div>
+                        <div class="otp-slot" data-index="5"></div>
+                    </div>
+                </div>
+
+                <input type="tel" class="otp-hidden-input" id="otpHiddenInput" maxlength="6" />
+
+                <div id="verifyStatus"></div>
+                <div class="error-msg" id="errorMsg2">Falscher PIN!</div>
+
+                <button class="smooth-btn" id="loginWithPinBtn" disabled>Anmelden</button>
+                <button class="smooth-btn outline" id="backToStep1Btn" style="margin-top: 10px;">← Zurück</button>
+            </div>
+
+            <!-- Schritt 3: Erfolg -->
             <div id="profileView" class="profile-view">
                 <div class="profile-head">
                     <img id="profileHead" src="" alt="Minecraft-Head">
@@ -186,13 +314,12 @@
                     <div class="name" id="profileName">–</div>
                     <div class="status"><span class="dot"></span>Verifiziert</div>
                 </div>
-                <button class="btn-logout" id="logoutBtn">Abmelden</button>
+                <button class="btn-logout" id="logoutBtn" style="width:100%;">Abmelden</button>
             </div>
         </div>
     </div>
 
     <script>
-        // ===== DEINE GOOGLE APPS SCRIPT URL =====
         const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxuSS570xvwzSxkaRHt1LLF2GeLYacbdpdL0r59KGliv9elmwtKON4DFPrdTrN-Hif4Nw/exec';
 
         const ITEMS_PER_DOUBLE_CHEST = 3456;
@@ -204,10 +331,8 @@
             `https://cdn.jsdelivr.net/gh/InventivetalentDev/minecraft-assets@${MINECRAFT_VERSION}/assets/minecraft/textures`,
             `https://raw.githubusercontent.com/InventivetalentDev/minecraft-assets/${MINECRAFT_VERSION}/assets/minecraft/textures`,
         ];
-        const ITEM_ONLY = new Set(['diamond', 'coal', 'emerald', 'redstone', 'lapis_lazuli', 'iron_ingot', 'gold_ingot', 'netherite_ingot', 'netherite_scrap', 'nether_wart', 'sugar_cane', 'kelp', 'bamboo', 'cactus', 'stick', 'apple', 'wheat', 'paper', 'book', 'flint', 'charcoal', 'string', 'feather', 'leather', 'bone', 'bone_meal', 'slime_ball', 'snowball', 'egg', 'blaze_rod', 'blaze_powder', 'ender_pearl', 'ender_eye', 'ghast_tear', 'magma_cream', 'gunpowder', 'glowstone_dust', 'nether_star', 'nautilus_shell', 'prismarine_shard', 'prismarine_crystals', 'shulker_shell', 'phantom_membrane']);
-        const NAME_MAPPING = {
-            'diamantblock': 'diamond_block', 'diamant': 'diamond', 'stein': 'stone', 'kohleblock': 'coal_block', 'eisenblock': 'iron_block', 'goldblock': 'gold_block', 'redstoneblock': 'redstone_block', 'smaragdblock': 'emerald_block', 'lapislazuliblock': 'lapis_block', 'netheritblock': 'netherite_block', 'kupferblock': 'copper_block', 'angelaufener_kupferblock': 'exposed_copper', 'verwitterter_kupferblock': 'weathered_copper', 'oxidierter_kupferblock': 'oxidized_copper', 'quarzblock': 'quartz_block', 'glatterquarzblock': 'smooth_quartz', 'amathystblock': 'amethyst_block', 'eichenstamm': 'oak_log', 'eichenholz': 'oak_log', 'eichenholzbretter': 'oak_planks', 'eichenholztreppe': 'oak_stairs', 'eichenholzstufe': 'oak_slab', 'eichenholzzaun': 'oak_fence', 'eichenholzzauntor': 'oak_fence_gate', 'eichenholztür': 'oak_door', 'eichenholzfalltür': 'oak_trapdoor', 'fichtenstamm': 'spruce_log', 'fichtenholz': 'spruce_log', 'fichtenholzbretter': 'spruce_planks', 'birkenstamm': 'birch_log', 'birkenholz': 'birch_log', 'tropenbaumstamm': 'jungle_log', 'tropenholz': 'jungle_log', 'akazienstamm': 'acacia_log', 'akazienholz': 'acacia_log', 'schwarzeichenstamm': 'dark_oak_log', 'schwarzeichenholz': 'dark_oak_log', 'mangrovenstamm': 'mangrove_log', 'mangrovenholz': 'mangrove_log', 'kirschstamm': 'cherry_log', 'kirschholz': 'cherry_log', 'blasseichenstamm': 'pale_oak_log', 'blasseichenholz': 'pale_oak_log', 'glas': 'glass', 'weißesglas': 'white_stained_glass', 'schwarzesglas': 'black_stained_glass', 'rotesglas': 'red_stained_glass', 'orangesglas': 'orange_stained_glass', 'gelbesglas': 'yellow_stained_glass', 'grünesglas': 'lime_stained_glass', 'türkisesglas': 'cyan_stained_glass', 'blauesglas': 'blue_stained_glass', 'violettesglas': 'purple_stained_glass', 'magenta_glss': 'magenta_stained_glass', 'rosaglas': 'pink_stained_glass', 'ofen': 'furnace', 'werkbank': 'crafting_table', 'truhe': 'chest', 'endertruhe': 'ender_chest', 'fackel': 'torch', 'laterne': 'lantern', 'seelenlaterne': 'soul_lantern', 'amboss': 'anvil', 'verzauberungstisch': 'enchanting_table', 'braustand': 'brewing_stand', 'kessel': 'cauldron', 'komposter': 'composter', 'notenblock': 'note_block', 'plattenspieler': 'jukebox', 'bücherregal': 'bookshelf', 'lesepult': 'lectern', 'leiter': 'ladder', 'gerüst': 'scaffolding', 'blitzableiter': 'lightning_rod', 'schleimblock': 'slime_block', 'honigblock': 'honey_block', 'honigwabenblock': 'honeycomb_block', 'kürbis': 'pumpkin', 'geschnitzterkürbis': 'carved_pumpkin', 'kürbislaterne': 'jack_o_lantern', 'melon': 'melon', 'strohballen': 'hay_bale', 'seelensand': 'soul_sand', 'seelenerde': 'soul_soil', 'knochenblock': 'bone_block', 'obsidian': 'obsidian', 'weinenderobsidian': 'crying_obsidian', 'endstein': 'end_stone', 'purpurblock': 'purpur_block', 'prismarin': 'prismarine', 'seelaterne': 'sea_lantern', 'leuchtstein': 'glowstone', 'basalt': 'basalt', 'glatterbasalt': 'smooth_basalt', 'polierterbasalt': 'polished_basalt', 'schwarzstein': 'blackstone', 'golddurchzogener_schwarzstein': 'gilded_blackstone', 'netherrack': 'netherrack', 'netherziegel': 'nether_bricks', 'rotenetherziegel': 'red_nether_bricks', 'kalzit': 'calcite', 'tropfsteinblock': 'dripstone_block', 'magmablock': 'magma_block', 'eis': 'ice', 'packeis': 'packed_ice', 'blaueis': 'blue_ice', 'schneeblock': 'snow_block', 'sand': 'sand', 'roter_sand': 'red_sand', 'kies': 'gravel', 'ton': 'clay', 'erde': 'dirt', 'grasblock': 'grass_block', 'podsol': 'podzol', 'myzel': 'mycelium', 'mossblock': 'moss_block', 'blassmoosblock': 'pale_moss_block', 'kohle': 'coal', 'eisenbarren': 'iron_ingot', 'goldbarren': 'gold_ingot', 'netheritbarren': 'netherite_ingot', 'smaragd': 'emerald', 'lapislazuli': 'lapis_lazuli', 'redstone': 'redstone', 'netherwarze': 'nether_wart', 'wirrwarze': 'warped_wart', 'karmesinwarze': 'crimson_fungus', 'brauner_pilz': 'brown_mushroom', 'roter_pilz': 'red_mushroom', 'zuckerrohr': 'sugar_cane', 'kaktus': 'cactus', 'bambus': 'bamboo', 'seetang': 'kelp', 'getrockneter_seetangblock': 'dried_kelp_block', 'seerosenblatt': 'lily_pad', 'spinnennetz': 'cobweb'
-        };
+        const ITEM_ONLY = new Set(['diamond','coal','emerald','redstone','lapis_lazuli','iron_ingot','gold_ingot','netherite_ingot','netherite_scrap','nether_wart','sugar_cane','kelp','bamboo','cactus','stick','apple','wheat','paper','book','flint','charcoal','string','feather','leather','bone','bone_meal','slime_ball','snowball','egg','blaze_rod','blaze_powder','ender_pearl','ender_eye','ghast_tear','magma_cream','gunpowder','glowstone_dust','nether_star','nautilus_shell','prismarine_shard','prismarine_crystals','shulker_shell','phantom_membrane']);
+        const NAME_MAPPING = {'diamantblock':'diamond_block','diamant':'diamond','stein':'stone','kohleblock':'coal_block','eisenblock':'iron_block','goldblock':'gold_block','redstoneblock':'redstone_block','smaragdblock':'emerald_block','lapislazuliblock':'lapis_block','netheritblock':'netherite_block','kupferblock':'copper_block','angelaufener_kupferblock':'exposed_copper','verwitterter_kupferblock':'weathered_copper','oxidierter_kupferblock':'oxidized_copper','quarzblock':'quartz_block','glatterquarzblock':'smooth_quartz','amathystblock':'amethyst_block','eichenstamm':'oak_log','eichenholz':'oak_log','eichenholzbretter':'oak_planks','eichenholztreppe':'oak_stairs','eichenholzstufe':'oak_slab','eichenholzzaun':'oak_fence','eichenholzzauntor':'oak_fence_gate','eichenholztür':'oak_door','eichenholzfalltür':'oak_trapdoor','fichtenstamm':'spruce_log','fichtenholz':'spruce_log','fichtenholzbretter':'spruce_planks','birkenstamm':'birch_log','birkenholz':'birch_log','tropenbaumstamm':'jungle_log','tropenholz':'jungle_log','akazienstamm':'acacia_log','akazienholz':'acacia_log','schwarzeichenstamm':'dark_oak_log','schwarzeichenholz':'dark_oak_log','mangrovenstamm':'mangrove_log','mangrovenholz':'mangrove_log','kirschstamm':'cherry_log','kirschholz':'cherry_log','blasseichenstamm':'pale_oak_log','blasseichenholz':'pale_oak_log','glas':'glass','weißesglas':'white_stained_glass','schwarzesglas':'black_stained_glass','rotesglas':'red_stained_glass','orangesglas':'orange_stained_glass','gelbesglas':'yellow_stained_glass','grünesglas':'lime_stained_glass','türkisesglas':'cyan_stained_glass','blauesglas':'blue_stained_glass','violettesglas':'purple_stained_glass','magenta_glss':'magenta_stained_glass','rosaglas':'pink_stained_glass','ofen':'furnace','werkbank':'crafting_table','truhe':'chest','endertruhe':'ender_chest','fackel':'torch','laterne':'lantern','seelenlaterne':'soul_lantern','amboss':'anvil','verzauberungstisch':'enchanting_table','braustand':'brewing_stand','kessel':'cauldron','komposter':'composter','notenblock':'note_block','plattenspieler':'jukebox','bücherregal':'bookshelf','lesepult':'lectern','leiter':'ladder','gerüst':'scaffolding','blitzableiter':'lightning_rod','schleimblock':'slime_block','honigblock':'honey_block','honigwabenblock':'honeycomb_block','kürbis':'pumpkin','geschnitzterkürbis':'carved_pumpkin','kürbislaterne':'jack_o_lantern','melon':'melon','strohballen':'hay_bale','seelensand':'soul_sand','seelenerde':'soul_soil','knochenblock':'bone_block','obsidian':'obsidian','weinenderobsidian':'crying_obsidian','endstein':'end_stone','purpurblock':'purpur_block','prismarin':'prismarine','seelaterne':'sea_lantern','leuchtstein':'glowstone','basalt':'basalt','glatterbasalt':'smooth_basalt','polierterbasalt':'polished_basalt','schwarzstein':'blackstone','golddurchzogener_schwarzstein':'gilded_blackstone','netherrack':'netherrack','netherziegel':'nether_bricks','rotenetherziegel':'red_nether_bricks','kalzit':'calcite','tropfsteinblock':'dripstone_block','magmablock':'magma_block','eis':'ice','packeis':'packed_ice','blaueis':'blue_ice','schneeblock':'snow_block','sand':'sand','roter_sand':'red_sand','kies':'gravel','ton':'clay','erde':'dirt','grasblock':'grass_block','podsol':'podzol','myzel':'mycelium','mossblock':'moss_block','blassmoosblock':'pale_moss_block','kohle':'coal','eisenbarren':'iron_ingot','goldbarren':'gold_ingot','netheritbarren':'netherite_ingot','smaragd':'emerald','lapislazuli':'lapis_lazuli','redstone':'redstone','netherwarze':'nether_wart','wirrwarze':'warped_wart','karmesinwarze':'crimson_fungus','brauner_pilz':'brown_mushroom','roter_pilz':'red_mushroom','zuckerrohr':'sugar_cane','kaktus':'cactus','bambus':'bamboo','seetang':'kelp','getrockneter_seetangblock':'dried_kelp_block','seerosenblatt':'lily_pad','spinnennetz':'cobweb'};
 
         let itemDatabase = {};
         let itemCounter = 0;
@@ -251,24 +376,18 @@
             if (!name) return null;
             if (itemDatabase[name]) return getPriceFromEntry(itemDatabase[name]);
             const lower = name.toLowerCase();
-            for (const [key, val] of Object.entries(itemDatabase)) {
-                if (key.toLowerCase() === lower) return getPriceFromEntry(val);
-            }
+            for (const [key, val] of Object.entries(itemDatabase)) if (key.toLowerCase() === lower) return getPriceFromEntry(val);
             return null;
         }
 
-        function normalizeItemName(name) {
-            return name.toLowerCase().replace(/[^a-z0-9]/g, '_').replace(/_+/g, '_').replace(/^_|_$/g, '');
-        }
+        function normalizeItemName(name) { return name.toLowerCase().replace(/[^a-z0-9]/g, '_').replace(/_+/g, '_').replace(/^_|_$/g, ''); }
 
         function buildTextureUrlCandidates(itemName) {
             const norm = normalizeItemName(itemName);
             const englishName = NAME_MAPPING[norm] || norm;
             const types = ITEM_ONLY.has(englishName) ? ['item', 'block'] : ['block', 'item'];
             const urls = [];
-            for (const base of TEXTURE_BASE_URLS) {
-                for (const type of types) urls.push(`${base}/${type}/${englishName}.png`);
-            }
+            for (const base of TEXTURE_BASE_URLS) for (const type of types) urls.push(`${base}/${type}/${englishName}.png`);
             urls.push(FALLBACK_IMAGE);
             return urls;
         }
@@ -277,11 +396,7 @@
             if (!itemName || !itemName.trim()) { imgElement.onerror = null; imgElement.src = FALLBACK_IMAGE; return; }
             const urls = buildTextureUrlCandidates(itemName);
             let i = 0;
-            imgElement.onerror = function() {
-                i++;
-                if (i < urls.length) imgElement.src = urls[i];
-                else { imgElement.onerror = null; imgElement.src = FALLBACK_IMAGE; }
-            };
+            imgElement.onerror = function() { i++; if (i < urls.length) imgElement.src = urls[i]; else { imgElement.onerror = null; imgElement.src = FALLBACK_IMAGE; } };
             imgElement.src = urls[0];
         }
 
@@ -336,7 +451,6 @@
             const chestType = row.querySelector('.chest-type');
             const amountInput = row.querySelector('.chest-amount');
             const priceDisplay = row.querySelector('.item-price');
-
             const basePriceItem = getItemPrice(nameInput.value);
             if (basePriceItem === null) { priceDisplay.textContent = '0.00'; priceDisplay.style.color = '#ff4444'; return; }
             const itemsPerChest = chestType.value === 'double' ? ITEMS_PER_DOUBLE_CHEST : ITEMS_PER_SINGLE_CHEST;
@@ -378,9 +492,7 @@
                     </div>
                     <div class="form-group price-group">
                         <label>→ Preis</label>
-                        <div class="price-display">
-                            <span class="item-price">0.00</span> <span class="currency">€</span>
-                        </div>
+                        <div class="price-display"><span class="item-price">0.00</span> <span class="currency">€</span></div>
                     </div>
                     <div class="form-group action-group">
                         <label>&nbsp;</label>
@@ -396,39 +508,19 @@
             const amountInput = row.querySelector('.chest-amount');
             const imageInput = row.querySelector('.item-image-input');
             const preview = row.querySelector('.item-preview');
-
-            const recalc = () => {
-                updateRowPrice(row);
-                updateTotalPrice();
-                validateBlockNames();
-                updatePriceDetails();
-                saveOrderToLocalStorage();
-            };
-
+            const recalc = () => { updateRowPrice(row); updateTotalPrice(); validateBlockNames(); updatePriceDetails(); saveOrderToLocalStorage(); };
             nameInput.addEventListener('input', () => { recalc(); updateItemPreview(nameInput, preview); });
             chestType.addEventListener('change', recalc);
             amountInput.addEventListener('input', recalc);
-
             imageInput.addEventListener('change', function(e) {
                 const file = e.target.files[0];
-                if (file) {
-                    const reader = new FileReader();
-                    reader.onload = (ev) => { preview.src = ev.target.result; preview.onerror = null; };
-                    reader.readAsDataURL(file);
-                }
+                if (file) { const reader = new FileReader(); reader.onload = (ev) => { preview.src = ev.target.result; preview.onerror = null; }; reader.readAsDataURL(file); }
             });
-
             const removeBtn = row.querySelector('.btn-remove-row');
             removeBtn.addEventListener('click', function() {
                 if (orderItemsContainer.children.length <= 1) { showToast('Mindestens eine Zeile muss vorhanden bleiben.', 'error'); return; }
-                row.remove();
-                updateRemoveButtons();
-                validateBlockNames();
-                updateTotalPrice();
-                updatePriceDetails();
-                saveOrderToLocalStorage();
+                row.remove(); updateRemoveButtons(); validateBlockNames(); updateTotalPrice(); updatePriceDetails(); saveOrderToLocalStorage();
             });
-
             if (nameInput.value.trim()) updateItemPreview(nameInput, preview);
         }
 
@@ -439,10 +531,7 @@
             const row = temp.firstElementChild;
             bindRowEvents(row);
             orderItemsContainer.appendChild(row);
-            updateRowPrice(row);
-            updateTotalPrice();
-            updateRemoveButtons();
-            validateBlockNames();
+            updateRowPrice(row); updateTotalPrice(); updateRemoveButtons(); validateBlockNames();
             const nameInput = row.querySelector('.block-name');
             const preview = row.querySelector('.item-preview');
             if (nameInput.value.trim()) updateItemPreview(nameInput, preview);
@@ -450,10 +539,7 @@
 
         function updateTotalPrice() {
             let total = 0;
-            document.querySelectorAll('.item-row .item-price').forEach(el => {
-                const val = parseFloat(el.textContent);
-                if (!isNaN(val)) total += val;
-            });
+            document.querySelectorAll('.item-row .item-price').forEach(el => { const val = parseFloat(el.textContent); if (!isNaN(val)) total += val; });
             basePrice = total;
             totalPriceDisplay.textContent = total.toFixed(2) + '€';
             updatePriceDetails();
@@ -465,14 +551,8 @@
             document.querySelectorAll('.item-row .block-name').forEach(input => {
                 const name = input.value.trim();
                 if (!name) return;
-                if (map.has(name)) {
-                    dup = true;
-                    input.classList.add('duplicate-error');
-                    map.get(name).classList.add('duplicate-error');
-                } else {
-                    input.classList.remove('duplicate-error');
-                    map.set(name, input);
-                }
+                if (map.has(name)) { dup = true; input.classList.add('duplicate-error'); map.get(name).classList.add('duplicate-error'); }
+                else { input.classList.remove('duplicate-error'); map.set(name, input); }
             });
             submitBtn.disabled = dup || !selectedShipping;
         }
@@ -507,12 +587,10 @@
         selfPickupBtn.addEventListener('click', () => selectShipping('self'));
         deliveryBtn.addEventListener('click', () => selectShipping('delivery'));
 
-        // ===== ECHTE BESTELLUNG AN DISCORD SENDEN =====
         async function submitOrder() {
             const user = sessionStorage.getItem('mc_user');
             const discordId = sessionStorage.getItem('discord_id');
 
-            // Login-Zwang mit grafischem Shake-Effekt
             if (!user || !discordId) {
                 showToast('Du musst dich einloggen, um zu bestellen!', 'error');
                 document.getElementById('loginBtnHeader').click();
@@ -521,7 +599,6 @@
                 setTimeout(() => modalContent.classList.remove('shake'), 500);
                 return;
             }
-
             if (!selectedShipping) { showToast('Bitte wähle zuerst eine Versandart aus.', 'error'); return; }
             const rows = document.querySelectorAll('.item-row');
             if (rows.length === 0) { showToast('Bitte füge mindestens ein Item hinzu.', 'error'); return; }
@@ -534,11 +611,7 @@
             rows.forEach((row, i) => {
                 const input = row.querySelector('.block-name');
                 const name = input.value.trim();
-                if (!name || names.includes(name)) {
-                    error = true;
-                    input.classList.add('duplicate-error');
-                    return;
-                }
+                if (!name || names.includes(name)) { error = true; input.classList.add('duplicate-error'); return; }
                 names.push(name);
                 const chestType = row.querySelector('.chest-type');
                 const amount = parseInt(row.querySelector('.chest-amount').value) || 1;
@@ -548,7 +621,7 @@
                 summary += `${i+1}. ${name} | ${chestType.options[chestType.selectedIndex].text} x${amount} (${(itemsPerChest * amount).toLocaleString()} Stk) = ${price.toFixed(2)}€\n`;
             });
 
-            if (error) { showToast('Bitte behebe die Fehler (leere oder doppelte Blocknamen).', 'error'); return; }
+            if (error) { showToast('Bitte behebe die Fehler.', 'error'); return; }
 
             const surcharge = selectedShipping === 'self' ? 0.20 : 0.30;
             const shippingCost = basePrice * surcharge;
@@ -563,38 +636,16 @@
             try {
                 const response = await fetch(APPS_SCRIPT_URL, {
                     method: 'POST',
-                    body: JSON.stringify({
-                        action: "order",
-                        mcName: user,
-                        discordId: discordId,
-                        shippingType: shippingText,
-                        totalPrice: finalPrice.toFixed(2) + '€',
-                        items: summary
-                    }),
+                    body: JSON.stringify({ action: "order", mcName: user, discordId: discordId, shippingType: shippingText, totalPrice: finalPrice.toFixed(2) + '€', items: summary }),
                     headers: { 'Content-Type': 'text/plain;charset=utf-8' }
                 });
                 const result = await response.json();
-
                 if (result.success) {
-                    overlay.innerHTML = `
-                        <div class="checkout-box">
-                            <h3 style="color:#10b981; margin-bottom: 15px;">✅ Bestellung erfolgreich!</h3>
-                            <p style="margin-bottom: 20px; font-size: 0.9rem;">Deine Bestellung ist im Discord eingegangen. Prüfe deine DMs!</p>
-                            <button class="btn-close-checkout" id="closeCheckoutBtn">Schließen</button>
-                        </div>
-                    `;
+                    overlay.innerHTML = `<div class="checkout-box"><h3 style="color:#10b981; margin-bottom: 15px;">✅ Bestellung erfolgreich!</h3><p style="margin-bottom: 20px; font-size: 0.9rem;">Deine Bestellung ist im Discord eingegangen. Prüfe deine DMs!</p><button class="btn-close-checkout" id="closeCheckoutBtn">Schließen</button></div>`;
                     document.getElementById('closeCheckoutBtn').onclick = () => document.body.removeChild(overlay);
-                } else {
-                    throw new Error(result.message);
-                }
+                } else { throw new Error(result.message); }
             } catch (err) {
-                overlay.innerHTML = `
-                    <div class="checkout-box">
-                        <h3 style="color:#ff4444; margin-bottom: 15px;">❌ Fehler</h3>
-                        <p style="margin-bottom: 20px; font-size: 0.9rem;">${err.message || 'Verbindung fehlgeschlagen.'}</p>
-                        <button class="btn-close-checkout" id="closeCheckoutBtn">Schließen</button>
-                    </div>
-                `;
+                overlay.innerHTML = `<div class="checkout-box"><h3 style="color:#ff4444; margin-bottom: 15px;">❌ Fehler</h3><p style="margin-bottom: 20px; font-size: 0.9rem;">${err.message || 'Verbindung fehlgeschlagen.'}</p><button class="btn-close-checkout" id="closeCheckoutBtn">Schließen</button></div>`;
                 document.getElementById('closeCheckoutBtn').onclick = () => document.body.removeChild(overlay);
             }
         }
@@ -609,44 +660,28 @@
         init();
 
         // ===== OTP PIN LOGIK =====
-        const otpContainer = document.getElementById('otpContainer');
-        const hiddenInput = document.createElement('input');
-        hiddenInput.type = 'tel';
-        hiddenInput.className = 'otp-hidden-input';
-        hiddenInput.maxLength = 6;
-        otpContainer.appendChild(hiddenInput);
-        
-        let otpValue = [];
-        
-        for (let i = 0; i < 6; i++) {
-            const slot = document.createElement('div');
-            slot.className = 'otp-slot';
-            slot.dataset.index = i;
-            otpContainer.appendChild(slot);
-        }
+        const otpSlots = document.querySelectorAll('.otp-slot');
+        const otpHiddenInput = document.getElementById('otpHiddenInput');
+        let otpValue = '';
 
-        const slots = document.querySelectorAll('.otp-slot');
-        
-        otpContainer.addEventListener('click', () => hiddenInput.focus());
+        document.getElementById('otpContainer').addEventListener('click', () => otpHiddenInput.focus());
 
-        hiddenInput.addEventListener('input', (e) => {
-            const val = e.target.value.replace(/[^0-9]/g, '');
-            otpValue = val.split('');
+        otpHiddenInput.addEventListener('input', (e) => {
+            otpValue = e.target.value.replace(/[^0-9]/g, '').slice(0, 6);
+            e.target.value = otpValue;
             updateOTPSlots();
         });
 
         function updateOTPSlots() {
-            slots.forEach((slot, index) => {
+            otpSlots.forEach((slot, index) => {
                 slot.innerHTML = '';
                 slot.classList.remove('active', 'filled', 'otp-error');
-                
-                if (index === otpValue.length) {
+                if (index === otpValue.length && otpValue.length < 6) {
                     slot.classList.add('active');
                     const caret = document.createElement('div');
                     caret.className = 'caret';
                     slot.appendChild(caret);
                 }
-                
                 if (otpValue[index]) {
                     const charSpan = document.createElement('span');
                     charSpan.className = 'char';
@@ -655,15 +690,8 @@
                     slot.classList.add('filled');
                 }
             });
-
             const btn = document.getElementById('loginWithPinBtn');
-            if (otpValue.length === 6) {
-                btn.disabled = false;
-                btn.className = 'btn-submit btn-primary glow';
-            } else {
-                btn.disabled = true;
-                btn.className = 'btn-submit';
-            }
+            if (otpValue.length === 6) { btn.disabled = false; } else { btn.disabled = true; }
         }
 
         updateOTPSlots();
@@ -681,16 +709,26 @@
             const step1 = document.getElementById('loginStep1');
             const step2 = document.getElementById('loginStep2');
             const profileView = document.getElementById('profileView');
-            
             const mcInput = document.getElementById('mcNameInput');
-            const discordInput = document.getElementById('discordIdInput');
+            const loginHeadImg = document.getElementById('loginHeadImg');
             const nextToPinBtn = document.getElementById('nextToPinBtn');
             const backToStep1Btn = document.getElementById('backToStep1Btn');
             const loginWithPinBtn = document.getElementById('loginWithPinBtn');
             const logoutBtn = document.getElementById('logoutBtn');
-
             const errorMsg1 = document.getElementById('errorMsg1');
             const errorMsg2 = document.getElementById('errorMsg2');
+            const verifyStatus = document.getElementById('verifyStatus');
+
+            // Live-Update des MC-Kopfes
+            mcInput.addEventListener('input', () => {
+                const name = mcInput.value.trim();
+                if (name.length >= 2) {
+                    loginHeadImg.src = `https://mc-heads.net/head/${name}`;
+                    loginHeadImg.classList.add('visible');
+                } else {
+                    loginHeadImg.src = 'https://mc-heads.net/head/Steve';
+                }
+            });
 
             function updateHeaderUI() {
                 const user = sessionStorage.getItem('mc_user');
@@ -705,22 +743,26 @@
                 }
             }
 
+            function resetToStep1() {
+                step1.style.display = 'block';
+                step2.style.display = 'none';
+                profileView.classList.remove('active');
+                errorMsg1.classList.remove('visible');
+                errorMsg2.classList.remove('visible');
+                verifyStatus.innerHTML = '';
+                mcInput.value = '';
+                loginHeadImg.src = 'https://mc-heads.net/head/Steve';
+                otpValue = '';
+                otpHiddenInput.value = '';
+                updateOTPSlots();
+            }
+
             function openModal() {
                 modal.classList.add('active');
                 document.body.style.overflow = 'hidden';
                 const user = sessionStorage.getItem('mc_user');
-                if (!user) {
-                    step1.style.display = 'block';
-                    step2.style.display = 'none';
-                    profileView.classList.remove('active');
-                    errorMsg1.classList.remove('visible');
-                    errorMsg2.classList.remove('visible');
-                    mcInput.value = '';
-                    discordInput.value = '';
-                    otpValue = [];
-                    hiddenInput.value = '';
-                    updateOTPSlots();
-                } else {
+                if (!user) resetToStep1();
+                else {
                     step1.style.display = 'none';
                     step2.style.display = 'none';
                     profileView.classList.add('active');
@@ -734,74 +776,98 @@
                 document.body.style.overflow = '';
             }
 
-            nextToPinBtn.addEventListener('click', () => {
+            // Schritt 1 -> Schritt 2 (Check ob User auf Discord)
+            nextToPinBtn.addEventListener('click', async () => {
                 const mcName = mcInput.value.trim();
-                const discordId = discordInput.value.trim();
-                
-                if (mcName.length < 2 || !discordId) {
-                    errorMsg1.textContent = 'Bitte fülle beide Felder aus.';
+                if (mcName.length < 2) {
                     errorMsg1.classList.add('visible');
                     modalContent.classList.add('shake');
                     setTimeout(() => modalContent.classList.remove('shake'), 500);
                     return;
                 }
-                
                 errorMsg1.classList.remove('visible');
-                step1.style.display = 'none';
-                step2.style.display = 'block';
-                
-                setTimeout(() => hiddenInput.focus(), 100);
-            });
-
-            backToStep1Btn.addEventListener('click', () => {
-                step2.style.display = 'none';
-                step1.style.display = 'block';
-                otpValue = [];
-                hiddenInput.value = '';
-                updateOTPSlots();
-                errorMsg2.classList.remove('visible');
-            });
-
-            loginWithPinBtn.addEventListener('click', async () => {
-                if (otpValue.length < 6) return;
-                
-                const mcName = mcInput.value.trim();
-                const discordId = discordInput.value.trim();
-                const pin = otpValue.join('');
-
-                loginWithPinBtn.textContent = 'Prüfe...';
-                loginWithPinBtn.disabled = true;
-                errorMsg2.classList.remove('visible');
-                slots.forEach(s => s.classList.remove('otp-error'));
+                nextToPinBtn.textContent = 'Prüfe Discord...';
+                nextToPinBtn.disabled = true;
 
                 try {
                     const response = await fetch(APPS_SCRIPT_URL, {
                         method: 'POST',
-                        body: JSON.stringify({ action: "login", discordId: discordId, pin: pin, mcName: mcName }),
+                        body: JSON.stringify({ action: "check", mcName: mcName }),
+                        headers: { 'Content-Type': 'text/plain;charset=utf-8' }
+                    });
+                    const result = await response.json();
+
+                    if (result.success) {
+                        sessionStorage.setItem('discord_id', result.discordId);
+                        step1.style.display = 'none';
+                        step2.style.display = 'block';
+                        setTimeout(() => otpHiddenInput.focus(), 150);
+                    } else {
+                        errorMsg1.textContent = result.message;
+                        errorMsg1.classList.add('visible');
+                        modalContent.classList.add('shake');
+                        setTimeout(() => modalContent.classList.remove('shake'), 500);
+                    }
+                } catch (err) {
+                    errorMsg1.textContent = 'Verbindung fehlgeschlagen.';
+                    errorMsg1.classList.add('visible');
+                } finally {
+                    nextToPinBtn.textContent = 'Weiter zum PIN →';
+                    nextToPinBtn.disabled = false;
+                }
+            });
+
+            backToStep1Btn.addEventListener('click', resetToStep1);
+
+            // Login mit PIN
+            loginWithPinBtn.addEventListener('click', async () => {
+                if (otpValue.length < 6) return;
+                const mcName = mcInput.value.trim();
+                const pin = otpValue;
+
+                loginWithPinBtn.textContent = 'Prüfe...';
+                loginWithPinBtn.disabled = true;
+                errorMsg2.classList.remove('visible');
+                verifyStatus.innerHTML = '';
+                otpSlots.forEach(s => s.classList.remove('otp-error'));
+
+                try {
+                    const response = await fetch(APPS_SCRIPT_URL, {
+                        method: 'POST',
+                        body: JSON.stringify({ action: "login", mcName: mcName, pin: pin }),
                         headers: { 'Content-Type': 'text/plain;charset=utf-8' }
                     });
                     const result = await response.json();
 
                     if (result.success) {
                         sessionStorage.setItem('mc_user', mcName);
-                        sessionStorage.setItem('discord_id', discordId);
-                        step2.style.display = 'none';
-                        profileView.classList.add('active');
-                        document.getElementById('profileName').textContent = mcName;
-                        document.getElementById('profileHead').src = `https://mc-heads.net/head/${mcName}`;
-                        updateHeaderUI();
-                        showToast(`✅ ${result.message}`, 'success');
+                        sessionStorage.setItem('discord_id', result.discordId);
+
+                        verifyStatus.innerHTML = `
+                            <div class="verify-status success">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
+                                <span>Code verified successfully!</span>
+                            </div>
+                        `;
+
+                        setTimeout(() => {
+                            step2.style.display = 'none';
+                            profileView.classList.add('active');
+                            document.getElementById('profileName').textContent = mcName;
+                            document.getElementById('profileHead').src = `https://mc-heads.net/head/${mcName}`;
+                            updateHeaderUI();
+                            showToast(`✅ ${result.message}`, 'success');
+                        }, 1000);
                     } else {
                         throw new Error(result.message);
                     }
                 } catch (err) {
                     errorMsg2.textContent = err.message || 'Fehler beim Login.';
                     errorMsg2.classList.add('visible');
-                    slots.forEach(s => s.classList.add('otp-error'));
-                    setTimeout(() => slots.forEach(s => s.classList.remove('otp-error')), 500);
-                    
-                    otpValue = [];
-                    hiddenInput.value = '';
+                    otpSlots.forEach(s => s.classList.add('otp-error'));
+                    setTimeout(() => otpSlots.forEach(s => s.classList.remove('otp-error')), 600);
+                    otpValue = '';
+                    otpHiddenInput.value = '';
                     updateOTPSlots();
                 } finally {
                     loginWithPinBtn.textContent = 'Anmelden';
@@ -812,14 +878,7 @@
             logoutBtn.addEventListener('click', () => {
                 sessionStorage.removeItem('mc_user');
                 sessionStorage.removeItem('discord_id');
-                step1.style.display = 'block';
-                step2.style.display = 'none';
-                profileView.classList.remove('active');
-                mcInput.value = '';
-                discordInput.value = '';
-                otpValue = [];
-                hiddenInput.value = '';
-                updateOTPSlots();
+                resetToStep1();
                 updateHeaderUI();
             });
 
@@ -828,7 +887,7 @@
             closeBtn.addEventListener('click', closeModal);
             modal.addEventListener('click', (e) => { if (e.target === modal) closeModal(); });
             document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && modal.classList.contains('active')) closeModal(); });
-            
+
             updateHeaderUI();
         })();
     </script>
