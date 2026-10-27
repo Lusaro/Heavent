@@ -8,13 +8,11 @@
     <link rel="stylesheet" href="lieferando-style.css" />
     <style>
         .author-avatar { width: 44px; height: 44px; border-radius: 50%; object-fit: cover; border: 2px solid var(--border-color); }
-        
         .mc-input-row { display: flex; align-items: center; gap: 12px; margin-bottom: 14px; }
         .mc-head-live { width: 52px; height: 52px; border-radius: 6px; image-rendering: pixelated; flex-shrink: 0; object-fit: cover; transition: transform 0.2s ease; opacity: 0; }
         .mc-head-live.visible { animation: popIn 0.3s cubic-bezier(0.22, 1, 0.36, 1) forwards; }
         .mc-input-row .login-field { flex: 1; margin: 0 !important; }
         @keyframes popIn { 0% { transform: scale(0.6); opacity: 0; } 100% { transform: scale(1); opacity: 1; } }
-
         .otp-container { display: flex; justify-content: center; align-items: center; gap: 8px; margin: 24px 0 16px; }
         .otp-group { display: flex; gap: 8px; }
         .otp-separator { display: flex; align-items: center; justify-content: center; color: var(--text-muted); margin: 0 4px; opacity: 0; animation: fadeInSep 0.3s ease-out 0.15s forwards; }
@@ -187,7 +185,7 @@
     </div>
 
     <script>
-        const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxuSS570xvwzSxkaRHt1LLF2GeLYacbdpdL0r59KGliv9elmwtKON4DFPrdTrN-Hif4Nw/exec';
+        const API_BASE_URL = 'https://heavent-shop.de/api';
 
         document.addEventListener('DOMContentLoaded', () => {
             const counters = document.querySelectorAll('.counter');
@@ -241,7 +239,7 @@
                 const mcName = mcInput.value.trim(); if (mcName.length < 2) { errorMsg1.classList.add('visible'); modalContent.classList.add('shake'); setTimeout(() => modalContent.classList.remove('shake'), 500); return; }
                 errorMsg1.classList.remove('visible'); nextToPinBtn.textContent = 'Prüfe Discord...'; nextToPinBtn.disabled = true;
                 try {
-                    const response = await fetch(APPS_SCRIPT_URL, { method: 'POST', body: JSON.stringify({ action: "check", mcName: mcName }), headers: { 'Content-Type': 'text/plain;charset=utf-8' } });
+                    const response = await fetch(`${API_BASE_URL}/check`, { method: 'POST', body: JSON.stringify({ mcName: mcName }), headers: { 'Content-Type': 'application/json' } });
                     const result = await response.json();
                     if (result.success) { localStorage.setItem('discord_id', result.discordId); step1.style.display = 'none'; step2.style.display = 'block'; setTimeout(() => otpHiddenInput.focus(), 150); }
                     else { errorMsg1.textContent = result.message; errorMsg1.classList.add('visible'); modalContent.classList.add('shake'); setTimeout(() => modalContent.classList.remove('shake'), 500); }
@@ -255,7 +253,7 @@
                 if (otpValue.length < 6) return; const mcName = mcInput.value.trim(); const pin = otpValue;
                 loginWithPinBtn.textContent = 'Prüfe...'; loginWithPinBtn.disabled = true; errorMsg2.classList.remove('visible'); verifyStatus.innerHTML = ''; otpSlots.forEach(s => s.classList.remove('otp-error'));
                 try {
-                    const response = await fetch(APPS_SCRIPT_URL, { method: 'POST', body: JSON.stringify({ action: "login", mcName: mcName, pin: pin }), headers: { 'Content-Type': 'text/plain;charset=utf-8' } });
+                    const response = await fetch(`${API_BASE_URL}/login`, { method: 'POST', body: JSON.stringify({ mcName: mcName, pin: pin }), headers: { 'Content-Type': 'application/json' } });
                     const result = await response.json();
                     if (result.success) {
                         localStorage.setItem('mc_user', mcName); localStorage.setItem('discord_id', result.discordId);
