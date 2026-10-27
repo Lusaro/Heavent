@@ -7,28 +7,29 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700;14..32,800&display=swap" rel="stylesheet" />
     <link rel="stylesheet" href="bestellen.css" />
     <script src="config.js"></script>
-    <script src="preisliste.js"></script>
     <style>
-        .mc-input-row { display: flex; align-items: center; gap: 12px; margin-bottom: 14px; }
-        .mc-head-live { width: 52px; height: 52px; border-radius: 6px; image-rendering: pixelated; flex-shrink: 0; object-fit: cover; transition: transform 0.2s ease; opacity: 0; }
-        .mc-head-live.visible { animation: popIn 0.3s cubic-bezier(0.22, 1, 0.36, 1) forwards; }
-        .mc-input-row .login-field { flex: 1; margin: 0 !important; }
-        @keyframes popIn { 0% { transform: scale(0.6); opacity: 0; } 100% { transform: scale(1); opacity: 1; } }
         .smooth-btn { width: 100%; padding: 14px; background: linear-gradient(135deg, #8b5cf6, #3b82f6); border: 1px solid transparent; border-radius: 50px; color: #fff; font-size: 1rem; font-weight: 700; cursor: pointer; transition: all 0.25s cubic-bezier(0.22, 1, 0.36, 1); box-shadow: 0 4px 20px rgba(139, 92, 246, 0.3); display: inline-flex; align-items: center; justify-content: center; gap: 8px; }
         .smooth-btn:hover:not(:disabled) { transform: translateY(-2px); box-shadow: 0 8px 35px rgba(139, 92, 246, 0.5); }
-        .smooth-btn:active:not(:disabled) { transform: scale(0.98); }
         .smooth-btn:disabled { opacity: 0.4; cursor: not-allowed; }
         .smooth-btn.outline { background: transparent; border: 1px solid var(--border-color); color: var(--text-secondary); box-shadow: none; }
         .smooth-btn.outline:hover:not(:disabled) { background: rgba(255,255,255,0.05); color: #fff; box-shadow: none; transform: none; }
+        .discord-btn { background: linear-gradient(135deg, #5865F2, #7289da) !important; }
         .modal-content.shake { animation: shake 0.4s ease-in-out; border-color: #ff4444 !important; box-shadow: 0 0 30px rgba(255, 68, 68, 0.4) !important; }
-        @keyframes shake { 0% { transform: translateX(0); } 25% { transform: translateX(-8px); } 50% { transform: translateX(8px); } 75% { transform: translateX(-8px); } 100% { transform: translateX(0); } }
+        @keyframes shake { 0%, 100% { transform: translateX(0); } 25% { transform: translateX(-8px); } 50% { transform: translateX(8px); } 75% { transform: translateX(-8px); } }
         .toast-container { position: fixed; top: 20px; right: 20px; z-index: 10000; display: flex; flex-direction: column; gap: 10px; }
         .toast { background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 10px; padding: 12px 18px; color: var(--text-primary); font-size: 0.9rem; box-shadow: 0 8px 30px rgba(0,0,0,0.4); transition: all 0.3s ease; max-width: 300px; }
-        .checkout-overlay { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.7); display: flex; align-items: center; justify-content: center; z-index: 9999; backdrop-filter: blur(4px); }
+        .toast.error { border-color: #ff4444; }
+        .toast.success { border-color: #10b981; }
+        .checkout-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.7); display: flex; align-items: center; justify-content: center; z-index: 9999; backdrop-filter: blur(4px); }
         .checkout-box { background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 16px; padding: 30px 40px; text-align: center; max-width: 400px; }
         .spinner { width: 40px; height: 40px; border: 3px solid var(--border-color); border-top-color: var(--accent-purple); border-radius: 50%; animation: spin 1s linear infinite; margin: 0 auto 15px; }
         @keyframes spin { to { transform: rotate(360deg); } }
         .btn-close-checkout { margin-top: 10px; padding: 10px 24px; background: var(--accent-purple); border: none; border-radius: 8px; color: #fff; font-weight: 600; cursor: pointer; }
+        .user-profile-box { display: flex; align-items: center; gap: 14px; padding: 16px; background: rgba(139, 92, 246, 0.08); border: 1px solid rgba(139, 92, 246, 0.3); border-radius: 12px; margin-bottom: 16px; }
+        .user-profile-box img { width: 56px; height: 56px; border-radius: 50%; image-rendering: pixelated; }
+        .user-profile-box .info { display: flex; flex-direction: column; gap: 2px; }
+        .user-profile-box .info strong { font-size: 1.05rem; }
+        .user-profile-box .info small { color: var(--text-secondary); font-size: 0.85rem; }
     </style>
 </head>
 <body>
@@ -43,7 +44,7 @@
                 <li><a href="lieferando.html">Preise</a></li>
             </ul>
             <div class="nav-actions">
-                <button class="btn-login" id="loginBtnHeader">Anmelden</button>
+                <button class="btn-login" id="loginBtnHeader">Mit Discord anmelden</button>
                 <div class="header-avatar" id="headerAvatar">
                     <img id="headerAvatarImg" src="" alt="Avatar">
                     <span class="name" id="headerAvatarName">User</span>
@@ -103,36 +104,41 @@
     <div id="accountModal" class="modal-overlay">
         <div class="modal-content account-modal" id="accountModalContent">
             <button class="modal-close" id="closeModalBtn">&times;</button>
-            <h2>🔐 Account</h2>
-            <p id="modalSubtitle">Melde dich mit deinem Minecraft-Namen an</p>
+            <h2>🔐 Anmelden</h2>
+            <p>Melde dich mit deinem Discord-Account an, um zu bestellen.</p>
 
-            <div id="loginStep1">
-                <div class="mc-input-row">
-                    <img id="loginHeadImg" class="mc-head-live" src="https://mc-heads.net/head/Steve" alt="Minecraft Head" />
-                    <div class="login-field">
-                        <label for="mcNameInput">Minecraft-Name</label>
-                        <input type="text" id="mcNameInput" placeholder="z.B. xLusaro" autocomplete="off" />
-                    </div>
-                </div>
-                <div class="error-msg" id="errorMsg1">Bitte gib deinen Minecraft-Namen ein (mind. 2 Zeichen).</div>
-                <button class="smooth-btn" id="loginBtn">Anmelden</button>
-                <p style="font-size:0.75rem; margin-top:14px; color:#6b7a8f; text-align:center;">
-                    Dein Nickname auf dem <a href="https://discord.gg/utngw94B7b" target="_blank" style="color:#8b5cf6;">Heavent Discord</a> sollte deinen MC-Namen enthalten.
+            <div id="loginView">
+                <button class="smooth-btn discord-btn" id="discordLoginBtn" style="margin-top: 20px;">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" style="margin-right: 8px;">
+                        <path d="M20.317 4.37a19.79 19.79 0 0 0-4.885-1.515.074.074 0 0 0-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 0 0-5.487 0 12.64 12.64 0 0 0-.617-1.25.077.077 0 0 0-.079-.037A19.74 19.74 0 0 0 3.677 4.37a.07.07 0 0 0-.032.027C.533 9.046-.32 13.58.099 18.057a.082.082 0 0 0 .031.057 19.9 19.9 0 0 0 5.993 3.03.078.078 0 0 0 .084-.028 14.09 14.09 0 0 0 1.226-1.994.076.076 0 0 0-.041-.106 13.107 13.107 0 0 1-1.872-.892.077.077 0 0 1-.008-.128 10.2 10.2 0 0 0 .372-.292.074.074 0 0 1 .077-.01c3.928 1.793 8.18 1.793 12.062 0a.074.074 0 0 1 .078.01c.12.098.246.198.373.292a.077.077 0 0 1-.006.127 12.299 12.299 0 0 1-1.873.892.077.077 0 0 0-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 0 0 .084.028 19.839 19.839 0 0 0 6.002-3.03.077.077 0 0 0 .032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 0 0-.031-.03z"/>
+                    </svg>
+                    Mit Discord anmelden
+                </button>
+                <p style="font-size:0.75rem; margin-top:16px; color:#6b7a8f; text-align:center;">
+                    Dein Discord-Nickname auf dem <a href="https://discord.gg/utngw94B7b" target="_blank" style="color:#8b5cf6;">Heavent Server</a> wird als Minecraft-Name verwendet.
                 </p>
             </div>
 
             <div id="profileView" class="profile-view">
-                <div class="profile-head"><img id="profileHead" src="" alt="Minecraft-Head"></div>
-                <div class="profile-info">
-                    <div class="name" id="profileName">–</div>
-                    <div class="status"><span class="dot"></span>Eingeloggt</div>
+                <div class="user-profile-box">
+                    <img id="profileHead" src="" alt="Minecraft-Head">
+                    <div class="info">
+                        <strong id="profileName">–</strong>
+                        <small id="profileDiscord">Discord-User</small>
+                    </div>
                 </div>
-                <button class="smooth-btn outline" id="logoutBtn" style="margin-top: 16px; width: 100%;">Abmelden</button>
+                <button class="smooth-btn outline" id="logoutBtn" style="width:100%;">Abmelden</button>
             </div>
         </div>
     </div>
 
     <script>
+        // ===== KONFIGURATION =====
+        const DISCORD_CLIENT_ID = '1563982978323976264';
+        const DISCORD_REDIRECT_URI = 'https://lusaro.github.io/Heavent/auth-callback.html';
+        const DISCORD_SCOPES = 'identify guilds.members.read';
+        const DISCORD_GUILD_ID = '1461850234060673068'; // New Server (Lieferando)
+
         const ITEMS_PER_DOUBLE_CHEST = 3456;
         const ITEMS_PER_SINGLE_CHEST = 1728;
         const FALLBACK_IMAGE = 'data:image/svg+xml;charset=UTF-8,' + encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" width="48" height="48"><rect width="48" height="48" rx="6" fill="#2a3440"/><text x="24" y="31" font-family="Arial" font-size="22" font-weight="bold" fill="#8b5cf6" text-anchor="middle">?</text></svg>');
@@ -143,12 +149,13 @@
             `https://raw.githubusercontent.com/InventivetalentDev/minecraft-assets/${MINECRAFT_VERSION}/assets/minecraft/textures`,
         ];
         const ITEM_ONLY = new Set(['diamond','coal','emerald','redstone','lapis_lazuli','iron_ingot','gold_ingot','netherite_ingot','netherite_scrap','nether_wart','sugar_cane','kelp','bamboo','cactus','stick','apple','wheat','paper','book','flint','charcoal','string','feather','leather','bone','bone_meal','slime_ball','snowball','egg','blaze_rod','blaze_powder','ender_pearl','ender_eye','ghast_tear','magma_cream','gunpowder','glowstone_dust','nether_star','nautilus_shell','prismarine_shard','prismarine_crystals','shulker_shell','phantom_membrane']);
-        const NAME_MAPPING = {'diamantblock':'diamond_block','diamant':'diamond','stein':'stone','kohleblock':'coal_block','eisenblock':'iron_block','goldblock':'gold_block','redstoneblock':'redstone_block','smaragdblock':'emerald_block','lapislazuliblock':'lapis_block','netheritblock':'netherite_block','kupferblock':'copper_block','eichenstamm':'oak_log','eichenholz':'oak_log','eichenholzbretter':'oak_planks','glas':'glass','weißesglas':'white_stained_glass','schwarzesglas':'black_stained_glass','rotesglas':'red_stained_glass','truhe':'chest','endertruhe':'ender_chest','fackel':'torch','ofen':'furnace','werkbank':'crafting_table','bücherregal':'bookshelf','leiter':'ladder','kohle':'coal','eisenbarren':'iron_ingot','goldbarren':'gold_ingot','netheritbarren':'netherite_ingot','smaragd':'emerald','lapislazuli':'lapis_lazuli','redstone':'redstone','zuckerrohr':'sugar_cane','kaktus':'cactus','bambus':'bamboo'};
+        const NAME_MAPPING = {'diamantblock':'diamond_block','diamant':'diamond','stein':'stone','kohleblock':'coal_block','eisenblock':'iron_block','goldblock':'gold_block','redstoneblock':'redstone_block','smaragdblock':'emerald_block','lapislazuliblock':'lapis_block','netheritblock':'netherite_block','kupferblock':'copper_block','eichenstamm':'oak_log','eichenholz':'oak_log','eichenholzbretter':'oak_planks','glas':'glass','truhe':'chest','endertruhe':'ender_chest','fackel':'torch','ofen':'furnace','werkbank':'crafting_table','bücherregal':'bookshelf','kohle':'coal','eisenbarren':'iron_ingot','goldbarren':'gold_ingot','netheritbarren':'netherite_ingot','smaragd':'emerald','lapislazuli':'lapis_lazuli','redstone':'redstone','zuckerrohr':'sugar_cane','kaktus':'cactus','bambus':'bamboo'};
 
         let itemDatabase = {};
         let itemCounter = 0;
         let selectedShipping = null;
         let basePrice = 0;
+        let currentUser = null;
 
         const orderItemsContainer = document.getElementById('orderItems');
         const addBtn = document.getElementById('addItemBtn');
@@ -160,6 +167,7 @@
         const shippingCostsDisplay = document.getElementById('shippingCosts');
         const finalPriceDisplay = document.getElementById('finalPrice');
 
+        // ===== TOAST =====
         function showToast(message, type = 'info') {
             let container = document.querySelector('.toast-container');
             if (!container) {
@@ -170,22 +178,20 @@
             const toast = document.createElement('div');
             toast.className = `toast ${type}`;
             toast.textContent = message;
-            if (type === 'error') toast.style.borderColor = '#ff4444';
-            if (type === 'success') toast.style.borderColor = '#10b981';
             container.appendChild(toast);
             setTimeout(() => {
                 toast.style.opacity = '0';
                 toast.style.transform = 'translateX(100%)';
                 setTimeout(() => toast.remove(), 300);
-            }, 3000);
+            }, 3500);
         }
 
+        // ===== PREIS-LOGIK =====
         function getPriceFromEntry(entry) {
             let price = entry?.kunden_preis ?? entry?.farmer_preis ?? null;
             if (typeof price === 'string') price = parseFloat(price.replace(',', '.'));
             return (typeof price === 'number' && !isNaN(price)) ? price : null;
         }
-
         function getItemPrice(itemName) {
             const name = itemName.trim();
             if (!name) return null;
@@ -196,31 +202,20 @@
             }
             return null;
         }
-
         function normalizeItemName(name) {
             return name.toLowerCase().replace(/[^a-z0-9]/g, '_').replace(/_+/g, '_').replace(/^_|_$/g, '');
         }
-
         function buildTextureUrlCandidates(itemName) {
             const norm = normalizeItemName(itemName);
             const englishName = NAME_MAPPING[norm] || norm;
             const types = ITEM_ONLY.has(englishName) ? ['item', 'block'] : ['block', 'item'];
             const urls = [];
-            for (const base of TEXTURE_BASE_URLS) {
-                for (const type of types) {
-                    urls.push(`${base}/${type}/${englishName}.png`);
-                }
-            }
+            for (const base of TEXTURE_BASE_URLS) for (const type of types) urls.push(`${base}/${type}/${englishName}.png`);
             urls.push(FALLBACK_IMAGE);
             return urls;
         }
-
         function setImageWithFallback(imgElement, itemName) {
-            if (!itemName || !itemName.trim()) {
-                imgElement.onerror = null;
-                imgElement.src = FALLBACK_IMAGE;
-                return;
-            }
+            if (!itemName || !itemName.trim()) { imgElement.onerror = null; imgElement.src = FALLBACK_IMAGE; return; }
             const urls = buildTextureUrlCandidates(itemName);
             let i = 0;
             imgElement.onerror = function() {
@@ -230,7 +225,6 @@
             };
             imgElement.src = urls[0];
         }
-
         async function loadItemDatabase() {
             try {
                 const res = await fetch('./data/preise.json');
@@ -238,29 +232,14 @@
                     const data = await res.json();
                     if (data && typeof data === 'object' && Object.keys(data).length > 0) {
                         itemDatabase = data;
-                        console.log('✅ Preise aus data/preise.json geladen:', Object.keys(itemDatabase).length);
+                        console.log('✅ Preise geladen:', Object.keys(itemDatabase).length);
                         return true;
                     }
                 }
-            } catch (err) {
-                console.warn('data/preise.json nicht erreichbar, versuche preisliste.js', err);
-            }
-            if (typeof PREISLISTE !== 'undefined' && PREISLISTE) {
-                const data = PREISLISTE.item_prices || PREISLISTE;
-                if (Object.keys(data).length > 0) {
-                    itemDatabase = data;
-                    console.log('⚠️ Fallback auf preisliste.js:', Object.keys(itemDatabase).length);
-                    return true;
-                }
-            }
-            itemDatabase = {
-                "Diamantblock": { kunden_preis: 860.0 },
-                "Stein": { kunden_preis: 3.0 },
-                "Eichenholz": { kunden_preis: 7 }
-            };
+            } catch (err) { console.warn('Preise laden fehlgeschlagen:', err); }
+            itemDatabase = { "Diamantblock": { kunden_preis: 860.0 }, "Stein": { kunden_preis: 3.0 } };
             return false;
         }
-
         function populateDatalist() {
             const datalist = document.getElementById('itemList');
             if (!datalist) return;
@@ -271,7 +250,6 @@
                 datalist.appendChild(option);
             });
         }
-
         function saveOrderToLocalStorage() {
             const rows = document.querySelectorAll('.item-row');
             const order = [];
@@ -283,7 +261,6 @@
             });
             localStorage.setItem('heavent_order', JSON.stringify(order));
         }
-
         function loadOrderFromLocalStorage() {
             const saved = localStorage.getItem('heavent_order');
             if (!saved) return false;
@@ -297,34 +274,23 @@
             } catch(e) {}
             return false;
         }
-
         function updateRowPrice(row) {
             const nameInput = row.querySelector('.block-name');
             const chestType = row.querySelector('.chest-type');
             const amountInput = row.querySelector('.chest-amount');
             const priceDisplay = row.querySelector('.item-price');
             const basePriceItem = getItemPrice(nameInput.value);
-            if (basePriceItem === null) {
-                priceDisplay.textContent = '0.00';
-                priceDisplay.style.color = '#ff4444';
-                return;
-            }
+            if (basePriceItem === null) { priceDisplay.textContent = '0.00'; priceDisplay.style.color = '#ff4444'; return; }
             const itemsPerChest = chestType.value === 'double' ? ITEMS_PER_DOUBLE_CHEST : ITEMS_PER_SINGLE_CHEST;
             const amount = parseInt(amountInput.value) || 1;
             priceDisplay.textContent = (basePriceItem * itemsPerChest * amount).toFixed(2);
             priceDisplay.style.color = '';
         }
-
         function updateItemPreview(input, preview) {
             const name = input.value.trim();
-            if (!name) {
-                preview.onerror = null;
-                preview.src = FALLBACK_IMAGE;
-                return;
-            }
+            if (!name) { preview.onerror = null; preview.src = FALLBACK_IMAGE; return; }
             setImageWithFallback(preview, name);
         }
-
         function createItemRow(index, defaultName = '', defaultType = 'double', defaultAmount = 1) {
             return `
                 <div class="item-row" data-index="${index}">
@@ -352,21 +318,13 @@
                 </div>
             `;
         }
-
         function bindRowEvents(row) {
             const nameInput = row.querySelector('.block-name');
             const chestType = row.querySelector('.chest-type');
             const amountInput = row.querySelector('.chest-amount');
             const imageInput = row.querySelector('.item-image-input');
             const preview = row.querySelector('.item-preview');
-
-            const recalc = () => {
-                updateRowPrice(row);
-                updateTotalPrice();
-                validateBlockNames();
-                updatePriceDetails();
-                saveOrderToLocalStorage();
-            };
+            const recalc = () => { updateRowPrice(row); updateTotalPrice(); validateBlockNames(); updatePriceDetails(); saveOrderToLocalStorage(); };
             nameInput.addEventListener('input', () => { recalc(); updateItemPreview(nameInput, preview); });
             chestType.addEventListener('change', recalc);
             amountInput.addEventListener('input', recalc);
@@ -380,20 +338,11 @@
             });
             const removeBtn = row.querySelector('.btn-remove-row');
             removeBtn.addEventListener('click', function() {
-                if (orderItemsContainer.children.length <= 1) {
-                    showToast('Mindestens eine Zeile muss vorhanden bleiben.', 'error');
-                    return;
-                }
-                row.remove();
-                updateRemoveButtons();
-                validateBlockNames();
-                updateTotalPrice();
-                updatePriceDetails();
-                saveOrderToLocalStorage();
+                if (orderItemsContainer.children.length <= 1) { showToast('Mindestens eine Zeile muss vorhanden bleiben.', 'error'); return; }
+                row.remove(); updateRemoveButtons(); validateBlockNames(); updateTotalPrice(); updatePriceDetails(); saveOrderToLocalStorage();
             });
             if (nameInput.value.trim()) updateItemPreview(nameInput, preview);
         }
-
         function addItemRow(defaultName = '', defaultType = 'double', defaultAmount = 1) {
             const index = itemCounter++;
             const temp = document.createElement('div');
@@ -401,15 +350,11 @@
             const row = temp.firstElementChild;
             bindRowEvents(row);
             orderItemsContainer.appendChild(row);
-            updateRowPrice(row);
-            updateTotalPrice();
-            updateRemoveButtons();
-            validateBlockNames();
+            updateRowPrice(row); updateTotalPrice(); updateRemoveButtons(); validateBlockNames();
             const nameInput = row.querySelector('.block-name');
             const preview = row.querySelector('.item-preview');
             if (nameInput.value.trim()) updateItemPreview(nameInput, preview);
         }
-
         function updateTotalPrice() {
             let total = 0;
             document.querySelectorAll('.item-row .item-price').forEach(el => {
@@ -420,35 +365,22 @@
             totalPriceDisplay.textContent = total.toFixed(2) + '€';
             updatePriceDetails();
         }
-
         function validateBlockNames() {
-            const map = new Map();
-            let dup = false;
+            const map = new Map(); let dup = false;
             document.querySelectorAll('.item-row .block-name').forEach(input => {
                 const name = input.value.trim();
                 if (!name) return;
-                if (map.has(name)) {
-                    dup = true;
-                    input.classList.add('duplicate-error');
-                    map.get(name).classList.add('duplicate-error');
-                } else {
-                    input.classList.remove('duplicate-error');
-                    map.set(name, input);
-                }
+                if (map.has(name)) { dup = true; input.classList.add('duplicate-error'); map.get(name).classList.add('duplicate-error'); }
+                else { input.classList.remove('duplicate-error'); map.set(name, input); }
             });
             submitBtn.disabled = dup || !selectedShipping;
         }
-
         function updateRemoveButtons() {
             const count = orderItemsContainer.children.length;
             document.querySelectorAll('.btn-remove-row').forEach(btn => btn.disabled = count <= 1);
         }
-
         function updatePriceDetails() {
-            if (!selectedShipping || basePrice === 0) {
-                priceDetails.classList.remove('visible');
-                return;
-            }
+            if (!selectedShipping || basePrice === 0) { priceDetails.classList.remove('visible'); return; }
             priceDetails.classList.add('visible');
             const surcharge = selectedShipping === 'self' ? 0.20 : 0.30;
             const shippingCost = basePrice * surcharge;
@@ -456,7 +388,6 @@
             shippingCostsDisplay.innerHTML = shippingCost.toFixed(2) + '€ <span class="surcharge-info">(+' + (surcharge * 100) + '%)</span>';
             finalPriceDisplay.textContent = finalPrice.toFixed(2) + '€';
         }
-
         function selectShipping(type) {
             selectedShipping = type;
             selfPickupBtn.classList.remove('active');
@@ -465,63 +396,136 @@
             else if (type === 'delivery') deliveryBtn.classList.add('active');
             submitBtn.disabled = false;
             submitBtn.className = 'btn btn-primary glow';
-            validateBlockNames();
-            updatePriceDetails();
+            validateBlockNames(); updatePriceDetails();
         }
-
         selfPickupBtn.addEventListener('click', () => selectShipping('self'));
         deliveryBtn.addEventListener('click', () => selectShipping('delivery'));
 
-        async function submitOrder() {
-            const user = localStorage.getItem('mc_user');
-            if (!user) {
-                showToast('Du musst dich einloggen, um zu bestellen!', 'error');
-                document.getElementById('loginBtnHeader').click();
-                const modalContent = document.getElementById('accountModalContent');
-                modalContent.classList.add('shake');
-                setTimeout(() => modalContent.classList.remove('shake'), 500);
-                return;
-            }
-            if (!selectedShipping) {
-                showToast('Bitte wähle zuerst eine Versandart aus.', 'error');
-                return;
-            }
-            const rows = document.querySelectorAll('.item-row');
-            if (rows.length === 0) {
-                showToast('Bitte füge mindestens ein Item hinzu.', 'error');
-                return;
+        // ===== DISCORD LOGIN =====
+        function loginWithDiscord() {
+            const state = Math.random().toString(36).substring(2, 15);
+            try { sessionStorage.setItem('oauth_state', state); } catch(e) {}
+            const url = `https://discord.com/oauth2/authorize?client_id=${DISCORD_CLIENT_ID}&redirect_uri=${encodeURIComponent(DISCORD_REDIRECT_URI)}&response_type=token&scope=${encodeURIComponent(DISCORD_SCOPES)}&state=${state}`;
+            window.location.href = url;
+        }
+
+        async function fetchUserInfo() {
+            const token = localStorage.getItem('discord_token');
+            if (!token) return null;
+
+            const expiresAt = parseInt(localStorage.getItem('discord_token_expires') || '0');
+            if (expiresAt && Date.now() > expiresAt) {
+                localStorage.removeItem('discord_token');
+                localStorage.removeItem('discord_token_expires');
+                return null;
             }
 
+            try {
+                // User-Info
+                const userRes = await fetch('https://discord.com/api/v10/users/@me', {
+                    headers: { Authorization: `Bearer ${token}` }
+                });
+                if (!userRes.ok) {
+                    if (userRes.status === 401) {
+                        localStorage.removeItem('discord_token');
+                        localStorage.removeItem('discord_token_expires');
+                    }
+                    return null;
+                }
+                const user = await userRes.json();
+
+                // Guild-Member (Nickname)
+                let mcName = user.global_name || user.username;
+                let nickname = null;
+                try {
+                    const memberRes = await fetch(`https://discord.com/api/v10/users/@me/guilds/${DISCORD_GUILD_ID}/member`, {
+                        headers: { Authorization: `Bearer ${token}` }
+                    });
+                    if (memberRes.ok) {
+                        const member = await memberRes.json();
+                        if (member.nick) {
+                            nickname = member.nick;
+                            mcName = member.nick;
+                        }
+                    }
+                } catch(e) { console.warn('Guild-Member-Fetch fehlgeschlagen:', e); }
+
+                return {
+                    discordId: user.id,
+                    username: user.username,
+                    globalName: user.global_name,
+                    nickname: nickname,
+                    mcName: mcName
+                };
+            } catch (e) {
+                console.error('User-Fetch fehlgeschlagen:', e);
+                return null;
+            }
+        }
+
+        function updateUI() {
+            const loginBtn = document.getElementById('loginBtnHeader');
+            const headerAvatar = document.getElementById('headerAvatar');
+            const headerAvatarImg = document.getElementById('headerAvatarImg');
+            const headerAvatarName = document.getElementById('headerAvatarName');
+            const loginView = document.getElementById('loginView');
+            const profileView = document.getElementById('profileView');
+
+            if (currentUser) {
+                loginBtn.classList.add('hidden');
+                headerAvatar.classList.add('visible');
+                headerAvatarImg.src = `https://mc-heads.net/head/${currentUser.mcName}`;
+                headerAvatarName.textContent = currentUser.mcName;
+                loginView.style.display = 'none';
+                profileView.classList.add('active');
+                document.getElementById('profileHead').src = `https://mc-heads.net/head/${currentUser.mcName}`;
+                document.getElementById('profileName').textContent = currentUser.mcName;
+                document.getElementById('profileDiscord').textContent = `@${currentUser.username}` + (currentUser.nickname ? ` • Nickname: ${currentUser.nickname}` : '');
+            } else {
+                loginBtn.classList.remove('hidden');
+                headerAvatar.classList.remove('visible');
+                loginView.style.display = 'block';
+                profileView.classList.remove('active');
+            }
+        }
+
+        function openModal() {
+            const modal = document.getElementById('accountModal');
+            modal.classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+        function closeModal() {
+            const modal = document.getElementById('accountModal');
+            modal.classList.remove('active');
+            document.body.style.overflow = '';
+        }
+
+        // ===== BESTELLEN =====
+        async function submitOrder() {
+            if (!currentUser) {
+                showToast('Bitte melde dich zuerst mit Discord an!', 'error');
+                openModal();
+                return;
+            }
+            if (!selectedShipping) { showToast('Bitte wähle eine Versandart.', 'error'); return; }
+
+            const rows = document.querySelectorAll('.item-row');
+            if (rows.length === 0) { showToast('Bitte füge Items hinzu.', 'error'); return; }
+
             const items = [];
-            let total = 0;
             let error = false;
             const names = [];
-            rows.forEach((row, i) => {
+            rows.forEach((row) => {
                 const input = row.querySelector('.block-name');
                 const name = input.value.trim();
-                if (!name || names.includes(name)) {
-                    error = true;
-                    input.classList.add('duplicate-error');
-                    return;
-                }
+                if (!name || names.includes(name)) { error = true; input.classList.add('duplicate-error'); return; }
                 names.push(name);
                 const chestType = row.querySelector('.chest-type');
                 const amount = parseInt(row.querySelector('.chest-amount').value) || 1;
                 const price = parseFloat(row.querySelector('.item-price').textContent) || 0;
-                total += price;
-                const itemsPerChest = chestType.value === 'double' ? ITEMS_PER_DOUBLE_CHEST : ITEMS_PER_SINGLE_CHEST;
-                items.push({
-                    name: name,
-                    amount: amount,
-                    chestType: chestType.value,
-                    totalItems: itemsPerChest * amount,
-                    price: price
-                });
+                items.push({ name, amount, chestType: chestType.value, price });
             });
-            if (error) {
-                showToast('Bitte behebe die Fehler.', 'error');
-                return;
-            }
+            if (error) { showToast('Bitte Fehler beheben.', 'error'); return; }
 
             const surcharge = selectedShipping === 'self' ? 0.20 : 0.30;
             const shippingCost = basePrice * surcharge;
@@ -530,13 +534,13 @@
 
             const webhookURL = window.HEAVENT_CONFIG?.DISCORD_WEBHOOK_URL;
             if (!webhookURL || webhookURL.includes('HIER_DEINE')) {
-                showToast('Webhook nicht konfiguriert. Bitte Admin informieren.', 'error');
+                showToast('Webhook nicht konfiguriert!', 'error');
                 return;
             }
 
             const overlay = document.createElement('div');
             overlay.className = 'checkout-overlay';
-            overlay.innerHTML = `<div class="checkout-box"><div class="spinner"></div><h3>Bestellung wird gesendet...</h3><p>Verbinde mit dem Server...</p></div>`;
+            overlay.innerHTML = `<div class="checkout-box"><div class="spinner"></div><h3>Bestellung wird gesendet...</h3></div>`;
             document.body.appendChild(overlay);
 
             try {
@@ -545,27 +549,25 @@
                     title: '🌐 Neue Website-Bestellung',
                     color: 0x8b5cf6,
                     fields: [
-                        { name: '👤 Minecraft-Name', value: user, inline: true },
+                        { name: '👤 Minecraft-Name', value: currentUser.mcName, inline: true },
+                        { name: '💬 Discord', value: `@${currentUser.username}`, inline: true },
                         { name: '📦 Versandart', value: shippingText, inline: true },
                         { name: '💰 Basispreis', value: `${basePrice.toFixed(2)}€`, inline: true },
                         { name: '💵 Endpreis', value: `**${finalPrice.toFixed(2)}€**`, inline: true },
                         { name: '📋 Items', value: itemLines || '–', inline: false },
                     ],
                     timestamp: new Date().toISOString(),
-                    footer: { text: 'heavent-shop.de' }
+                    footer: { text: `Heavent Shop • Discord-ID: ${currentUser.discordId}` }
                 };
 
                 const response = await fetch(webhookURL + '?wait=true', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({
-                        username: 'Lieferando Website',
-                        embeds: [embed]
-                    })
+                    body: JSON.stringify({ username: 'Lieferando Website', embeds: [embed] })
                 });
 
                 if (response.ok) {
-                    overlay.innerHTML = `<div class="checkout-box"><h3 style="color:#10b981; margin-bottom: 15px;">✅ Bestellung erfolgreich!</h3><p style="margin-bottom: 20px; font-size: 0.9rem;">Deine Bestellung ist im Discord eingegangen.</p><button class="btn-close-checkout" id="closeCheckoutBtn">Schließen</button></div>`;
+                    overlay.innerHTML = `<div class="checkout-box"><h3 style="color:#10b981;">✅ Bestellung erfolgreich!</h3><p>Deine Bestellung ist im Discord eingegangen.</p><button class="btn-close-checkout" id="closeCheckoutBtn">Schließen</button></div>`;
                     document.getElementById('closeCheckoutBtn').onclick = () => {
                         document.body.removeChild(overlay);
                         localStorage.removeItem('heavent_order');
@@ -574,125 +576,47 @@
                     throw new Error('Webhook-Fehler: ' + response.status);
                 }
             } catch (err) {
-                overlay.innerHTML = `<div class="checkout-box"><h3 style="color:#ff4444; margin-bottom: 15px;">❌ Fehler</h3><p style="margin-bottom: 20px; font-size: 0.9rem;">${err.message || 'Verbindung fehlgeschlagen.'}</p><button class="btn-close-checkout" id="closeCheckoutBtn">Schließen</button></div>`;
+                overlay.innerHTML = `<div class="checkout-box"><h3 style="color:#ff4444;">❌ Fehler</h3><p>${err.message}</p><button class="btn-close-checkout" id="closeCheckoutBtn">Schließen</button></div>`;
                 document.getElementById('closeCheckoutBtn').onclick = () => document.body.removeChild(overlay);
             }
         }
 
+        // ===== INIT =====
         async function init() {
             await loadItemDatabase();
             populateDatalist();
             if (!loadOrderFromLocalStorage()) addItemRow();
             addBtn.addEventListener('click', () => addItemRow());
             submitBtn.addEventListener('click', submitOrder);
+
+            // Discord-Login prüfen
+            currentUser = await fetchUserInfo();
+            updateUI();
+
+            // Nach Callback: URL aufräumen
+            if (window.location.search.includes('login=ok')) {
+                window.history.replaceState({}, document.title, 'bestellen.html');
+                if (currentUser) showToast(`✅ Willkommen, ${currentUser.mcName}!`, 'success');
+            }
+
+            // Login-Button
+            document.getElementById('loginBtnHeader').addEventListener('click', openModal);
+            document.getElementById('headerAvatar').addEventListener('click', openModal);
+            document.getElementById('closeModalBtn').addEventListener('click', closeModal);
+            document.getElementById('discordLoginBtn').addEventListener('click', loginWithDiscord);
+            document.getElementById('accountModal').addEventListener('click', (e) => {
+                if (e.target.id === 'accountModal') closeModal();
+            });
+            document.getElementById('logoutBtn').addEventListener('click', () => {
+                localStorage.removeItem('discord_token');
+                localStorage.removeItem('discord_token_expires');
+                currentUser = null;
+                updateUI();
+                closeModal();
+                showToast('Abgemeldet', 'info');
+            });
         }
         init();
-
-        // ===================== ACCOUNT MODAL (MC-Name only) =====================
-        (function() {
-            const modal = document.getElementById('accountModal');
-            const modalContent = document.getElementById('accountModalContent');
-            const closeBtn = document.getElementById('closeModalBtn');
-            const loginHeaderBtn = document.getElementById('loginBtnHeader');
-            const headerAvatar = document.getElementById('headerAvatar');
-            const headerAvatarImg = document.getElementById('headerAvatarImg');
-            const headerAvatarName = document.getElementById('headerAvatarName');
-            const step1 = document.getElementById('loginStep1');
-            const profileView = document.getElementById('profileView');
-            const mcInput = document.getElementById('mcNameInput');
-            const loginHeadImg = document.getElementById('loginHeadImg');
-            const loginBtn = document.getElementById('loginBtn');
-            const logoutBtn = document.getElementById('logoutBtn');
-            const errorMsg1 = document.getElementById('errorMsg1');
-
-            mcInput.addEventListener('input', () => {
-                const name = mcInput.value.trim();
-                if (name.length >= 2) {
-                    loginHeadImg.src = `https://mc-heads.net/head/${name}`;
-                    loginHeadImg.classList.add('visible');
-                } else {
-                    loginHeadImg.src = 'https://mc-heads.net/head/Steve';
-                }
-            });
-
-            function updateHeaderUI() {
-                const user = localStorage.getItem('mc_user');
-                if (user) {
-                    loginHeaderBtn.classList.add('hidden');
-                    headerAvatar.classList.add('visible');
-                    headerAvatarImg.src = `https://mc-heads.net/head/${user}`;
-                    headerAvatarName.textContent = user;
-                } else {
-                    loginHeaderBtn.classList.remove('hidden');
-                    headerAvatar.classList.remove('visible');
-                }
-            }
-
-            function resetToStep1() {
-                step1.style.display = 'block';
-                profileView.classList.remove('active');
-                errorMsg1.classList.remove('visible');
-                mcInput.value = '';
-                loginHeadImg.src = 'https://mc-heads.net/head/Steve';
-                loginHeadImg.classList.remove('visible');
-            }
-
-            function openModal() {
-                modal.classList.add('active');
-                document.body.style.overflow = 'hidden';
-                const user = localStorage.getItem('mc_user');
-                if (!user) {
-                    resetToStep1();
-                } else {
-                    step1.style.display = 'none';
-                    profileView.classList.add('active');
-                    document.getElementById('profileName').textContent = user;
-                    document.getElementById('profileHead').src = `https://mc-heads.net/head/${user}`;
-                }
-            }
-
-            function closeModal() {
-                modal.classList.remove('active');
-                document.body.style.overflow = '';
-            }
-
-            loginBtn.addEventListener('click', () => {
-                const mcName = mcInput.value.trim();
-                if (mcName.length < 2) {
-                    errorMsg1.classList.add('visible');
-                    modalContent.classList.add('shake');
-                    setTimeout(() => modalContent.classList.remove('shake'), 500);
-                    return;
-                }
-                errorMsg1.classList.remove('visible');
-                localStorage.setItem('mc_user', mcName);
-                step1.style.display = 'none';
-                profileView.classList.add('active');
-                document.getElementById('profileName').textContent = mcName;
-                document.getElementById('profileHead').src = `https://mc-heads.net/head/${mcName}`;
-                updateHeaderUI();
-                showToast(`✅ Willkommen, ${mcName}!`, 'success');
-                setTimeout(closeModal, 800);
-            });
-
-            logoutBtn.addEventListener('click', () => {
-                localStorage.removeItem('mc_user');
-                resetToStep1();
-                updateHeaderUI();
-            });
-
-            if (loginHeaderBtn) loginHeaderBtn.addEventListener('click', openModal);
-            if (headerAvatar) headerAvatar.addEventListener('click', openModal);
-            closeBtn.addEventListener('click', closeModal);
-            modal.addEventListener('click', (e) => {
-                if (e.target === modal) closeModal();
-            });
-            document.addEventListener('keydown', (e) => {
-                if (e.key === 'Escape' && modal.classList.contains('active')) closeModal();
-            });
-
-            updateHeaderUI();
-        })();
     </script>
 </body>
 </html>
