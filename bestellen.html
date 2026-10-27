@@ -141,26 +141,14 @@
                 <p style="font-size: 0.75rem; color: #6b7a8f; margin-bottom: 5px;">(Beim ersten Mal wird dieser als dein neuer PIN gespeichert)</p>
 
                 <div class="otp-container" id="otpContainer">
-                    <div class="otp-group">
-                        <div class="otp-slot" data-index="0"></div>
-                        <div class="otp-slot" data-index="1"></div>
-                        <div class="otp-slot" data-index="2"></div>
-                    </div>
-                    <div class="otp-separator">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line></svg>
-                    </div>
-                    <div class="otp-group">
-                        <div class="otp-slot" data-index="3"></div>
-                        <div class="otp-slot" data-index="4"></div>
-                        <div class="otp-slot" data-index="5"></div>
-                    </div>
+                    <div class="otp-group"><div class="otp-slot" data-index="0"></div><div class="otp-slot" data-index="1"></div><div class="otp-slot" data-index="2"></div></div>
+                    <div class="otp-separator"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line></svg></div>
+                    <div class="otp-group"><div class="otp-slot" data-index="3"></div><div class="otp-slot" data-index="4"></div><div class="otp-slot" data-index="5"></div></div>
                 </div>
 
                 <input type="tel" class="otp-hidden-input" id="otpHiddenInput" maxlength="6" />
-
                 <div id="verifyStatus"></div>
                 <div class="error-msg" id="errorMsg2">Falscher PIN!</div>
-
                 <button class="smooth-btn" id="loginWithPinBtn" disabled>Anmelden</button>
                 <button class="smooth-btn outline" id="backToStep1Btn" style="margin-top: 10px;">← Zurück</button>
             </div>
@@ -177,7 +165,7 @@
     </div>
 
     <script>
-        const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxuSS570xvwzSxkaRHt1LLF2GeLYacbdpdL0r59KGliv9elmwtKON4DFPrdTrN-Hif4Nw/exec';
+        const API_BASE_URL = 'https://heavent-shop.de/api';
 
         const ITEMS_PER_DOUBLE_CHEST = 3456;
         const ITEMS_PER_SINGLE_CHEST = 1728;
@@ -315,16 +303,16 @@
             const shippingText = selectedShipping === 'self' ? 'Selbstabholung (+20%)' : 'Lieferung (+30%)';
 
             const overlay = document.createElement('div'); overlay.className = 'checkout-overlay';
-            overlay.innerHTML = `<div class="checkout-box"><div class="spinner"></div><h3>Bestellung wird gesendet...</h3><p>Verbinde mit dem Discord-Server...</p></div>`; document.body.appendChild(overlay);
+            overlay.innerHTML = `<div class="checkout-box"><div class="spinner"></div><h3>Bestellung wird gesendet...</h3><p>Verbinde mit dem Server...</p></div>`; document.body.appendChild(overlay);
 
             try {
-                const response = await fetch(APPS_SCRIPT_URL, {
-                    method: 'POST', body: JSON.stringify({ action: "order", mcName: user, discordId: discordId, shippingType: shippingText, totalPrice: finalPrice.toFixed(2) + '€', items: summary }),
-                    headers: { 'Content-Type': 'text/plain;charset=utf-8' }
+                const response = await fetch(`${API_BASE_URL}/order`, {
+                    method: 'POST', body: JSON.stringify({ mcName: user, discordId: discordId, shippingType: shippingText, totalPrice: finalPrice.toFixed(2) + '€', items: summary }),
+                    headers: { 'Content-Type': 'application/json' }
                 });
                 const result = await response.json();
                 if (result.success) {
-                    overlay.innerHTML = `<div class="checkout-box"><h3 style="color:#10b981; margin-bottom: 15px;">✅ Bestellung erfolgreich!</h3><p style="margin-bottom: 20px; font-size: 0.9rem;">Deine Bestellung ist im Discord eingegangen. Prüfe deine DMs!</p><button class="btn-close-checkout" id="closeCheckoutBtn">Schließen</button></div>`;
+                    overlay.innerHTML = `<div class="checkout-box"><h3 style="color:#10b981; margin-bottom: 15px;">✅ Bestellung erfolgreich!</h3><p style="margin-bottom: 20px; font-size: 0.9rem;">Deine Bestellung ist im Discord eingegangen.</p><button class="btn-close-checkout" id="closeCheckoutBtn">Schließen</button></div>`;
                     document.getElementById('closeCheckoutBtn').onclick = () => document.body.removeChild(overlay);
                 } else { throw new Error(result.message); }
             } catch (err) {
@@ -371,7 +359,7 @@
                 const mcName = mcInput.value.trim(); if (mcName.length < 2) { errorMsg1.classList.add('visible'); modalContent.classList.add('shake'); setTimeout(() => modalContent.classList.remove('shake'), 500); return; }
                 errorMsg1.classList.remove('visible'); nextToPinBtn.textContent = 'Prüfe Discord...'; nextToPinBtn.disabled = true;
                 try {
-                    const response = await fetch(APPS_SCRIPT_URL, { method: 'POST', body: JSON.stringify({ action: "check", mcName: mcName }), headers: { 'Content-Type': 'text/plain;charset=utf-8' } });
+                    const response = await fetch(`${API_BASE_URL}/check`, { method: 'POST', body: JSON.stringify({ mcName: mcName }), headers: { 'Content-Type': 'application/json' } });
                     const result = await response.json();
                     if (result.success) { localStorage.setItem('discord_id', result.discordId); step1.style.display = 'none'; step2.style.display = 'block'; setTimeout(() => otpHiddenInput.focus(), 150); }
                     else { errorMsg1.textContent = result.message; errorMsg1.classList.add('visible'); modalContent.classList.add('shake'); setTimeout(() => modalContent.classList.remove('shake'), 500); }
@@ -385,7 +373,7 @@
                 if (otpValue.length < 6) return; const mcName = mcInput.value.trim(); const pin = otpValue;
                 loginWithPinBtn.textContent = 'Prüfe...'; loginWithPinBtn.disabled = true; errorMsg2.classList.remove('visible'); verifyStatus.innerHTML = ''; otpSlots.forEach(s => s.classList.remove('otp-error'));
                 try {
-                    const response = await fetch(APPS_SCRIPT_URL, { method: 'POST', body: JSON.stringify({ action: "login", mcName: mcName, pin: pin }), headers: { 'Content-Type': 'text/plain;charset=utf-8' } });
+                    const response = await fetch(`${API_BASE_URL}/login`, { method: 'POST', body: JSON.stringify({ mcName: mcName, pin: pin }), headers: { 'Content-Type': 'application/json' } });
                     const result = await response.json();
                     if (result.success) {
                         localStorage.setItem('mc_user', mcName); localStorage.setItem('discord_id', result.discordId);
