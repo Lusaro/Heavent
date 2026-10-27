@@ -6,6 +6,14 @@
     <title>Lieferando - HVNT - OPSUCHT</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700;14..32,800&display=swap" rel="stylesheet" />
     <link rel="stylesheet" href="lieferando-style.css" />
+    <!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Lieferando - HVNT - OPSUCHT</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700;14..32,800&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="lieferando-style.css" />
     
     <!-- ===== NEUE STYLES FÜR LOGIN & OTP ===== -->
     <style>
@@ -21,6 +29,554 @@
         .mc-head-live.visible { animation: popIn 0.3s cubic-bezier(0.22, 1, 0.36, 1); border-color: var(--accent-purple); }
         .mc-input-row .login-field { flex: 1; margin: 0 !important; }
         @keyframes popIn { 0% { transform: scale(0.6); opacity: 0; } 100% { transform: scale(1); opacity: 1; } }
+
+        /* OTP Slots */
+        .otp-container { display: flex; justify-content: center; align-items: center; gap: 8px; margin: 24px 0 16px; }
+        .otp-group { display: flex; gap: 8px; }
+        .otp-separator { display: flex; align-items: center; justify-content: center; color: var(--text-muted); margin: 0 4px; opacity: 0; animation: fadeInSep 0.3s ease-out 0.15s forwards; }
+        @keyframes fadeInSep { to { opacity: 1; transform: scale(1); } from { opacity: 0; transform: scale(0.8); } }
+        .otp-slot {
+            width: 42px; height: 42px; border: 1px solid var(--border-color); border-radius: 8px;
+            background: var(--bg-primary); display: flex; align-items: center; justify-content: center;
+            font-size: 1.15rem; font-weight: 600; color: var(--text-primary);
+            transition: all 0.2s cubic-bezier(0.22, 1, 0.36, 1); position: relative; overflow: hidden;
+            box-shadow: 0 1px 2px rgba(0,0,0,0.2); cursor: text;
+            animation: slotPopIn 0.2s cubic-bezier(0.22, 1, 0.36, 1) backwards;
+        }
+        @keyframes slotPopIn { from { opacity: 0; transform: scale(0.8) translateY(10px); } to { opacity: 1; transform: scale(1) translateY(0); } }
+        .otp-slot:nth-child(1) { animation-delay: 0s; } .otp-slot:nth-child(2) { animation-delay: 0.05s; }
+        .otp-slot:nth-child(3) { animation-delay: 0.10s; } .otp-slot:nth-child(4) { animation-delay: 0.15s; }
+        .otp-slot:nth-child(5) { animation-delay: 0.20s; } .otp-slot:nth-child(6) { animation-delay: 0.25s; }
+        .otp-slot:hover { transform: scale(1.02); }
+        .otp-slot:active { transform: scale(0.98); }
+        .otp-slot.active { border-color: var(--accent-purple); box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.2); z-index: 10; }
+        .otp-slot.filled { transform: scale(1.05); border-color: var(--accent-purple); }
+        .otp-slot .char { animation: charPopIn 0.2s cubic-bezier(0.22, 1, 0.36, 1) forwards; }
+        @keyframes charPopIn { 0% { transform: scale(0) rotateY(-90deg); opacity: 0; } 100% { transform: scale(1) rotateY(0deg); opacity: 1; } }
+        .otp-slot .caret { position: absolute; width: 1px; height: 18px; background: var(--text-primary); animation: blink 1s infinite; }
+        @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0; } }
+        .otp-slot.otp-error { animation: shake 0.4s ease-in-out; border-color: #ff4444 !important; box-shadow: 0 0 0 3px rgba(255, 68, 68, 0.2); }
+        @keyframes shake { 0% { transform: translateX(0); } 25% { transform: translateX(-8px); } 50% { transform: translateX(8px); } 75% { transform: translateX(-8px); } 100% { transform: translateX(0); } }
+        .otp-hidden-input { position: absolute; opacity: 0; pointer-events: none; width: 1px; height: 1px; }
+
+        /* Verify Status */
+        .verify-status {
+            display: flex; align-items: center; justify-content: center; gap: 8px; margin: 16px 0; padding: 12px;
+            border-radius: 10px; font-size: 0.9rem; animation: statusFadeIn 0.3s ease-out;
+        }
+        @keyframes statusFadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        .verify-status.success { color: #10b981; background: rgba(16, 185, 129, 0.08); border: 1px solid rgba(16, 185, 129, 0.2); }
+        
+        /* Smooth Button */
+        .smooth-btn {
+            width: 100%; padding: 14px; background: linear-gradient(135deg, #8b5cf6, #3b82f6);
+            border: 1px solid transparent; border-radius: 50px; color: #fff;
+            font-size: 1rem; font-weight: 700; cursor: pointer;
+            transition: all 0.25s cubic-bezier(0.22, 1, 0.36, 1);
+            box-shadow: 0 4px 20px rgba(139, 92, 246, 0.3);
+            display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+        }
+        .smooth-btn:hover:not(:disabled) { transform: translateY(-2px); box-shadow: 0 8px 35px rgba(139, 92, 246, 0.5); }
+        .smooth-btn:active:not(:disabled) { transform: scale(0.98); }
+        .smooth-btn:disabled { opacity: 0.4; cursor: not-allowed; }
+        .smooth-btn.outline { background: transparent; border: 1px solid var(--border-color); color: var(--text-secondary); box-shadow: none; }
+        .smooth-btn.outline:hover:not(:disabled) { background: rgba(255,255,255,0.05); color: #fff; box-shadow: none; transform: none; }
+        
+        .modal-content.shake { animation: shake 0.4s ease-in-out; border-color: #ff4444 !important; box-shadow: 0 0 30px rgba(255, 68, 68, 0.4) !important; }
+        
+        /* Header Avatar */
+        .header-avatar {
+            display: none; align-items: center; gap: 8px; background: rgba(255,255,255,0.05);
+            padding: 4px 12px 4px 6px; border-radius: 50px; border: 1px solid rgba(255,255,255,0.1);
+            cursor: pointer; transition: border-color 0.3s;
+        }
+        .header-avatar.visible { display: flex; }
+        .header-avatar:hover { border-color: var(--accent-purple); }
+        .header-avatar img { width: 32px; height: 32px; border-radius: 50%; object-fit: cover; }
+        .header-avatar .name { color: var(--text-primary); font-size: 0.9rem; font-weight: 500; max-width: 80px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+        .btn-login.hidden { display: none !important; }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="container navbar">
+            <div class="Logo"> <img src="Lieferando.png" alt="Lieferando Logo"/></div>
+            <ul class="nav-links">
+                <li><a href="index.html">Startseite</a></li>
+                <li><a href="team.html">HEAVENT</a></li>
+                <li><a href="bestellen.html">Bestellung</a></li>
+                <li><a href="partner.html">Partner</a></li>
+                <li><a href="#" class="active">Preise</a></li>
+            </ul>
+            <div class="nav-actions">
+                <button class="btn-login" id="loginBtnHeader">Anmelden</button>
+                <div class="header-avatar" id="headerAvatar">
+                    <img id="headerAvatarImg" src="" alt="Avatar">
+                    <span class="name" id="headerAvatarName">User</span>
+                </div>
+                <a href="https://discord.gg/utngw94B7b" class="btn btn-primary">Werde Teil vom HVNT!</a>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <div class="container">
+            <nav class="breadcrumb"><a href="index.html">🏠 Startseite</a> / <span>Lieferando</span></nav>
+        </div>
+
+        <section class="hero container">
+            <span class="hero-badge">🚀 Jetzt bestellen – Limited Slots</span>
+            <h1>Der SCHNELLSTE <br /><span class="highlight">Lieferant auf OPSUCHT</span></h1>
+            <p class="subtitle">Lieferando ist euer zuverlässiger Partner für schnelle und unkomplizierte Materiallieferungen. Unser Ziel ist es, Spielern den Einkauf und Transport von Items so einfach wie möglich zu gestalten, damit ihr euch auf das Wesentliche konzentrieren könnt – eure Projekte. Hier <a href="https://discord.gg/mFYD5Hj6mV" target="_blank">beitreten</a> und Teil der Community werden!</p>
+            <div class="hero-buttons">
+                <a href="bestellen.html" class="btn btn-primary">Jetzt BESTELLEN →</a>
+                <a href="https://discord.gg/mFYD5Hj6mV" class="btn btn-outline-light">Bewerben</a>
+            </div>
+        </section>
+
+        <section class="container">
+            <div class="stats-bar">
+                <div class="stat-item"><h3 class="counter" data-target="20" data-prefix="$" data-suffix="M+">$0M+</h3><p>Umsatz</p></div>
+                <div class="stat-item"><h3 class="counter" data-target="4" data-prefix="$" data-suffix="M+">$0M+</h3><p>Bonis</p></div>
+                <div class="stat-item"><h3 class="counter" data-target="3">0</h3><p>Offene Aufträge</p></div>
+            </div>
+        </section>
+
+        <section>
+            <div class="container">
+                <div class="section-header"><h2>Warum bei <span class="highlight">Lieferando</span> bestellen?</h2><p>Schnell, unkompliziert und preiswert!</p></div>
+                <div class="features-grid">
+                    <div class="feature-card"><span class="feature-icon">🤖</span><h3>Top-KI</h3><p>Alle Prozesse automatisiert.</p></div>
+                    <div class="feature-card"><span class="feature-icon">💰</span><h3>Faire Vergütung</h3><p>Transparente Preise.</p></div>
+                    <div class="feature-card"><span class="feature-icon">📆</span><h3>Rekordzeit</h3><p>Verlässlichster Lieferant. Jeden Tag.</p></div>
+                    <div class="feature-card" id="openModalBtn"><span class="feature-icon">🚀</span><h3 style="color: red;">Exklusives Angebot</h3><p style="color: gold;">Lieferando+</p></div>
+                </div>
+            </div>
+        </section>
+
+        <section style="padding-top: 0">
+            <div class="container">
+                <div class="section-header"><h2>Rezensionen der <span class="highlight">Kunden</span></h2></div>
+                <div class="testimonials-grid">
+                    <div class="testimonial-card">
+                        <div class="stars">★★★★★</div>
+                        <blockquote>„War sehr schnell und unkompliziert. Die Lieferung wurde kurzfristig auch an einen anderen Ort gebracht.“</blockquote>
+                        <div class="author"><img src="https://mc-heads.net/head/AgentBeere" class="author-avatar" alt="Agent Beere"><div class="author-info"><strong>Agent Beere</strong></div></div>
+                    </div>
+                    <div class="testimonial-card">
+                        <div class="stars">★★★★★</div>
+                        <blockquote>“war sehr schnell und unkompliziert. Die Lieferung wurde kurzfristig auch an einen anderen Ort gebracht”</blockquote>
+                        <div class="author"><img src="https://mc-heads.net/head/Snow263" class="author-avatar" alt="Snow"><div class="author-info"><strong>Snow</strong></div></div>
+                    </div>
+                    <div class="testimonial-card">
+                        <div class="stars">★★★★★</div>
+                        <blockquote>“So schnell hätte ich das niemals geschafft und konnte deshalb mein Bauprojekt sehr schnell abschließen – der Preis ist auch sehr gut!”</blockquote>
+                        <div class="author"><img src="https://mc-heads.net/head/DrMelonee" class="author-avatar" alt="Dr Melonee"><div class="author-info"><strong>Dr Melonee</strong></div></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section style="padding-top: 0; padding-bottom: 40px">
+            <div class="container">
+                <div class="cta-banner"><h2>NOCH <span class="highlight">NICHT</span> BESTELLT?</h2><a href="bestellen.html" class="btn btn-primary">Jetzt bestellen →</a></div>
+            </div>
+        </section>
+    </main>
+
+    <!-- ===== KONZEPT MODAL (Lieferando+) ===== -->
+    <div id="konzeptModal" class="modal-overlay">
+        <div class="modal-content">
+            <div class="modal-header"><h2>📦 Lieferando+ – Konzept &amp; Angebot</h2><button class="modal-close" id="closeModalBtn">&times;</button></div>
+            <div class="modal-body">
+                <h3>Wer wir sind</h3>
+                <p>Lieferando ist euer zuverlässiger Partner für schnelle und unkomplizierte Materiallieferungen. Unser Ziel ist es, Spielern den Einkauf und Transport von Items so einfach wie möglich zu gestalten, damit ihr euch auf das Wesentliche konzentrieren könnt – eure Projekte.</p>
+                <p>Auf jedem Citybuild (CB) verfügen wir über einen eigenen Plot. Unser Hauptlager befindet sich aktuell auf:</p>
+                <p><strong>CB 6 – /sw lieferando</strong></p>
+                <p>Dort wird unser Lager kontinuierlich aufgefüllt, sodass wir viele Bestellungen direkt aus unserem Bestand bearbeiten und besonders kurze Lieferzeiten gewährleisten können.</p>
+                <h3>📦 Same Day Delivery</h3>
+                <p>Dank unseres dauerhaft gefüllten Lagers bieten wir einen Same-Day-Delivery-Service für Bestellungen mit einem Itemwert von bis zu 5.000.000 Coins an.</p>
+                <p>Unser Anspruch ist es, Bestellungen schnell, zuverlässig und unkompliziert auszuliefern – häufig noch am selben Tag.</p>
+                <h3>✅ Vorteile unseres Lieferservices</h3>
+                <ul><li>⚡ Schnelle Bearbeitung und kurze Lieferzeiten</li><li>📦 Großes, dauerhaft gefülltes Lager</li><li>🌍 Lieferung auf allen Citybuilds</li><li>📍 Flexible Lieferorte nach Absprache</li><li>😊 Freundlicher und unkomplizierter Service</li></ul>
+                <h3>⭐ Lieferando Plus</h3>
+                <p>Für alle, die regelmäßig bestellen, bieten wir unser Lieferando Plus-Abo an.</p>
+                <p><strong>Kosten:</strong> 1.000.000 Coins pro Monat – monatlich kündbar, ideal für Vielbesteller, dauerhaft reduzierte Versandkosten.</p>
+                <h4>Versandkosten mit Lieferando Plus</h4>
+                <table><tr><th>Bestellwert</th><th>Versandkosten</th></tr><tr><td>bis 500.000 Coins</td><td>100.000 Coins</td></tr><tr><td>über 500.000 Coins</td><td>250.000 Coins</td></tr></table>
+                <h4>Bestellung ohne Lieferando Plus</h4>
+                <p>Selbstverständlich könnt ihr auch ohne Lieferando Plus bestellen. Dann gelten folgende Lieferaufschläge:</p>
+                <ul><li><strong>Abholung:</strong> 20 %</li><li><strong>Lieferung:</strong> 30 %</li></ul>
+                <h3>💰 Unsere Preisgestaltung</h3>
+                <p>Unsere Preise orientieren sich jederzeit am aktuellen Ankaufspreis des offiziellen Marktsystems.</p>
+                <p>Für jedes Item wird ein individueller Farmerpreis festgelegt. Dieser liegt bewusst nur geringfügig über dem jeweiligen Server-Ankaufspreis, um den Aufwand für Produktion, Lagerhaltung und Logistik fair abzudecken.</p>
+                <p>So garantieren wir:</p>
+                <ul><li>transparente Preisgestaltung</li><li>marktgerechte Konditionen</li><li>faire Preise für Käufer und Farmer</li></ul>
+                <p>Der jeweilige Farmerpreis bildet dabei die verbindliche Grundlage für jede Bestellung.</p>
+                <h3>🎁 Exklusiver Bestellcode</h3>
+                <p>Mit unserem exklusiven Bestellcode profitiert ihr dauerhaft von günstigeren Lieferkonditionen.</p>
+                <p>Anstelle des regulären Lieferaufschlags von 30 % zahlt ihr lediglich einen Aufschlag von <strong>10 %</strong> auf den Farmerpreis.</p>
+                <p><strong>Das bedeutet:</strong></p>
+                <ul><li>dauerhaft günstiger bestellen</li><li>attraktive Konditionen auch ohne Lieferando Plus</li><li>maximale Ersparnis bei größeren Bestellungen</li></ul>
+                <h3>💳 Anzahlung bei Großbestellungen</h3>
+                <p>Bei Einzelbestellungen mit einem Gesamtwert ab 1.000.000 Coins ist eine Anzahlung von 500.000 Coins erforderlich.</p>
+                <p>Die Anzahlung dient ausschließlich der Auftragsabsicherung und wird selbstverständlich vollständig auf den Gesamtpreis angerechnet.</p>
+                <h3>🗣 Das sagen unsere Kunden</h3>
+                <blockquote>„War sehr schnell und unkompliziert. Die Lieferung wurde kurzfristig auch an einen anderen Ort gebracht.“</blockquote>
+                <blockquote>„5 Sterne für schnelle Lieferung.“</blockquote>
+                <blockquote>„So schnell hätte ich das niemals geschafft und konnte deshalb mein Bauprojekt sehr schnell abschließen – der Preis ist auch sehr gut!“</blockquote>
+                <h3>💪 Unser Versprechen</h3>
+                <p>Wir möchten mehr sein als nur ein Lieferdienst. Unser Ziel ist es, der schnellste und zuverlässigste Anbieter auf dem Server zu sein.</p>
+                <p>Durch unser großes Warenlager, transparente Preise und kurze Lieferzeiten ermöglichen wir euch einen Service, auf den ihr euch jederzeit verlassen könnt.</p>
+                <h3>Lieferando steht für:</h3>
+                <ul><li>⚡ Geschwindigkeit</li><li>🤝 Zuverlässigkeit</li><li>💎 Faire und transparente Preise</li><li>📦 Große Warenverfügbarkeit</li><li>❤️ Kundenorientierten Service</li></ul>
+                <p><strong>Ihr findet uns auf jedem Citybuild.</strong><br>Hauptlager: CB 6 Warp: <code>/sw lieferando</code></p>
+            </div>
+            <div class="modal-footer"><button class="btn-secondary" id="closeModalFooterBtn">Schließen</button><a href="https://discord.gg/TbRGu9664E" target="_blank" class="btn-success">🔔 Abonnieren</a></div>
+        </div>
+    </div>
+
+    <!-- ===== ACCOUNT MODAL (NEU mit Live Head & PIN) ===== -->
+    <div id="accountModal" class="modal-overlay">
+        <div class="modal-content account-modal" id="accountModalContent">
+            <button class="modal-close" id="closeAccountModalBtn">&times;</button>
+            <h2>🔐 Account</h2>
+            <p id="modalSubtitle">Melde dich an oder registriere dich</p>
+
+            <!-- Schritt 1: MC-Name + Live-Head -->
+            <div id="loginStep1">
+                <div class="mc-input-row">
+                    <img id="loginHeadImg" class="mc-head-live" src="https://mc-heads.net/head/Steve" alt="Minecraft Head" />
+                    <div class="login-field">
+                        <label for="mcNameInput">Minecraft-Name</label>
+                        <input type="text" id="mcNameInput" placeholder="z.B. xLusaro" autocomplete="off" />
+                    </div>
+                </div>
+                <div class="error-msg" id="errorMsg1">Bitte gib deinen Minecraft-Namen ein.</div>
+                <button class="smooth-btn" id="nextToPinBtn">Weiter zum PIN →</button>
+                <p style="font-size:0.75rem; margin-top:14px; color:#6b7a8f; text-align:center;">
+                    Dein Nickname auf dem <a href="https://discord.gg/utngw94B7b" target="_blank" style="color:#8b5cf6;">Heavent Discord</a> muss deinen MC-Namen enthalten.
+                </p>
+            </div>
+
+            <!-- Schritt 2: OTP PIN -->
+            <div id="loginStep2" style="display: none;">
+                <p style="font-size: 0.9rem; color: #b0b8c4; margin-bottom: 5px;">Gib deinen 6-stelligen PIN ein.</p>
+                <p style="font-size: 0.75rem; color: #6b7a8f; margin-bottom: 5px;">(Beim ersten Mal wird dieser als dein neuer PIN gespeichert)</p>
+
+                <div class="otp-container" id="otpContainer">
+                    <div class="otp-group">
+                        <div class="otp-slot" data-index="0"></div>
+                        <div class="otp-slot" data-index="1"></div>
+                        <div class="otp-slot" data-index="2"></div>
+                    </div>
+                    <div class="otp-separator">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+                    </div>
+                    <div class="otp-group">
+                        <div class="otp-slot" data-index="3"></div>
+                        <div class="otp-slot" data-index="4"></div>
+                        <div class="otp-slot" data-index="5"></div>
+                    </div>
+                </div>
+
+                <input type="tel" class="otp-hidden-input" id="otpHiddenInput" maxlength="6" />
+
+                <div id="verifyStatus"></div>
+                <div class="error-msg" id="errorMsg2">Falscher PIN!</div>
+
+                <button class="smooth-btn" id="loginWithPinBtn" disabled>Anmelden</button>
+                <button class="smooth-btn outline" id="backToStep1Btn" style="margin-top: 10px;">← Zurück</button>
+            </div>
+
+            <!-- Schritt 3: Profil-Ansicht -->
+            <div id="profileView" class="profile-view">
+                <div class="profile-head"><img id="profileHead" src="" alt="Minecraft-Head"></div>
+                <div class="profile-info">
+                    <div class="name" id="profileName">–</div>
+                    <div class="status"><span class="dot"></span>Verifiziert</div>
+                </div>
+                <button class="btn-logout" id="logoutBtn" style="width:100%;">Abmelden</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxuSS570xvwzSxkaRHt1LLF2GeLYacbdpdL0r59KGliv9elmwtKON4DFPrdTrN-Hif4Nw/exec';
+
+        // ===== STATISTIK COUNTER ANIMATION =====
+        document.addEventListener('DOMContentLoaded', () => {
+            const counters = document.querySelectorAll('.counter');
+            counters.forEach(counter => {
+                const target = +counter.getAttribute('data-target');
+                const prefix = counter.getAttribute('data-prefix') || '';
+                const suffix = counter.getAttribute('data-suffix') || '';
+                const duration = 2000; const steps = 50; const stepTime = Math.abs(Math.floor(duration / steps));
+                let current = 0; const increment = target / steps;
+                const timer = setInterval(() => {
+                    current += increment;
+                    if (current >= target) { current = target; clearInterval(timer); }
+                    counter.innerText = prefix + Math.floor(current) + suffix;
+                }, stepTime);
+            });
+        });
+
+        // ===== KONZEPT MODAL LOGIC =====
+        document.addEventListener('DOMContentLoaded', () => {
+            const modal = document.getElementById('konzeptModal');
+            const openBtns = document.querySelectorAll('#openModalBtn, #openModalFromHero, #openModalFromCTA');
+            const closeBtns = document.querySelectorAll('#closeModalBtn, #closeModalFooterBtn');
+
+            openBtns.forEach(btn => btn.addEventListener('click', function(e) { e.preventDefault(); modal.classList.add('active'); document.body.style.overflow = 'hidden'; }));
+            closeBtns.forEach(btn => btn.addEventListener('click', function() { modal.classList.remove('active'); document.body.style.overflow = ''; }));
+            modal.addEventListener('click', function(e) { if (e.target === modal) { modal.classList.remove('active'); document.body.style.overflow = ''; } });
+            document.addEventListener('keydown', function(e) { if (e.key === 'Escape' && modal.classList.contains('active')) { modal.classList.remove('active'); document.body.style.overflow = ''; } });
+        });
+
+        // ===== OTP PIN LOGIK =====
+        const otpSlots = document.querySelectorAll('.otp-slot');
+        const otpHiddenInput = document.getElementById('otpHiddenInput');
+        let otpValue = '';
+
+        document.getElementById('otpContainer').addEventListener('click', () => otpHiddenInput.focus());
+        otpHiddenInput.addEventListener('input', (e) => {
+            otpValue = e.target.value.replace(/[^0-9]/g, '').slice(0, 6);
+            e.target.value = otpValue;
+            updateOTPSlots();
+        });
+
+        function updateOTPSlots() {
+            otpSlots.forEach((slot, index) => {
+                slot.innerHTML = '';
+                slot.classList.remove('active', 'filled', 'otp-error');
+                if (index === otpValue.length && otpValue.length < 6) {
+                    slot.classList.add('active');
+                    const caret = document.createElement('div');
+                    caret.className = 'caret';
+                    slot.appendChild(caret);
+                }
+                if (otpValue[index]) {
+                    const charSpan = document.createElement('span');
+                    charSpan.className = 'char';
+                    charSpan.textContent = otpValue[index];
+                    slot.appendChild(charSpan);
+                    slot.classList.add('filled');
+                }
+            });
+            document.getElementById('loginWithPinBtn').disabled = otpValue.length !== 6;
+        }
+        updateOTPSlots();
+
+        // ===== ACCOUNT MODAL LOGIC =====
+        (function() {
+            const modal = document.getElementById('accountModal');
+            const modalContent = document.getElementById('accountModalContent');
+            const closeBtn = document.getElementById('closeAccountModalBtn');
+            const loginHeaderBtn = document.getElementById('loginBtnHeader');
+            const headerAvatar = document.getElementById('headerAvatar');
+            const headerAvatarImg = document.getElementById('headerAvatarImg');
+            const headerAvatarName = document.getElementById('headerAvatarName');
+
+            const step1 = document.getElementById('loginStep1');
+            const step2 = document.getElementById('loginStep2');
+            const profileView = document.getElementById('profileView');
+            
+            const mcInput = document.getElementById('mcNameInput');
+            const loginHeadImg = document.getElementById('loginHeadImg');
+            const nextToPinBtn = document.getElementById('nextToPinBtn');
+            const backToStep1Btn = document.getElementById('backToStep1Btn');
+            const loginWithPinBtn = document.getElementById('loginWithPinBtn');
+            const logoutBtn = document.getElementById('logoutBtn');
+            const errorMsg1 = document.getElementById('errorMsg1');
+            const errorMsg2 = document.getElementById('errorMsg2');
+            const verifyStatus = document.getElementById('verifyStatus');
+
+            mcInput.addEventListener('input', () => {
+                const name = mcInput.value.trim();
+                if (name.length >= 2) {
+                    loginHeadImg.src = `https://mc-heads.net/head/${name}`;
+                    loginHeadImg.classList.add('visible');
+                } else {
+                    loginHeadImg.src = 'https://mc-heads.net/head/Steve';
+                }
+            });
+
+            function updateHeaderUI() {
+                const user = localStorage.getItem('mc_user');
+                if (user) {
+                    loginHeaderBtn.classList.add('hidden');
+                    headerAvatar.classList.add('visible');
+                    headerAvatarImg.src = `https://mc-heads.net/head/${user}`;
+                    headerAvatarName.textContent = user;
+                } else {
+                    loginHeaderBtn.classList.remove('hidden');
+                    headerAvatar.classList.remove('visible');
+                }
+            }
+
+            function resetToStep1() {
+                step1.style.display = 'block';
+                step2.style.display = 'none';
+                profileView.classList.remove('active');
+                errorMsg1.classList.remove('visible');
+                errorMsg2.classList.remove('visible');
+                verifyStatus.innerHTML = '';
+                mcInput.value = '';
+                loginHeadImg.src = 'https://mc-heads.net/head/Steve';
+                otpValue = '';
+                otpHiddenInput.value = '';
+                updateOTPSlots();
+            }
+
+            function openModal() {
+                modal.classList.add('active');
+                document.body.style.overflow = 'hidden';
+                const user = localStorage.getItem('mc_user');
+                if (!user) resetToStep1();
+                else {
+                    step1.style.display = 'none';
+                    step2.style.display = 'none';
+                    profileView.classList.add('active');
+                    document.getElementById('profileName').textContent = user;
+                    document.getElementById('profileHead').src = `https://mc-heads.net/head/${user}`;
+                }
+            }
+
+            function closeModal() {
+                modal.classList.remove('active');
+                document.body.style.overflow = '';
+            }
+
+            nextToPinBtn.addEventListener('click', async () => {
+                const mcName = mcInput.value.trim();
+                if (mcName.length < 2) {
+                    errorMsg1.classList.add('visible');
+                    modalContent.classList.add('shake');
+                    setTimeout(() => modalContent.classList.remove('shake'), 500);
+                    return;
+                }
+                errorMsg1.classList.remove('visible');
+                nextToPinBtn.textContent = 'Prüfe Discord...';
+                nextToPinBtn.disabled = true;
+
+                try {
+                    const response = await fetch(APPS_SCRIPT_URL, {
+                        method: 'POST',
+                        body: JSON.stringify({ action: "check", mcName: mcName }),
+                        headers: { 'Content-Type': 'text/plain;charset=utf-8' }
+                    });
+                    const result = await response.json();
+
+                    if (result.success) {
+                        localStorage.setItem('discord_id', result.discordId);
+                        step1.style.display = 'none';
+                        step2.style.display = 'block';
+                        setTimeout(() => otpHiddenInput.focus(), 150);
+                    } else {
+                        errorMsg1.textContent = result.message;
+                        errorMsg1.classList.add('visible');
+                        modalContent.classList.add('shake');
+                        setTimeout(() => modalContent.classList.remove('shake'), 500);
+                    }
+                } catch (err) {
+                    errorMsg1.textContent = 'Verbindung fehlgeschlagen.';
+                    errorMsg1.classList.add('visible');
+                } finally {
+                    nextToPinBtn.textContent = 'Weiter zum PIN →';
+                    nextToPinBtn.disabled = false;
+                }
+            });
+
+            backToStep1Btn.addEventListener('click', resetToStep1);
+
+            loginWithPinBtn.addEventListener('click', async () => {
+                if (otpValue.length < 6) return;
+                const mcName = mcInput.value.trim();
+                const pin = otpValue;
+
+                loginWithPinBtn.textContent = 'Prüfe...';
+                loginWithPinBtn.disabled = true;
+                errorMsg2.classList.remove('visible');
+                verifyStatus.innerHTML = '';
+                otpSlots.forEach(s => s.classList.remove('otp-error'));
+
+                try {
+                    const response = await fetch(APPS_SCRIPT_URL, {
+                        method: 'POST',
+                        body: JSON.stringify({ action: "login", mcName: mcName, pin: pin }),
+                        headers: { 'Content-Type': 'text/plain;charset=utf-8' }
+                    });
+                    const result = await response.json();
+
+                    if (result.success) {
+                        localStorage.setItem('mc_user', mcName);
+                        localStorage.setItem('discord_id', result.discordId);
+
+                        verifyStatus.innerHTML = `
+                            <div class="verify-status success">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
+                                <span>Code verified successfully!</span>
+                            </div>
+                        `;
+
+                        setTimeout(() => {
+                            step2.style.display = 'none';
+                            profileView.classList.add('active');
+                            document.getElementById('profileName').textContent = mcName;
+                            document.getElementById('profileHead').src = `https://mc-heads.net/head/${mcName}`;
+                            updateHeaderUI();
+                        }, 1000);
+                    } else {
+                        throw new Error(result.message);
+                    }
+                } catch (err) {
+                    errorMsg2.textContent = err.message || 'Fehler beim Login.';
+                    errorMsg2.classList.add('visible');
+                    otpSlots.forEach(s => s.classList.add('otp-error'));
+                    setTimeout(() => otpSlots.forEach(s => s.classList.remove('otp-error')), 600);
+                    otpValue = '';
+                    otpHiddenInput.value = '';
+                    updateOTPSlots();
+                } finally {
+                    loginWithPinBtn.textContent = 'Anmelden';
+                    loginWithPinBtn.disabled = false;
+                }
+            });
+
+            logoutBtn.addEventListener('click', () => {
+                localStorage.removeItem('mc_user');
+                localStorage.removeItem('discord_id');
+                resetToStep1();
+                updateHeaderUI();
+            });
+
+            if (loginHeaderBtn) loginHeaderBtn.addEventListener('click', openModal);
+            if (headerAvatar) headerAvatar.addEventListener('click', openModal);
+            closeBtn.addEventListener('click', closeModal);
+            modal.addEventListener('click', (e) => { if (e.target === modal) closeModal(); });
+            document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && modal.classList.contains('active')) closeModal(); });
+
+            updateHeaderUI();
+        })();
+    </script>
+</body>
+</html>
+    <!-- ===== NEUE STYLES FÜR LOGIN & OTP ===== -->
+    <style>
+        .author-avatar { width: 44px; height: 44px; border-radius: 50%; object-fit: cover; border: 2px solid var(--border-color); }
+        
+        /* Live MC-Head */
+        .mc-input-row { display: flex; align-items: center; gap: 12px; margin-bottom: 14px; }
+        .mc-head-live {
+            width: 52px; height: 52px; border-radius: 6px;
+            image-rendering: pixelated; flex-shrink: 0; object-fit: cover;
+            transition: transform 0.2s ease;
+            opacity: 0;
+        }
+        .mc-head-live.visible {
+            animation: popIn 0.3s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+        }
 
         /* OTP Slots */
         .otp-container { display: flex; justify-content: center; align-items: center; gap: 8px; margin: 24px 0 16px; }
