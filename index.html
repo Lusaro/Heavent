@@ -28,7 +28,7 @@
             100% { transform: scale(1); opacity: 1; }
         }
 
-        /* ===== OTP SLOTS (3 + Minus + 3) ===== */
+        /* ===== OTP SLOTS ===== */
         .otp-container {
             display: flex; justify-content: center; align-items: center;
             gap: 8px; margin: 24px 0 16px;
@@ -67,7 +67,6 @@
         .otp-slot:nth-child(4) { animation-delay: 0.15s; }
         .otp-slot:nth-child(5) { animation-delay: 0.20s; }
         .otp-slot:nth-child(6) { animation-delay: 0.25s; }
-
         .otp-slot:hover { transform: scale(1.02); }
         .otp-slot:active { transform: scale(0.98); }
         .otp-slot.active {
@@ -79,9 +78,7 @@
             transform: scale(1.05);
             border-color: #8b5cf6;
         }
-        .otp-slot .char {
-            animation: charPopIn 0.2s cubic-bezier(0.22, 1, 0.36, 1) forwards;
-        }
+        .otp-slot .char { animation: charPopIn 0.2s cubic-bezier(0.22, 1, 0.36, 1) forwards; }
         @keyframes charPopIn {
             0% { transform: scale(0) rotateY(-90deg); opacity: 0; }
             100% { transform: scale(1) rotateY(0deg); opacity: 1; }
@@ -108,8 +105,6 @@
             position: absolute; opacity: 0; pointer-events: none;
             width: 1px; height: 1px;
         }
-
-        /* ===== VERIFY STATUS ===== */
         .verify-status {
             display: flex; align-items: center; justify-content: center;
             gap: 8px; margin: 16px 0; padding: 12px;
@@ -121,8 +116,6 @@
             to { opacity: 1; transform: translateY(0); }
         }
         .verify-status.success { color: #10b981; background: rgba(16, 185, 129, 0.08); border: 1px solid rgba(16, 185, 129, 0.2); }
-
-        /* ===== SMOOTH BUTTON ===== */
         .smooth-btn {
             width: 100%; padding: 14px;
             background: linear-gradient(135deg, #8b5cf6, #3b82f6);
@@ -140,7 +133,6 @@
         }
         .smooth-btn:active:not(:disabled) { transform: scale(0.98); }
         .smooth-btn:disabled { opacity: 0.4; cursor: not-allowed; }
-
         .smooth-btn.outline {
             background: transparent;
             border: 1px solid #2a3440;
@@ -153,7 +145,6 @@
             box-shadow: none;
             transform: none;
         }
-
         .modal-content.shake {
             animation: shakeOtp 0.4s ease-in-out;
             border-color: #ff4444 !important;
@@ -174,36 +165,28 @@
     </div>
 
     <svg class="svg-images-container" viewBox="0 0 1000 1000" preserveAspectRatio="xMidYMid meet">
-        <image id="strich1" href="strich.png" x="50" y="400" width="150" height="20"
-                transform="rotate(30 225 310) translate(0, 0)"></image>
-        <image id="strich2" href="strich.png" x="800" y="400" width="150" height="20"
-                transform="rotate(-30 775 310) translate(0, 0)"></image>
-        <image id="strich3" href="strich.png" x="10" y="600" width="150" height="20"
-                transform="rotate(-30 225 710) translate(0, 0)"></image>
-        <image id="strich4" href="strich.png" x="850" y="600" width="150" height="20"
-                transform="rotate(30 775 710) translate(0, 0)"></image>
+        <image id="strich1" href="strich.png" x="50" y="400" width="150" height="20" transform="rotate(30 225 310) translate(0, 0)"></image>
+        <image id="strich2" href="strich.png" x="800" y="400" width="150" height="20" transform="rotate(-30 775 310) translate(0, 0)"></image>
+        <image id="strich3" href="strich.png" x="10" y="600" width="150" height="20" transform="rotate(-30 225 710) translate(0, 0)"></image>
+        <image id="strich4" href="strich.png" x="850" y="600" width="150" height="20" transform="rotate(30 775 710) translate(0, 0)"></image>
     </svg>
 
     <div class="glass-box-container">
-        <!-- Lieferando – lila Glow -->
         <div id="box1" class="glass-box box-top-left">
             <a href="lieferando.html" target="_blank">
                 <img src="Lieferando.png" alt="Lieferando Logo">
             </a>
         </div>
-        <!-- HVNT – heller Glow -->
         <div id="box2" class="glass-box box-top-right">
             <a href="team.html">
                 <img src="hvnt_logo.png" alt="HVNT Logo">
             </a>
         </div>
-        <!-- Partner – Glasbox -->
         <div id="box3" class="glass-box box-bottom-left">
             <a href="partner.html">
                 <img src="hvnt_logo.png" alt="Partner">
             </a>
         </div>
-        <!-- Account – DYNAMISCH -->
         <div id="box4" class="glass-box box-bottom-right" style="cursor: pointer;">
             <img id="accountBoxImg" src="steve.png" alt="Account">
             <p id="accountBoxText" class="box-text">Account</p>
@@ -217,7 +200,6 @@
             <h2>🔐 Account</h2>
             <p id="modalSubtitle">Melde dich an oder registriere dich</p>
 
-            <!-- Schritt 1: MC-Name + Live-Head -->
             <div id="loginStep1">
                 <div class="mc-input-row">
                     <img id="loginHeadImg" class="mc-head-live" src="https://mc-heads.net/head/Steve" alt="Minecraft Head" />
@@ -233,7 +215,6 @@
                 </p>
             </div>
 
-            <!-- Schritt 2: OTP PIN -->
             <div id="loginStep2" style="display: none;">
                 <p style="font-size: 0.9rem; color: #b0b8c4; margin-bottom: 5px;">Gib deinen 6-stelligen PIN ein.</p>
                 <p style="font-size: 0.75rem; color: #6b7a8f; margin-bottom: 5px;">(Beim ersten Mal wird dieser als dein neuer PIN gespeichert)</p>
@@ -263,7 +244,6 @@
                 <button class="smooth-btn outline" id="backToStep1Btn" style="margin-top: 10px;">← Zurück</button>
             </div>
 
-            <!-- Schritt 3: Profil-Ansicht (nach Login) -->
             <div id="profileView" class="profile-view">
                 <div class="profile-head">
                     <img id="profileHead" src="" alt="Minecraft-Head">
@@ -281,7 +261,7 @@
         const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxuSS570xvwzSxkaRHt1LLF2GeLYacbdpdL0r59KGliv9elmwtKON4DFPrdTrN-Hif4Nw/exec';
 
         document.addEventListener('DOMContentLoaded', () => {
-            // ===== Animation (Original beibehalten) =====
+            // ===== ANIMATIONEN =====
             const svgImagesContainer = document.querySelector('.svg-images-container');
             const glassBoxes = document.querySelectorAll('.glass-box');
             const pngImages = document.querySelectorAll('.svg-images-container image');
@@ -355,7 +335,6 @@
             const otpHiddenInput = document.getElementById('otpHiddenInput');
             let otpValue = '';
 
-            // ===== OTP LOGIK =====
             document.getElementById('otpContainer').addEventListener('click', () => otpHiddenInput.focus());
             otpHiddenInput.addEventListener('input', (e) => {
                 otpValue = e.target.value.replace(/[^0-9]/g, '').slice(0, 6);
@@ -385,7 +364,6 @@
             }
             updateOTPSlots();
 
-            // ===== Live MC-Head =====
             mcInput.addEventListener('input', () => {
                 const name = mcInput.value.trim();
                 if (name.length >= 2) {
@@ -396,9 +374,9 @@
                 }
             });
 
-            // ===== UI Update =====
+            // ===== WICHTIG: localStorage statt sessionStorage! =====
             function updateUI() {
-                const user = sessionStorage.getItem('mc_user');
+                const user = localStorage.getItem('mc_user');
                 if (user) {
                     accountBoxImg.src = `https://mc-heads.net/head/${user}`;
                     accountBoxText.textContent = user;
@@ -425,7 +403,7 @@
             function openModal() {
                 modal.classList.add('active');
                 document.body.style.overflow = 'hidden';
-                const user = sessionStorage.getItem('mc_user');
+                const user = localStorage.getItem('mc_user');
                 if (!user) {
                     resetToStep1();
                     document.getElementById('modalSubtitle').textContent = 'Melde dich an oder registriere dich';
@@ -444,7 +422,6 @@
                 document.body.style.overflow = '';
             }
 
-            // ===== Schritt 1 -> 2 (Discord Check) =====
             nextToPinBtn.addEventListener('click', async () => {
                 const mcName = mcInput.value.trim();
                 if (mcName.length < 2) {
@@ -466,7 +443,7 @@
                     const result = await response.json();
 
                     if (result.success) {
-                        sessionStorage.setItem('discord_id', result.discordId);
+                        localStorage.setItem('discord_id', result.discordId);
                         step1.style.display = 'none';
                         step2.style.display = 'block';
                         setTimeout(() => otpHiddenInput.focus(), 150);
@@ -487,7 +464,6 @@
 
             backToStep1Btn.addEventListener('click', resetToStep1);
 
-            // ===== Login mit PIN =====
             loginWithPinBtn.addEventListener('click', async () => {
                 if (otpValue.length < 6) return;
                 const mcName = mcInput.value.trim();
@@ -508,8 +484,8 @@
                     const result = await response.json();
 
                     if (result.success) {
-                        sessionStorage.setItem('mc_user', mcName);
-                        sessionStorage.setItem('discord_id', result.discordId);
+                        localStorage.setItem('mc_user', mcName);
+                        localStorage.setItem('discord_id', result.discordId);
 
                         verifyStatus.innerHTML = `
                             <div class="verify-status success">
@@ -544,8 +520,8 @@
             });
 
             logoutBtn.addEventListener('click', () => {
-                sessionStorage.removeItem('mc_user');
-                sessionStorage.removeItem('discord_id');
+                localStorage.removeItem('mc_user');
+                localStorage.removeItem('discord_id');
                 resetToStep1();
                 updateUI();
                 document.getElementById('modalSubtitle').textContent = 'Melde dich an oder registriere dich';
