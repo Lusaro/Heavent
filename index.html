@@ -6,35 +6,17 @@
     <title>Heavent</title>
     <link rel="stylesheet" href="style.css">
     <style>
-        /* ===== LIVE MC-HEAD + NAME INPUT (CLEAN) ===== */
         .mc-input-row { display: flex; align-items: center; gap: 12px; margin-bottom: 14px; }
-        .mc-head-live {
-            width: 52px; height: 52px; border-radius: 6px;
-            image-rendering: pixelated; flex-shrink: 0; object-fit: cover;
-            transition: transform 0.2s ease;
-            opacity: 0;
-        }
+        .mc-head-live { width: 52px; height: 52px; border-radius: 6px; image-rendering: pixelated; flex-shrink: 0; object-fit: cover; transition: transform 0.2s ease; opacity: 0; }
         .mc-head-live.visible { animation: popIn 0.3s cubic-bezier(0.22, 1, 0.36, 1) forwards; }
         .mc-input-row .login-field { flex: 1; margin: 0 !important; }
         @keyframes popIn { 0% { transform: scale(0.6); opacity: 0; } 100% { transform: scale(1); opacity: 1; } }
 
-        /* ===== OTP SLOTS ===== */
         .otp-container { display: flex; justify-content: center; align-items: center; gap: 8px; margin: 24px 0 16px; }
         .otp-group { display: flex; gap: 8px; }
-        .otp-separator {
-            display: flex; align-items: center; justify-content: center;
-            color: #6b7a8f; margin: 0 4px;
-            animation: fadeInSep 0.3s ease-out 0.15s forwards; opacity: 0;
-        }
+        .otp-separator { display: flex; align-items: center; justify-content: center; color: #6b7a8f; margin: 0 4px; animation: fadeInSep 0.3s ease-out 0.15s forwards; opacity: 0; }
         @keyframes fadeInSep { to { opacity: 1; transform: scale(1); } from { opacity: 0; transform: scale(0.8); } }
-        .otp-slot {
-            width: 42px; height: 42px; border: 1px solid #2a3440; border-radius: 8px;
-            background: #0b0d0f; display: flex; align-items: center; justify-content: center;
-            font-size: 1.15rem; font-weight: 600; color: #fff;
-            transition: all 0.2s cubic-bezier(0.22, 1, 0.36, 1);
-            position: relative; overflow: hidden; box-shadow: 0 1px 2px rgba(0,0,0,0.2);
-            cursor: text; animation: slotPopIn 0.2s cubic-bezier(0.22, 1, 0.36, 1) backwards;
-        }
+        .otp-slot { width: 42px; height: 42px; border: 1px solid #2a3440; border-radius: 8px; background: #0b0d0f; display: flex; align-items: center; justify-content: center; font-size: 1.15rem; font-weight: 600; color: #fff; transition: all 0.2s cubic-bezier(0.22, 1, 0.36, 1); position: relative; overflow: hidden; box-shadow: 0 1px 2px rgba(0,0,0,0.2); cursor: text; animation: slotPopIn 0.2s cubic-bezier(0.22, 1, 0.36, 1) backwards; }
         @keyframes slotPopIn { from { opacity: 0; transform: scale(0.8) translateY(10px); } to { opacity: 1; transform: scale(1) translateY(0); } }
         .otp-slot:nth-child(1) { animation-delay: 0s; } .otp-slot:nth-child(2) { animation-delay: 0.05s; }
         .otp-slot:nth-child(3) { animation-delay: 0.10s; } .otp-slot:nth-child(4) { animation-delay: 0.15s; }
@@ -50,25 +32,10 @@
         .otp-slot.otp-error { animation: shakeOtp 0.4s ease-in-out; border-color: #ff4444 !important; box-shadow: 0 0 0 3px rgba(255, 68, 68, 0.2); }
         @keyframes shakeOtp { 0% { transform: translateX(0); } 25% { transform: translateX(-8px); } 50% { transform: translateX(8px); } 75% { transform: translateX(-8px); } 100% { transform: translateX(0); } }
         .otp-hidden-input { position: absolute; opacity: 0; pointer-events: none; width: 1px; height: 1px; }
-
-        /* ===== VERIFY STATUS ===== */
-        .verify-status {
-            display: flex; align-items: center; justify-content: center; gap: 8px;
-            margin: 16px 0; padding: 12px; border-radius: 10px; font-size: 0.9rem;
-            animation: statusFadeIn 0.3s ease-out;
-        }
+        .verify-status { display: flex; align-items: center; justify-content: center; gap: 8px; margin: 16px 0; padding: 12px; border-radius: 10px; font-size: 0.9rem; animation: statusFadeIn 0.3s ease-out; }
         @keyframes statusFadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
         .verify-status.success { color: #10b981; background: rgba(16, 185, 129, 0.08); border: 1px solid rgba(16, 185, 129, 0.2); }
-
-        /* ===== SMOOTH BUTTON ===== */
-        .smooth-btn {
-            width: 100%; padding: 14px; background: linear-gradient(135deg, #8b5cf6, #3b82f6);
-            border: 1px solid transparent; border-radius: 50px; color: #fff;
-            font-size: 1rem; font-weight: 700; cursor: pointer;
-            transition: all 0.25s cubic-bezier(0.22, 1, 0.36, 1);
-            box-shadow: 0 4px 20px rgba(139, 92, 246, 0.3);
-            display: inline-flex; align-items: center; justify-content: center; gap: 8px;
-        }
+        .smooth-btn { width: 100%; padding: 14px; background: linear-gradient(135deg, #8b5cf6, #3b82f6); border: 1px solid transparent; border-radius: 50px; color: #fff; font-size: 1rem; font-weight: 700; cursor: pointer; transition: all 0.25s cubic-bezier(0.22, 1, 0.36, 1); box-shadow: 0 4px 20px rgba(139, 92, 246, 0.3); display: inline-flex; align-items: center; justify-content: center; gap: 8px; }
         .smooth-btn:hover:not(:disabled) { transform: translateY(-2px); box-shadow: 0 8px 35px rgba(139, 92, 246, 0.5); }
         .smooth-btn:active:not(:disabled) { transform: scale(0.98); }
         .smooth-btn:disabled { opacity: 0.4; cursor: not-allowed; }
@@ -106,7 +73,6 @@
         </div>
     </div>
 
-    <!-- ===== ACCOUNT MODAL ===== -->
     <div id="accountModal" class="modal-overlay">
         <div class="modal-content" id="accountModalContent">
             <button class="modal-close" id="closeModalBtn">&times;</button>
@@ -133,26 +99,14 @@
                 <p style="font-size: 0.75rem; color: #6b7a8f; margin-bottom: 5px;">(Beim ersten Mal wird dieser als dein neuer PIN gespeichert)</p>
 
                 <div class="otp-container" id="otpContainer">
-                    <div class="otp-group">
-                        <div class="otp-slot" data-index="0"></div>
-                        <div class="otp-slot" data-index="1"></div>
-                        <div class="otp-slot" data-index="2"></div>
-                    </div>
-                    <div class="otp-separator">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line></svg>
-                    </div>
-                    <div class="otp-group">
-                        <div class="otp-slot" data-index="3"></div>
-                        <div class="otp-slot" data-index="4"></div>
-                        <div class="otp-slot" data-index="5"></div>
-                    </div>
+                    <div class="otp-group"><div class="otp-slot" data-index="0"></div><div class="otp-slot" data-index="1"></div><div class="otp-slot" data-index="2"></div></div>
+                    <div class="otp-separator"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line></svg></div>
+                    <div class="otp-group"><div class="otp-slot" data-index="3"></div><div class="otp-slot" data-index="4"></div><div class="otp-slot" data-index="5"></div></div>
                 </div>
 
                 <input type="tel" class="otp-hidden-input" id="otpHiddenInput" maxlength="6" />
-
                 <div id="verifyStatus"></div>
                 <div class="error-msg" id="errorMsg2">Falscher PIN!</div>
-
                 <button class="smooth-btn" id="loginWithPinBtn" disabled>Anmelden</button>
                 <button class="smooth-btn outline" id="backToStep1Btn" style="margin-top: 10px;">← Zurück</button>
             </div>
@@ -169,7 +123,8 @@
     </div>
 
     <script>
-        const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxuSS570xvwzSxkaRHt1LLF2GeLYacbdpdL0r59KGliv9elmwtKON4DFPrdTrN-Hif4Nw/exec';
+        // ===== API URL ZU DEINEM OCI BOT =====
+        const API_BASE_URL = 'https://heavent-shop.de/api'; 
 
         document.addEventListener('DOMContentLoaded', () => {
             const svgImagesContainer = document.querySelector('.svg-images-container');
@@ -208,12 +163,8 @@
                     img.style.opacity = '0';
                     img.style.animation = `${animationName} ${pngFadeInDuration / 1000}s ease-out ${delay}s forwards`;
                 });
-                setTimeout(() => {
-                    glassBoxes.forEach(box => { box.style.animation = `fadeInAndSlideUp ${boxFadeInDuration / 1000}s forwards ease-out`; });
-                }, boxAnimationStartDelay);
-                setTimeout(() => {
-                    mainTitleContent.style.animation = `contentPopUp ${contentAnimationDuration / 1000}s forwards ease-out`;
-                }, contentAnimationStartDelay);
+                setTimeout(() => { glassBoxes.forEach(box => { box.style.animation = `fadeInAndSlideUp ${boxFadeInDuration / 1000}s forwards ease-out`; }); }, boxAnimationStartDelay);
+                setTimeout(() => { mainTitleContent.style.animation = `contentPopUp ${contentAnimationDuration / 1000}s forwards ease-out`; }, contentAnimationStartDelay);
             }
 
             const modal = document.getElementById('accountModal');
@@ -240,29 +191,13 @@
             let otpValue = '';
 
             document.getElementById('otpContainer').addEventListener('click', () => otpHiddenInput.focus());
-            otpHiddenInput.addEventListener('input', (e) => {
-                otpValue = e.target.value.replace(/[^0-9]/g, '').slice(0, 6);
-                e.target.value = otpValue;
-                updateOTPSlots();
-            });
+            otpHiddenInput.addEventListener('input', (e) => { otpValue = e.target.value.replace(/[^0-9]/g, '').slice(0, 6); e.target.value = otpValue; updateOTPSlots(); });
 
             function updateOTPSlots() {
                 otpSlots.forEach((slot, index) => {
-                    slot.innerHTML = '';
-                    slot.classList.remove('active', 'filled', 'otp-error');
-                    if (index === otpValue.length && otpValue.length < 6) {
-                        slot.classList.add('active');
-                        const caret = document.createElement('div');
-                        caret.className = 'caret';
-                        slot.appendChild(caret);
-                    }
-                    if (otpValue[index]) {
-                        const charSpan = document.createElement('span');
-                        charSpan.className = 'char';
-                        charSpan.textContent = otpValue[index];
-                        slot.appendChild(charSpan);
-                        slot.classList.add('filled');
-                    }
+                    slot.innerHTML = ''; slot.classList.remove('active', 'filled', 'otp-error');
+                    if (index === otpValue.length && otpValue.length < 6) { slot.classList.add('active'); const caret = document.createElement('div'); caret.className = 'caret'; slot.appendChild(caret); }
+                    if (otpValue[index]) { const charSpan = document.createElement('span'); charSpan.className = 'char'; charSpan.textContent = otpValue[index]; slot.appendChild(charSpan); slot.classList.add('filled'); }
                 });
                 loginWithPinBtn.disabled = otpValue.length !== 6;
             }
@@ -270,112 +205,62 @@
 
             mcInput.addEventListener('input', () => {
                 const name = mcInput.value.trim();
-                if (name.length >= 2) {
-                    loginHeadImg.src = `https://mc-heads.net/head/${name}`;
-                    loginHeadImg.classList.add('visible');
-                } else {
-                    loginHeadImg.src = 'https://mc-heads.net/head/Steve';
-                }
+                if (name.length >= 2) { loginHeadImg.src = `https://mc-heads.net/head/${name}`; loginHeadImg.classList.add('visible'); } else { loginHeadImg.src = 'https://mc-heads.net/head/Steve'; }
             });
 
             function updateUI() {
                 const user = localStorage.getItem('mc_user');
-                if (user) {
-                    accountBoxImg.src = `https://mc-heads.net/head/${user}`;
-                    accountBoxText.textContent = user;
-                } else {
-                    accountBoxImg.src = 'steve.png';
-                    accountBoxText.textContent = 'Account';
-                }
+                if (user) { accountBoxImg.src = `https://mc-heads.net/head/${user}`; accountBoxText.textContent = user; } else { accountBoxImg.src = 'steve.png'; accountBoxText.textContent = 'Account'; }
             }
 
             function resetToStep1() {
                 step1.style.display = 'block'; step2.style.display = 'none'; profileView.classList.remove('active');
                 errorMsg1.classList.remove('visible'); errorMsg2.classList.remove('visible'); verifyStatus.innerHTML = '';
-                mcInput.value = ''; loginHeadImg.src = 'https://mc-heads.net/head/Steve';
-                otpValue = ''; otpHiddenInput.value = ''; updateOTPSlots();
+                mcInput.value = ''; loginHeadImg.src = 'https://mc-heads.net/head/Steve'; otpValue = ''; otpHiddenInput.value = ''; updateOTPSlots();
             }
 
             function openModal() {
                 modal.classList.add('active'); document.body.style.overflow = 'hidden';
                 const user = localStorage.getItem('mc_user');
                 if (!user) { resetToStep1(); document.getElementById('modalSubtitle').textContent = 'Melde dich an oder registriere dich'; }
-                else {
-                    step1.style.display = 'none'; step2.style.display = 'none'; profileView.classList.add('active');
-                    document.getElementById('profileName').textContent = user;
-                    document.getElementById('profileHead').src = `https://mc-heads.net/head/${user}`;
-                    document.getElementById('modalSubtitle').textContent = 'Du bist angemeldet';
-                }
+                else { step1.style.display = 'none'; step2.style.display = 'none'; profileView.classList.add('active'); document.getElementById('profileName').textContent = user; document.getElementById('profileHead').src = `https://mc-heads.net/head/${user}`; document.getElementById('modalSubtitle').textContent = 'Du bist angemeldet'; }
             }
 
             function closeModal() { modal.classList.remove('active'); document.body.style.overflow = ''; }
 
             nextToPinBtn.addEventListener('click', async () => {
                 const mcName = mcInput.value.trim();
-                if (mcName.length < 2) {
-                    errorMsg1.classList.add('visible'); modalContent.classList.add('shake');
-                    setTimeout(() => modalContent.classList.remove('shake'), 500); return;
-                }
+                if (mcName.length < 2) { errorMsg1.classList.add('visible'); modalContent.classList.add('shake'); setTimeout(() => modalContent.classList.remove('shake'), 500); return; }
                 errorMsg1.classList.remove('visible'); nextToPinBtn.textContent = 'Prüfe Discord...'; nextToPinBtn.disabled = true;
                 try {
-                    const response = await fetch(APPS_SCRIPT_URL, {
-                        method: 'POST', body: JSON.stringify({ action: "check", mcName: mcName }),
-                        headers: { 'Content-Type': 'text/plain;charset=utf-8' }
-                    });
+                    const response = await fetch(`${API_BASE_URL}/check`, { method: 'POST', body: JSON.stringify({ mcName: mcName }), headers: { 'Content-Type': 'application/json' } });
                     const result = await response.json();
-                    if (result.success) {
-                        localStorage.setItem('discord_id', result.discordId);
-                        step1.style.display = 'none'; step2.style.display = 'block';
-                        setTimeout(() => otpHiddenInput.focus(), 150);
-                    } else {
-                        errorMsg1.textContent = result.message; errorMsg1.classList.add('visible');
-                        modalContent.classList.add('shake'); setTimeout(() => modalContent.classList.remove('shake'), 500);
-                    }
-                } catch (err) {
-                    errorMsg1.textContent = 'Verbindung fehlgeschlagen.'; errorMsg1.classList.add('visible');
-                } finally {
-                    nextToPinBtn.textContent = 'Weiter zum PIN →'; nextToPinBtn.disabled = false;
-                }
+                    if (result.success) { localStorage.setItem('discord_id', result.discordId); step1.style.display = 'none'; step2.style.display = 'block'; setTimeout(() => otpHiddenInput.focus(), 150); }
+                    else { errorMsg1.textContent = result.message; errorMsg1.classList.add('visible'); modalContent.classList.add('shake'); setTimeout(() => modalContent.classList.remove('shake'), 500); }
+                } catch (err) { errorMsg1.textContent = 'Verbindung fehlgeschlagen.'; errorMsg1.classList.add('visible'); }
+                finally { nextToPinBtn.textContent = 'Weiter zum PIN →'; nextToPinBtn.disabled = false; }
             });
 
             backToStep1Btn.addEventListener('click', resetToStep1);
 
             loginWithPinBtn.addEventListener('click', async () => {
-                if (otpValue.length < 6) return;
-                const mcName = mcInput.value.trim(); const pin = otpValue;
-                loginWithPinBtn.textContent = 'Prüfe...'; loginWithPinBtn.disabled = true;
-                errorMsg2.classList.remove('visible'); verifyStatus.innerHTML = ''; otpSlots.forEach(s => s.classList.remove('otp-error'));
-
+                if (otpValue.length < 6) return; const mcName = mcInput.value.trim(); const pin = otpValue;
+                loginWithPinBtn.textContent = 'Prüfe...'; loginWithPinBtn.disabled = true; errorMsg2.classList.remove('visible'); verifyStatus.innerHTML = ''; otpSlots.forEach(s => s.classList.remove('otp-error'));
                 try {
-                    const response = await fetch(APPS_SCRIPT_URL, {
-                        method: 'POST', body: JSON.stringify({ action: "login", mcName: mcName, pin: pin }),
-                        headers: { 'Content-Type': 'text/plain;charset=utf-8' }
-                    });
+                    const response = await fetch(`${API_BASE_URL}/login`, { method: 'POST', body: JSON.stringify({ mcName: mcName, pin: pin }), headers: { 'Content-Type': 'application/json' } });
                     const result = await response.json();
                     if (result.success) {
                         localStorage.setItem('mc_user', mcName); localStorage.setItem('discord_id', result.discordId);
                         verifyStatus.innerHTML = `<div class="verify-status success"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg><span>Code verified successfully!</span></div>`;
-                        setTimeout(() => {
-                            step2.style.display = 'none'; profileView.classList.add('active');
-                            document.getElementById('profileName').textContent = mcName;
-                            document.getElementById('profileHead').src = `https://mc-heads.net/head/${mcName}`;
-                            document.getElementById('modalSubtitle').textContent = 'Du bist angemeldet';
-                            updateUI();
-                        }, 1000);
+                        setTimeout(() => { step2.style.display = 'none'; profileView.classList.add('active'); document.getElementById('profileName').textContent = mcName; document.getElementById('profileHead').src = `https://mc-heads.net/head/${mcName}`; document.getElementById('modalSubtitle').textContent = 'Du bist angemeldet'; updateUI(); }, 1000);
                     } else { throw new Error(result.message); }
                 } catch (err) {
-                    errorMsg2.textContent = err.message || 'Fehler beim Login.'; errorMsg2.classList.add('visible');
-                    otpSlots.forEach(s => s.classList.add('otp-error')); setTimeout(() => otpSlots.forEach(s => s.classList.remove('otp-error')), 600);
+                    errorMsg2.textContent = err.message || 'Fehler beim Login.'; errorMsg2.classList.add('visible'); otpSlots.forEach(s => s.classList.add('otp-error')); setTimeout(() => otpSlots.forEach(s => s.classList.remove('otp-error')), 600);
                     otpValue = ''; otpHiddenInput.value = ''; updateOTPSlots();
-                } finally {
-                    loginWithPinBtn.textContent = 'Anmelden'; loginWithPinBtn.disabled = false;
-                }
+                } finally { loginWithPinBtn.textContent = 'Anmelden'; loginWithPinBtn.disabled = false; }
             });
 
-            logoutBtn.addEventListener('click', () => {
-                localStorage.removeItem('mc_user'); localStorage.removeItem('discord_id');
-                resetToStep1(); updateUI(); document.getElementById('modalSubtitle').textContent = 'Melde dich an oder registriere dich';
-            });
+            logoutBtn.addEventListener('click', () => { localStorage.removeItem('mc_user'); localStorage.removeItem('discord_id'); resetToStep1(); updateUI(); document.getElementById('modalSubtitle').textContent = 'Melde dich an oder registriere dich'; });
 
             openModalBtn.addEventListener('click', openModal);
             closeModalBtn.addEventListener('click', closeModal);
