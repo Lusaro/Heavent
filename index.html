@@ -5,6 +5,161 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Heavent</title>
     <link rel="stylesheet" href="style.css">
+    <style>
+        /* ===== LIVE MC-HEAD + NAME INPUT ===== */
+        .mc-input-row {
+            display: flex; align-items: center; gap: 12px; margin-bottom: 14px;
+        }
+        .mc-head-live {
+            width: 52px; height: 52px; border-radius: 8px;
+            border: 1px solid var(--border-color, #2a3440);
+            background: var(--bg-primary, #0b0d0f);
+            image-rendering: pixelated;
+            flex-shrink: 0;
+            object-fit: cover;
+            transition: transform 0.2s ease;
+        }
+        .mc-head-live.visible {
+            animation: popIn 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+        }
+        .mc-input-row .login-field { flex: 1; margin: 0 !important; }
+        @keyframes popIn {
+            0% { transform: scale(0.6); opacity: 0; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+
+        /* ===== OTP SLOTS (3 + Minus + 3) ===== */
+        .otp-container {
+            display: flex; justify-content: center; align-items: center;
+            gap: 8px; margin: 24px 0 16px;
+        }
+        .otp-group { display: flex; gap: 8px; }
+        .otp-separator {
+            display: flex; align-items: center; justify-content: center;
+            color: #6b7a8f; margin: 0 4px;
+            animation: fadeInSep 0.3s ease-out 0.15s forwards;
+            opacity: 0;
+        }
+        @keyframes fadeInSep {
+            to { opacity: 1; transform: scale(1); }
+            from { opacity: 0; transform: scale(0.8); }
+        }
+        .otp-slot {
+            width: 42px; height: 42px;
+            border: 1px solid #2a3440;
+            border-radius: 8px;
+            background: #0b0d0f;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 1.15rem; font-weight: 600; color: #fff;
+            transition: all 0.2s cubic-bezier(0.22, 1, 0.36, 1);
+            position: relative; overflow: hidden;
+            box-shadow: 0 1px 2px rgba(0,0,0,0.2);
+            cursor: text;
+            animation: slotPopIn 0.2s cubic-bezier(0.22, 1, 0.36, 1) backwards;
+        }
+        @keyframes slotPopIn {
+            from { opacity: 0; transform: scale(0.8) translateY(10px); }
+            to { opacity: 1; transform: scale(1) translateY(0); }
+        }
+        .otp-slot:nth-child(1) { animation-delay: 0s; }
+        .otp-slot:nth-child(2) { animation-delay: 0.05s; }
+        .otp-slot:nth-child(3) { animation-delay: 0.10s; }
+        .otp-slot:nth-child(4) { animation-delay: 0.15s; }
+        .otp-slot:nth-child(5) { animation-delay: 0.20s; }
+        .otp-slot:nth-child(6) { animation-delay: 0.25s; }
+
+        .otp-slot:hover { transform: scale(1.02); }
+        .otp-slot:active { transform: scale(0.98); }
+        .otp-slot.active {
+            border-color: #8b5cf6;
+            box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.2);
+            z-index: 10;
+        }
+        .otp-slot.filled {
+            transform: scale(1.05);
+            border-color: #8b5cf6;
+        }
+        .otp-slot .char {
+            animation: charPopIn 0.2s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+        }
+        @keyframes charPopIn {
+            0% { transform: scale(0) rotateY(-90deg); opacity: 0; }
+            100% { transform: scale(1) rotateY(0deg); opacity: 1; }
+        }
+        .otp-slot .caret {
+            position: absolute; width: 1px; height: 18px;
+            background: #fff;
+            animation: blink 1s infinite;
+        }
+        @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0; } }
+        .otp-slot.otp-error {
+            animation: shakeOtp 0.4s ease-in-out;
+            border-color: #ff4444 !important;
+            box-shadow: 0 0 0 3px rgba(255, 68, 68, 0.2);
+        }
+        @keyframes shakeOtp {
+            0% { transform: translateX(0); }
+            25% { transform: translateX(-8px); }
+            50% { transform: translateX(8px); }
+            75% { transform: translateX(-8px); }
+            100% { transform: translateX(0); }
+        }
+        .otp-hidden-input {
+            position: absolute; opacity: 0; pointer-events: none;
+            width: 1px; height: 1px;
+        }
+
+        /* ===== VERIFY STATUS ===== */
+        .verify-status {
+            display: flex; align-items: center; justify-content: center;
+            gap: 8px; margin: 16px 0; padding: 12px;
+            border-radius: 10px; font-size: 0.9rem;
+            animation: statusFadeIn 0.3s ease-out;
+        }
+        @keyframes statusFadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .verify-status.success { color: #10b981; background: rgba(16, 185, 129, 0.08); border: 1px solid rgba(16, 185, 129, 0.2); }
+
+        /* ===== SMOOTH BUTTON ===== */
+        .smooth-btn {
+            width: 100%; padding: 14px;
+            background: linear-gradient(135deg, #8b5cf6, #3b82f6);
+            border: 1px solid transparent;
+            border-radius: 50px;
+            color: #fff; font-size: 1rem; font-weight: 700;
+            cursor: pointer;
+            transition: all 0.25s cubic-bezier(0.22, 1, 0.36, 1);
+            box-shadow: 0 4px 20px rgba(139, 92, 246, 0.3);
+            display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+        }
+        .smooth-btn:hover:not(:disabled) {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 35px rgba(139, 92, 246, 0.5);
+        }
+        .smooth-btn:active:not(:disabled) { transform: scale(0.98); }
+        .smooth-btn:disabled { opacity: 0.4; cursor: not-allowed; }
+
+        .smooth-btn.outline {
+            background: transparent;
+            border: 1px solid #2a3440;
+            color: #b0b8c4;
+            box-shadow: none;
+        }
+        .smooth-btn.outline:hover:not(:disabled) {
+            background: rgba(255,255,255,0.05);
+            color: #fff;
+            box-shadow: none;
+            transform: none;
+        }
+
+        .modal-content.shake {
+            animation: shakeOtp 0.4s ease-in-out;
+            border-color: #ff4444 !important;
+            box-shadow: 0 0 30px rgba(255, 68, 68, 0.4) !important;
+        }
+    </style>
 </head>
 <body>
     <div class="image-wrapper">
@@ -36,7 +191,7 @@
                 <img src="Lieferando.png" alt="Lieferando Logo">
             </a>
         </div>
-        <!-- HVNT – heller Glow & weiter links -->
+        <!-- HVNT – heller Glow -->
         <div id="box2" class="glass-box box-top-right">
             <a href="team.html">
                 <img src="hvnt_logo.png" alt="HVNT Logo">
@@ -48,7 +203,7 @@
                 <img src="hvnt_logo.png" alt="Partner">
             </a>
         </div>
-        <!-- Account – DYNAMISCH (wird per JS befüllt) -->
+        <!-- Account – DYNAMISCH -->
         <div id="box4" class="glass-box box-bottom-right" style="cursor: pointer;">
             <img id="accountBoxImg" src="steve.png" alt="Account">
             <p id="accountBoxText" class="box-text">Account</p>
@@ -57,288 +212,352 @@
 
     <!-- ===== ACCOUNT MODAL ===== -->
     <div id="accountModal" class="modal-overlay">
-        <div class="modal-content">
+        <div class="modal-content" id="accountModalContent">
             <button class="modal-close" id="closeModalBtn">&times;</button>
             <h2>🔐 Account</h2>
-            <p id="modalSubtitle">Melde dich mit deinem Minecraft-Namen an</p>
+            <p id="modalSubtitle">Melde dich an oder registriere dich</p>
 
-            <!-- Login-Ansicht -->
-            <div id="loginView">
-                <div class="login-row">
-                    <div class="login-head">
-                        <img id="loginHeadImg" src="" alt="Head">
-                    </div>
+            <!-- Schritt 1: MC-Name + Live-Head -->
+            <div id="loginStep1">
+                <div class="mc-input-row">
+                    <img id="loginHeadImg" class="mc-head-live" src="https://mc-heads.net/head/Steve" alt="Minecraft Head" />
                     <div class="login-field">
                         <label for="mcNameInput">Minecraft-Name</label>
-                        <input type="text" id="mcNameInput" placeholder="z.B. xLusaro" />
+                        <input type="text" id="mcNameInput" placeholder="z.B. xLusaro" autocomplete="off" />
                     </div>
                 </div>
-                <div class="error-msg" id="errorMsg">Bitte gib einen gültigen Namen ein.</div>
-                <button class="btn-submit" id="loginBtn">Anmelden</button>
+                <div class="error-msg" id="errorMsg1">Bitte gib deinen Minecraft-Namen ein.</div>
+                <button class="smooth-btn" id="nextToPinBtn">Weiter zum PIN →</button>
+                <p style="font-size:0.75rem; margin-top:14px; color:#6b7a8f; text-align:center;">
+                    Dein Nickname auf dem <a href="https://discord.gg/utngw94B7b" target="_blank" style="color:#8b5cf6;">Heavent Discord</a> muss deinen MC-Namen enthalten.
+                </p>
             </div>
 
-            <!-- Profil-Ansicht (nach Anmeldung) -->
+            <!-- Schritt 2: OTP PIN -->
+            <div id="loginStep2" style="display: none;">
+                <p style="font-size: 0.9rem; color: #b0b8c4; margin-bottom: 5px;">Gib deinen 6-stelligen PIN ein.</p>
+                <p style="font-size: 0.75rem; color: #6b7a8f; margin-bottom: 5px;">(Beim ersten Mal wird dieser als dein neuer PIN gespeichert)</p>
+
+                <div class="otp-container" id="otpContainer">
+                    <div class="otp-group">
+                        <div class="otp-slot" data-index="0"></div>
+                        <div class="otp-slot" data-index="1"></div>
+                        <div class="otp-slot" data-index="2"></div>
+                    </div>
+                    <div class="otp-separator">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+                    </div>
+                    <div class="otp-group">
+                        <div class="otp-slot" data-index="3"></div>
+                        <div class="otp-slot" data-index="4"></div>
+                        <div class="otp-slot" data-index="5"></div>
+                    </div>
+                </div>
+
+                <input type="tel" class="otp-hidden-input" id="otpHiddenInput" maxlength="6" />
+
+                <div id="verifyStatus"></div>
+                <div class="error-msg" id="errorMsg2">Falscher PIN!</div>
+
+                <button class="smooth-btn" id="loginWithPinBtn" disabled>Anmelden</button>
+                <button class="smooth-btn outline" id="backToStep1Btn" style="margin-top: 10px;">← Zurück</button>
+            </div>
+
+            <!-- Schritt 3: Profil-Ansicht (nach Login) -->
             <div id="profileView" class="profile-view">
                 <div class="profile-head">
                     <img id="profileHead" src="" alt="Minecraft-Head">
                 </div>
                 <div class="profile-info">
                     <div class="name" id="profileName">–</div>
-                    <div class="status"><span class="dot"></span>Online</div>
+                    <div class="status"><span class="dot"></span>Verifiziert</div>
                 </div>
-                <button class="btn-logout" id="logoutBtn">Abmelden</button>
+                <button class="btn-logout" id="logoutBtn" style="width:100%;">Abmelden</button>
             </div>
         </div>
     </div>
 
     <script>
-    document.addEventListener('DOMContentLoaded', () => {
-        // ===== Animation (Original) =====
-        const imageWrapper = document.querySelector('.image-wrapper');
-        const svgImagesContainer = document.querySelector('.svg-images-container');
-        const glassBoxes = document.querySelectorAll('.glass-box');
-        const pngImages = document.querySelectorAll('.svg-images-container image');
-        const mainTitleContent = document.getElementById('mainTitleContent');
+        const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxuSS570xvwzSxkaRHt1LLF2GeLYacbdpdL0r59KGliv9elmwtKON4DFPrdTrN-Hif4Nw/exec';
 
-        const initialImageShrinkDuration = 700;
-        const pngFadeInDuration = 800;
-        const delayBetweenPNGs = 50;
-        const boxAnimationStartDelay = 400;
-        const boxFadeInDuration = 800;
-        const contentAnimationStartDelay = initialImageShrinkDuration - 100;
-        const contentAnimationDuration = 800;
+        document.addEventListener('DOMContentLoaded', () => {
+            // ===== Animation (Original beibehalten) =====
+            const svgImagesContainer = document.querySelector('.svg-images-container');
+            const glassBoxes = document.querySelectorAll('.glass-box');
+            const pngImages = document.querySelectorAll('.svg-images-container image');
+            const mainTitleContent = document.getElementById('mainTitleContent');
 
-        const imgElement = document.querySelector('.background-image');
+            const initialImageShrinkDuration = 700;
+            const pngFadeInDuration = 800;
+            const delayBetweenPNGs = 50;
+            const boxAnimationStartDelay = 400;
+            const boxFadeInDuration = 800;
+            const contentAnimationStartDelay = initialImageShrinkDuration - 100;
+            const contentAnimationDuration = 800;
 
-        const initializeAnimations = () => {
-            console.log('Background image loaded or animation readiness reached. Starting animation sequence...');
-            startAnimations();
-        };
+            const imgElement = document.querySelector('.background-image');
 
-        imgElement.addEventListener('load', initializeAnimations);
-        imgElement.addEventListener('error', () => {
-            console.error('Error loading background image! Check path: ' + imgElement.src);
-            setTimeout(initializeAnimations, 100);
-        });
+            const initializeAnimations = () => startAnimations();
+            imgElement.addEventListener('load', initializeAnimations);
+            imgElement.addEventListener('error', () => setTimeout(initializeAnimations, 100));
+            if (imgElement.complete) initializeAnimations();
 
-        if (imgElement.complete) {
-            initializeAnimations();
-        }
-
-        function getAnimationAndInitialClipPathForStroke(imgElement) {
-            const svgRect = svgImagesContainer.getBoundingClientRect();
-            const svgCenterX = svgRect.left + svgRect.width / 2;
-            const imgRect = imgElement.getBoundingClientRect();
-            const imgCenterX = imgRect.left + imgRect.width / 2;
-
-            if (imgCenterX < svgCenterX) {
-                return {
-                    animationName: 'drawLineFromRightToLeft',
-                    initialClipPath: 'inset(0 0 0 100%)'
-                };
-            } else {
-                return {
-                    animationName: 'drawLineFromLeftToRight',
-                    initialClipPath: 'inset(0 100% 0 0)'
-                };
+            function getAnimationAndInitialClipPathForStroke(img) {
+                const svgRect = svgImagesContainer.getBoundingClientRect();
+                const svgCenterX = svgRect.left + svgRect.width / 2;
+                const imgRect = img.getBoundingClientRect();
+                const imgCenterX = imgRect.left + imgRect.width / 2;
+                if (imgCenterX < svgCenterX) return { animationName: 'drawLineFromRightToLeft', initialClipPath: 'inset(0 0 0 100%)' };
+                return { animationName: 'drawLineFromLeftToRight', initialClipPath: 'inset(0 100% 0 0)' };
             }
-        }
 
-        function startAnimations() {
-            console.log('Starting PNG phase (parallel to image shrink)...');
+            function startAnimations() {
+                pngImages.forEach((img, index) => {
+                    const delay = (index * delayBetweenPNGs / 1000);
+                    const { animationName, initialClipPath } = getAnimationAndInitialClipPathForStroke(img);
+                    img.style.clipPath = initialClipPath;
+                    img.style.opacity = '0';
+                    img.style.animation = `${animationName} ${pngFadeInDuration / 1000}s ease-out ${delay}s forwards`;
+                });
+                setTimeout(() => {
+                    glassBoxes.forEach(box => {
+                        box.style.animation = `fadeInAndSlideUp ${boxFadeInDuration / 1000}s forwards ease-out`;
+                    });
+                }, boxAnimationStartDelay);
+                setTimeout(() => {
+                    mainTitleContent.style.animation = `contentPopUp ${contentAnimationDuration / 1000}s forwards ease-out`;
+                }, contentAnimationStartDelay);
+            }
 
-            pngImages.forEach((img, index) => {
-                const delay = (index * delayBetweenPNGs / 1000);
-                const { animationName, initialClipPath } = getAnimationAndInitialClipPathForStroke(img);
+            // ===== ACCOUNT MODAL LOGIC =====
+            const modal = document.getElementById('accountModal');
+            const modalContent = document.getElementById('accountModalContent');
+            const openModalBtn = document.getElementById('box4');
+            const closeModalBtn = document.getElementById('closeModalBtn');
+            const step1 = document.getElementById('loginStep1');
+            const step2 = document.getElementById('loginStep2');
+            const profileView = document.getElementById('profileView');
 
-                img.style.clipPath = initialClipPath;
-                img.style.opacity = '0';
+            const mcInput = document.getElementById('mcNameInput');
+            const loginHeadImg = document.getElementById('loginHeadImg');
+            const nextToPinBtn = document.getElementById('nextToPinBtn');
+            const backToStep1Btn = document.getElementById('backToStep1Btn');
+            const loginWithPinBtn = document.getElementById('loginWithPinBtn');
+            const logoutBtn = document.getElementById('logoutBtn');
+            const errorMsg1 = document.getElementById('errorMsg1');
+            const errorMsg2 = document.getElementById('errorMsg2');
+            const verifyStatus = document.getElementById('verifyStatus');
 
-                img.style.animation = `${animationName} ${pngFadeInDuration / 1000}s ease-out ${delay}s forwards`;
-                console.log(`PNG ${index + 1} animation '${animationName}' started with delay ${delay * 1000}ms.`);
+            const accountBoxImg = document.getElementById('accountBoxImg');
+            const accountBoxText = document.getElementById('accountBoxText');
+
+            const otpSlots = document.querySelectorAll('.otp-slot');
+            const otpHiddenInput = document.getElementById('otpHiddenInput');
+            let otpValue = '';
+
+            // ===== OTP LOGIK =====
+            document.getElementById('otpContainer').addEventListener('click', () => otpHiddenInput.focus());
+            otpHiddenInput.addEventListener('input', (e) => {
+                otpValue = e.target.value.replace(/[^0-9]/g, '').slice(0, 6);
+                e.target.value = otpValue;
+                updateOTPSlots();
             });
 
-            setTimeout(() => {
-                console.log('Starting box phase (parallel and overlapping with PNGs)...');
-                glassBoxes.forEach((box) => {
-                    box.style.animation = `fadeInAndSlideUp ${boxFadeInDuration / 1000}s forwards ease-out`;
-                    console.log(`Box started.`);
+            function updateOTPSlots() {
+                otpSlots.forEach((slot, index) => {
+                    slot.innerHTML = '';
+                    slot.classList.remove('active', 'filled', 'otp-error');
+                    if (index === otpValue.length && otpValue.length < 6) {
+                        slot.classList.add('active');
+                        const caret = document.createElement('div');
+                        caret.className = 'caret';
+                        slot.appendChild(caret);
+                    }
+                    if (otpValue[index]) {
+                        const charSpan = document.createElement('span');
+                        charSpan.className = 'char';
+                        charSpan.textContent = otpValue[index];
+                        slot.appendChild(charSpan);
+                        slot.classList.add('filled');
+                    }
                 });
-            }, boxAnimationStartDelay);
+                loginWithPinBtn.disabled = otpValue.length !== 6;
+            }
+            updateOTPSlots();
 
-            setTimeout(() => {
-                console.log('Starting title pop-up animation...');
-                mainTitleContent.style.animation = `contentPopUp ${contentAnimationDuration / 1000}s forwards ease-out`;
-            }, contentAnimationStartDelay);
-        }
+            // ===== Live MC-Head =====
+            mcInput.addEventListener('input', () => {
+                const name = mcInput.value.trim();
+                if (name.length >= 2) {
+                    loginHeadImg.src = `https://mc-heads.net/head/${name}`;
+                    loginHeadImg.classList.add('visible');
+                } else {
+                    loginHeadImg.src = 'https://mc-heads.net/head/Steve';
+                }
+            });
 
-        // ===== ACCOUNT MODAL LOGIC (mit sessionStorage) =====
-        const modal = document.getElementById('accountModal');
-        const openModalBtn = document.getElementById('box4');
-        const closeModalBtn = document.getElementById('closeModalBtn');
-        const loginBtn = document.getElementById('loginBtn');
-        const logoutBtn = document.getElementById('logoutBtn');
-        const mcInput = document.getElementById('mcNameInput');
-        const errorMsg = document.getElementById('errorMsg');
-        const loginView = document.getElementById('loginView');
-        const profileView = document.getElementById('profileView');
-        const profileName = document.getElementById('profileName');
-        const profileHead = document.getElementById('profileHead');
-        const modalSubtitle = document.getElementById('modalSubtitle');
-        const loginHeadImg = document.getElementById('loginHeadImg');
+            // ===== UI Update =====
+            function updateUI() {
+                const user = sessionStorage.getItem('mc_user');
+                if (user) {
+                    accountBoxImg.src = `https://mc-heads.net/head/${user}`;
+                    accountBoxText.textContent = user;
+                } else {
+                    accountBoxImg.src = 'steve.png';
+                    accountBoxText.textContent = 'Account';
+                }
+            }
 
-        // Box4-Elemente
-        const accountBoxImg = document.getElementById('accountBoxImg');
-        const accountBoxText = document.getElementById('accountBoxText');
-
-        // ===== HELFER: UI aktualisieren =====
-        function updateUI() {
-            const user = sessionStorage.getItem('mc_user');
-            if (user) {
-                // Box4: Avatar + Name
-                accountBoxImg.src = `https://mc-heads.net/head/${user}`;
-                accountBoxText.textContent = user;
-                // Modal: Profil-Ansicht
-                loginView.style.display = 'none';
-                profileView.classList.add('active');
-                profileName.textContent = user;
-                profileHead.src = `https://mc-heads.net/head/${user}`;
-                modalSubtitle.textContent = 'Du bist angemeldet';
-            } else {
-                // Box4: Standard
-                accountBoxImg.src = 'steve.png';
-                accountBoxText.textContent = 'Account';
-                // Modal: Login-Ansicht
-                loginView.style.display = 'block';
+            function resetToStep1() {
+                step1.style.display = 'block';
+                step2.style.display = 'none';
                 profileView.classList.remove('active');
+                errorMsg1.classList.remove('visible');
+                errorMsg2.classList.remove('visible');
+                verifyStatus.innerHTML = '';
                 mcInput.value = '';
-                loginHeadImg.src = '';
-                loginHeadImg.style.display = 'none';
-                errorMsg.classList.remove('visible');
-                modalSubtitle.textContent = 'Melde dich mit deinem Minecraft-Namen an';
+                loginHeadImg.src = 'https://mc-heads.net/head/Steve';
+                otpValue = '';
+                otpHiddenInput.value = '';
+                updateOTPSlots();
             }
-        }
 
-        // ===== Modal öffnen =====
-        function openModal() {
-            modal.classList.add('active');
-            document.body.style.overflow = 'hidden';
-            // Wenn eingeloggt, Profil anzeigen, sonst Login
-            const user = sessionStorage.getItem('mc_user');
-            if (user) {
-                loginView.style.display = 'none';
-                profileView.classList.add('active');
-                profileName.textContent = user;
-                profileHead.src = `https://mc-heads.net/head/${user}`;
-                modalSubtitle.textContent = 'Du bist angemeldet';
-            } else {
-                loginView.style.display = 'block';
-                profileView.classList.remove('active');
-                mcInput.value = '';
-                loginHeadImg.src = '';
-                loginHeadImg.style.display = 'none';
-                errorMsg.classList.remove('visible');
-                modalSubtitle.textContent = 'Melde dich mit deinem Minecraft-Namen an';
+            function openModal() {
+                modal.classList.add('active');
+                document.body.style.overflow = 'hidden';
+                const user = sessionStorage.getItem('mc_user');
+                if (!user) {
+                    resetToStep1();
+                    document.getElementById('modalSubtitle').textContent = 'Melde dich an oder registriere dich';
+                } else {
+                    step1.style.display = 'none';
+                    step2.style.display = 'none';
+                    profileView.classList.add('active');
+                    document.getElementById('profileName').textContent = user;
+                    document.getElementById('profileHead').src = `https://mc-heads.net/head/${user}`;
+                    document.getElementById('modalSubtitle').textContent = 'Du bist angemeldet';
+                }
             }
-        }
 
-        function closeModal() {
-            modal.classList.remove('active');
-            document.body.style.overflow = '';
-        }
-
-        // ===== Login / Logout =====
-        function login() {
-            const name = mcInput.value.trim();
-            if (name.length < 2) {
-                errorMsg.classList.add('visible');
-                return;
+            function closeModal() {
+                modal.classList.remove('active');
+                document.body.style.overflow = '';
             }
-            errorMsg.classList.remove('visible');
-            sessionStorage.setItem('mc_user', name);
+
+            // ===== Schritt 1 -> 2 (Discord Check) =====
+            nextToPinBtn.addEventListener('click', async () => {
+                const mcName = mcInput.value.trim();
+                if (mcName.length < 2) {
+                    errorMsg1.classList.add('visible');
+                    modalContent.classList.add('shake');
+                    setTimeout(() => modalContent.classList.remove('shake'), 500);
+                    return;
+                }
+                errorMsg1.classList.remove('visible');
+                nextToPinBtn.textContent = 'Prüfe Discord...';
+                nextToPinBtn.disabled = true;
+
+                try {
+                    const response = await fetch(APPS_SCRIPT_URL, {
+                        method: 'POST',
+                        body: JSON.stringify({ action: "check", mcName: mcName }),
+                        headers: { 'Content-Type': 'text/plain;charset=utf-8' }
+                    });
+                    const result = await response.json();
+
+                    if (result.success) {
+                        sessionStorage.setItem('discord_id', result.discordId);
+                        step1.style.display = 'none';
+                        step2.style.display = 'block';
+                        setTimeout(() => otpHiddenInput.focus(), 150);
+                    } else {
+                        errorMsg1.textContent = result.message;
+                        errorMsg1.classList.add('visible');
+                        modalContent.classList.add('shake');
+                        setTimeout(() => modalContent.classList.remove('shake'), 500);
+                    }
+                } catch (err) {
+                    errorMsg1.textContent = 'Verbindung fehlgeschlagen.';
+                    errorMsg1.classList.add('visible');
+                } finally {
+                    nextToPinBtn.textContent = 'Weiter zum PIN →';
+                    nextToPinBtn.disabled = false;
+                }
+            });
+
+            backToStep1Btn.addEventListener('click', resetToStep1);
+
+            // ===== Login mit PIN =====
+            loginWithPinBtn.addEventListener('click', async () => {
+                if (otpValue.length < 6) return;
+                const mcName = mcInput.value.trim();
+                const pin = otpValue;
+
+                loginWithPinBtn.textContent = 'Prüfe...';
+                loginWithPinBtn.disabled = true;
+                errorMsg2.classList.remove('visible');
+                verifyStatus.innerHTML = '';
+                otpSlots.forEach(s => s.classList.remove('otp-error'));
+
+                try {
+                    const response = await fetch(APPS_SCRIPT_URL, {
+                        method: 'POST',
+                        body: JSON.stringify({ action: "login", mcName: mcName, pin: pin }),
+                        headers: { 'Content-Type': 'text/plain;charset=utf-8' }
+                    });
+                    const result = await response.json();
+
+                    if (result.success) {
+                        sessionStorage.setItem('mc_user', mcName);
+                        sessionStorage.setItem('discord_id', result.discordId);
+
+                        verifyStatus.innerHTML = `
+                            <div class="verify-status success">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
+                                <span>Code verified successfully!</span>
+                            </div>
+                        `;
+
+                        setTimeout(() => {
+                            step2.style.display = 'none';
+                            profileView.classList.add('active');
+                            document.getElementById('profileName').textContent = mcName;
+                            document.getElementById('profileHead').src = `https://mc-heads.net/head/${mcName}`;
+                            document.getElementById('modalSubtitle').textContent = 'Du bist angemeldet';
+                            updateUI();
+                        }, 1000);
+                    } else {
+                        throw new Error(result.message);
+                    }
+                } catch (err) {
+                    errorMsg2.textContent = err.message || 'Fehler beim Login.';
+                    errorMsg2.classList.add('visible');
+                    otpSlots.forEach(s => s.classList.add('otp-error'));
+                    setTimeout(() => otpSlots.forEach(s => s.classList.remove('otp-error')), 600);
+                    otpValue = '';
+                    otpHiddenInput.value = '';
+                    updateOTPSlots();
+                } finally {
+                    loginWithPinBtn.textContent = 'Anmelden';
+                    loginWithPinBtn.disabled = false;
+                }
+            });
+
+            logoutBtn.addEventListener('click', () => {
+                sessionStorage.removeItem('mc_user');
+                sessionStorage.removeItem('discord_id');
+                resetToStep1();
+                updateUI();
+                document.getElementById('modalSubtitle').textContent = 'Melde dich an oder registriere dich';
+            });
+
+            openModalBtn.addEventListener('click', openModal);
+            closeModalBtn.addEventListener('click', closeModal);
+            modal.addEventListener('click', (e) => { if (e.target === modal) closeModal(); });
+            document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && modal.classList.contains('active')) closeModal(); });
+
             updateUI();
-            alert(`✅ Willkommen, ${name}!`);
-            // Modal bleibt offen – Nutzer schließt es manuell
-        }
-
-        function logout() {
-            sessionStorage.removeItem('mc_user');
-            updateUI();
-            // Wenn modal offen ist, auf Login-Ansicht umschalten
-            if (modal.classList.contains('active')) {
-                loginView.style.display = 'block';
-                profileView.classList.remove('active');
-                mcInput.value = '';
-                loginHeadImg.src = '';
-                loginHeadImg.style.display = 'none';
-                errorMsg.classList.remove('visible');
-                modalSubtitle.textContent = 'Melde dich mit deinem Minecraft-Namen an';
-            }
-        }
-
-        // ===== Live-Vorschau beim Tippen =====
-        mcInput.addEventListener('input', function() {
-            const name = this.value.trim();
-            if (name.length >= 2) {
-                loginHeadImg.src = `https://mc-heads.net/head/${name}`;
-                loginHeadImg.style.display = 'block';
-            } else {
-                loginHeadImg.src = '';
-                loginHeadImg.style.display = 'none';
-            }
         });
-
-        // ===== Event-Listener =====
-        openModalBtn.addEventListener('click', openModal);
-        closeModalBtn.addEventListener('click', closeModal);
-        modal.addEventListener('click', (e) => {
-            if (e.target === modal) closeModal();
-        });
-        document.addEventListener('keydown', (e) => {
-            if (e.key === 'Escape' && modal.classList.contains('active')) closeModal();
-        });
-
-        loginBtn.addEventListener('click', login);
-        mcInput.addEventListener('keydown', (e) => {
-            if (e.key === 'Enter') loginBtn.click();
-        });
-        logoutBtn.addEventListener('click', logout);
-
-        // ===== Initial UI setzen =====
-        updateUI();
-
-
-        function doPost(e) {
-  try {
-    const data = JSON.parse(e.postData.contents);
-    const username = data.username.trim();
-    if (!username) return respond(false, 'Benutzername fehlt');
-
-    const sheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName('Websitebesucher');
-    if (!sheet) return respond(false, 'Tabellenblatt "Websitebesucher" nicht gefunden');
-
-    // Prüfen, ob Name bereits existiert
-    const existing = sheet.getRange('A:A').getValues().flat().filter(v => v);
-    if (existing.includes(username)) {
-      return respond(true, 'Bereits registriert');
-    }
-
-    // Neuer Name → Zeile anhängen
-    sheet.appendRow([username, new Date()]);
-    return respond(true, 'Neu registriert');
-  } catch (err) {
-    return respond(false, err.toString());
-  }
-}
-
-function respond(success, message) {
-  return ContentService.createTextOutput(JSON.stringify({ success, message }))
-    .setMimeType(ContentService.MimeType.JSON);
-}
-
-const WEB_APP_URL = 'https://docs.google.com/spreadsheets/d/1xFkBU1N4oVrJAt_ftVBu9lAKT5MRgFd_ryOQcL4--c4/edit?usp=sharing';
-
-    });
     </script>
 </body>
 </html>
