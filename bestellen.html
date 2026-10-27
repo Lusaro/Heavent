@@ -8,172 +8,76 @@
     <link rel="stylesheet" href="bestellen.css" />
     <script src="preisliste.js"></script>
     <style>
-        /* ===== LIVE MC-HEAD + NAME INPUT ===== */
-        .mc-input-row {
-            display: flex; align-items: center; gap: 12px; margin-bottom: 14px;
-        }
+        .mc-input-row { display: flex; align-items: center; gap: 12px; margin-bottom: 14px; }
         .mc-head-live {
             width: 52px; height: 52px; border-radius: 8px;
-            border: 1px solid var(--border-color);
-            background: var(--bg-primary);
-            image-rendering: pixelated;
-            flex-shrink: 0;
-            object-fit: cover;
+            border: 1px solid var(--border-color); background: var(--bg-primary);
+            image-rendering: pixelated; flex-shrink: 0; object-fit: cover;
             transition: transform 0.2s ease;
         }
-        .mc-head-live.visible {
-            animation: popIn 0.3s cubic-bezier(0.22, 1, 0.36, 1);
-        }
+        .mc-head-live.visible { animation: popIn 0.3s cubic-bezier(0.22, 1, 0.36, 1); }
         .mc-input-row .login-field { flex: 1; margin: 0 !important; }
+        @keyframes popIn { 0% { transform: scale(0.6); opacity: 0; } 100% { transform: scale(1); opacity: 1; } }
 
-        /* ===== OTP SLOTS (React-Stil: 3 + Minus + 3) ===== */
-        .otp-container {
-            display: flex; justify-content: center; align-items: center;
-            gap: 8px; margin: 24px 0 16px;
-        }
-        .otp-group {
-            display: flex; gap: 8px;
-        }
+        .otp-container { display: flex; justify-content: center; align-items: center; gap: 8px; margin: 24px 0 16px; }
+        .otp-group { display: flex; gap: 8px; }
         .otp-separator {
             display: flex; align-items: center; justify-content: center;
             color: var(--text-muted); margin: 0 4px;
-            animation: fadeInSep 0.3s ease-out 0.15s forwards;
-            opacity: 0;
+            animation: fadeInSep 0.3s ease-out 0.15s forwards; opacity: 0;
         }
-        @keyframes fadeInSep {
-            to { opacity: 1; transform: scale(1); }
-            from { opacity: 0; transform: scale(0.8); }
-        }
+        @keyframes fadeInSep { to { opacity: 1; transform: scale(1); } from { opacity: 0; transform: scale(0.8); } }
         .otp-slot {
-            width: 42px; height: 42px;
-            border: 1px solid var(--border-color);
-            border-radius: 8px;
-            background: var(--bg-primary);
+            width: 42px; height: 42px; border: 1px solid var(--border-color);
+            border-radius: 8px; background: var(--bg-primary);
             display: flex; align-items: center; justify-content: center;
             font-size: 1.15rem; font-weight: 600; color: var(--text-primary);
             transition: all 0.2s cubic-bezier(0.22, 1, 0.36, 1);
-            position: relative; overflow: hidden;
-            box-shadow: 0 1px 2px rgba(0,0,0,0.2);
-            cursor: text;
-            animation: slotPopIn 0.2s cubic-bezier(0.22, 1, 0.36, 1) backwards;
+            position: relative; overflow: hidden; box-shadow: 0 1px 2px rgba(0,0,0,0.2);
+            cursor: text; animation: slotPopIn 0.2s cubic-bezier(0.22, 1, 0.36, 1) backwards;
         }
-        @keyframes slotPopIn {
-            from { opacity: 0; transform: scale(0.8) translateY(10px); }
-            to { opacity: 1; transform: scale(1) translateY(0); }
-        }
+        @keyframes slotPopIn { from { opacity: 0; transform: scale(0.8) translateY(10px); } to { opacity: 1; transform: scale(1) translateY(0); } }
         .otp-slot:nth-child(1) { animation-delay: 0s; }
         .otp-slot:nth-child(2) { animation-delay: 0.05s; }
         .otp-slot:nth-child(3) { animation-delay: 0.10s; }
         .otp-slot:nth-child(4) { animation-delay: 0.15s; }
         .otp-slot:nth-child(5) { animation-delay: 0.20s; }
         .otp-slot:nth-child(6) { animation-delay: 0.25s; }
-
         .otp-slot:hover { transform: scale(1.02); }
         .otp-slot:active { transform: scale(0.98); }
-        .otp-slot.active {
-            border-color: var(--accent-purple);
-            box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.2);
-            z-index: 10;
-        }
-        .otp-slot.filled {
-            transform: scale(1.05);
-            border-color: var(--accent-purple);
-        }
-        .otp-slot .char {
-            animation: charPopIn 0.2s cubic-bezier(0.22, 1, 0.36, 1) forwards;
-        }
-        @keyframes charPopIn {
-            0% { transform: scale(0) rotateY(-90deg); opacity: 0; }
-            100% { transform: scale(1) rotateY(0deg); opacity: 1; }
-        }
-        .otp-slot .caret {
-            position: absolute; width: 1px; height: 18px;
-            background: var(--text-primary);
-            animation: blink 1s infinite;
-        }
+        .otp-slot.active { border-color: var(--accent-purple); box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.2); z-index: 10; }
+        .otp-slot.filled { transform: scale(1.05); border-color: var(--accent-purple); }
+        .otp-slot .char { animation: charPopIn 0.2s cubic-bezier(0.22, 1, 0.36, 1) forwards; }
+        @keyframes charPopIn { 0% { transform: scale(0) rotateY(-90deg); opacity: 0; } 100% { transform: scale(1) rotateY(0deg); opacity: 1; } }
+        .otp-slot .caret { position: absolute; width: 1px; height: 18px; background: var(--text-primary); animation: blink 1s infinite; }
         @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0; } }
-
-        .otp-slot.otp-error {
-            animation: shake 0.4s ease-in-out;
-            border-color: #ff4444 !important;
-            box-shadow: 0 0 0 3px rgba(255, 68, 68, 0.2);
-        }
-        @keyframes shake {
-            0% { transform: translateX(0); }
-            25% { transform: translateX(-8px); }
-            50% { transform: translateX(8px); }
-            75% { transform: translateX(-8px); }
-            100% { transform: translateX(0); }
-        }
-        .otp-hidden-input {
-            position: absolute; opacity: 0; pointer-events: none;
-            width: 1px; height: 1px;
-        }
-        
-        /* ===== VERIFY STATUS ===== */
+        .otp-slot.otp-error { animation: shake 0.4s ease-in-out; border-color: #ff4444 !important; box-shadow: 0 0 0 3px rgba(255, 68, 68, 0.2); }
+        @keyframes shake { 0% { transform: translateX(0); } 25% { transform: translateX(-8px); } 50% { transform: translateX(8px); } 75% { transform: translateX(-8px); } 100% { transform: translateX(0); } }
+        .otp-hidden-input { position: absolute; opacity: 0; pointer-events: none; width: 1px; height: 1px; }
         .verify-status {
             display: flex; align-items: center; justify-content: center;
             gap: 8px; margin: 16px 0; padding: 12px;
-            border-radius: 10px; font-size: 0.9rem;
-            animation: statusFadeIn 0.3s ease-out;
+            border-radius: 10px; font-size: 0.9rem; animation: statusFadeIn 0.3s ease-out;
         }
-        @keyframes statusFadeIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-        .verify-status.loading { color: var(--text-muted); }
+        @keyframes statusFadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
         .verify-status.success { color: #10b981; background: rgba(16, 185, 129, 0.08); border: 1px solid rgba(16, 185, 129, 0.2); }
-        .verify-status.error { color: #ff4444; background: rgba(255, 68, 68, 0.08); border: 1px solid rgba(255, 68, 68, 0.2); }
-        .verify-status .spinner-mini {
-            width: 14px; height: 14px;
-            border: 2px solid var(--text-muted);
-            border-top-color: transparent;
-            border-radius: 50%;
-            animation: spin 0.8s linear infinite;
-        }
-        @keyframes spin { to { transform: rotate(360deg); } }
-
-        /* ===== SMOOTH BUTTON (Reset / Verify) ===== */
         .smooth-btn {
-            width: 100%; padding: 14px;
-            background: linear-gradient(135deg, #8b5cf6, #3b82f6);
-            border: 1px solid transparent;
-            border-radius: 50px;
-            color: #fff; font-size: 1rem; font-weight: 700;
-            cursor: pointer;
+            width: 100%; padding: 14px; background: linear-gradient(135deg, #8b5cf6, #3b82f6);
+            border: 1px solid transparent; border-radius: 50px; color: #fff;
+            font-size: 1rem; font-weight: 700; cursor: pointer;
             transition: all 0.25s cubic-bezier(0.22, 1, 0.36, 1);
             box-shadow: 0 4px 20px rgba(139, 92, 246, 0.3);
             display: inline-flex; align-items: center; justify-content: center; gap: 8px;
         }
-        .smooth-btn:hover:not(:disabled) {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 35px rgba(139, 92, 246, 0.5);
-        }
+        .smooth-btn:hover:not(:disabled) { transform: translateY(-2px); box-shadow: 0 8px 35px rgba(139, 92, 246, 0.5); }
         .smooth-btn:active:not(:disabled) { transform: scale(0.98); }
         .smooth-btn:disabled { opacity: 0.4; cursor: not-allowed; }
-
-        .smooth-btn.outline {
-            background: transparent;
-            border: 1px solid var(--border-color);
-            color: var(--text-secondary);
-            box-shadow: none;
-        }
-        .smooth-btn.outline:hover:not(:disabled) {
-            background: rgba(255,255,255,0.05);
-            color: #fff;
-            box-shadow: none;
-            transform: none;
-        }
-
-        .modal-content.shake {
-            animation: shake 0.4s ease-in-out;
-            border-color: #ff4444 !important;
-            box-shadow: 0 0 30px rgba(255, 68, 68, 0.4) !important;
-        }
+        .smooth-btn.outline { background: transparent; border: 1px solid var(--border-color); color: var(--text-secondary); box-shadow: none; }
+        .smooth-btn.outline:hover:not(:disabled) { background: rgba(255,255,255,0.05); color: #fff; box-shadow: none; transform: none; }
+        .modal-content.shake { animation: shake 0.4s ease-in-out; border-color: #ff4444 !important; box-shadow: 0 0 30px rgba(255, 68, 68, 0.4) !important; }
     </style>
 </head>
 <body>
-    <!-- ===== HEADER ===== -->
     <header>
         <div class="container navbar">
             <div class="Logo"><img src="Lieferando.png" alt="Lieferando Logo" style="height:150px; width:auto;" /></div>
@@ -207,20 +111,14 @@
                 🛒 Jetzt neu:
                 <a href="lieferando+.html"> <img src="Lieferando+.png" style="height: 50px; width: auto;"> </a>
             </span>
-            <h1 style="font-size: clamp(2rem, 3vw, 2.8rem);">
-                Deine <span class="highlight">Bestellung</span>
-            </h1>
-            <p class="subtitle" style="max-width: 500px; margin: 0 auto 20px;">
-                Wähle Kistenart und Anzahl – der Preis wird automatisch berechnet.
-            </p>
+            <h1 style="font-size: clamp(2rem, 3vw, 2.8rem);">Deine <span class="highlight">Bestellung</span></h1>
+            <p class="subtitle" style="max-width: 500px; margin: 0 auto 20px;">Wähle Kistenart und Anzahl – der Preis wird automatisch berechnet.</p>
         </section>
 
         <section class="container" style="padding-top: 0; padding-bottom: 40px;">
             <div class="order-form-wrapper">
                 <div id="orderItems"></div>
-                <div class="add-row-wrapper">
-                    <button id="addItemBtn" class="btn-add-row">+</button>
-                </div>
+                <div class="add-row-wrapper"><button id="addItemBtn" class="btn-add-row">+</button></div>
                 <div class="order-summary">
                     <div class="total-price">
                         <span class="total-label">Gesamtpreis:</span>
@@ -248,14 +146,12 @@
 
     <datalist id="itemList"></datalist>
 
-    <!-- ===== ACCOUNT MODAL ===== -->
     <div id="accountModal" class="modal-overlay">
         <div class="modal-content account-modal" id="accountModalContent">
             <button class="modal-close" id="closeModalBtn">&times;</button>
             <h2>🔐 Account</h2>
             <p id="modalSubtitle">Melde dich an oder registriere dich</p>
 
-            <!-- Schritt 1: MC-Name + Live-Head -->
             <div id="loginStep1">
                 <div class="mc-input-row">
                     <img id="loginHeadImg" class="mc-head-live" src="https://mc-heads.net/head/Steve" alt="Minecraft Head" />
@@ -271,14 +167,9 @@
                 </p>
             </div>
 
-            <!-- Schritt 2: OTP PIN -->
             <div id="loginStep2" style="display: none;">
-                <p style="font-size: 0.9rem; color: #b0b8c4; margin-bottom: 5px;">
-                    Gib deinen 6-stelligen PIN ein.
-                </p>
-                <p style="font-size: 0.75rem; color: #6b7a8f; margin-bottom: 5px;">
-                    (Beim ersten Mal wird dieser als dein neuer PIN gespeichert)
-                </p>
+                <p style="font-size: 0.9rem; color: #b0b8c4; margin-bottom: 5px;">Gib deinen 6-stelligen PIN ein.</p>
+                <p style="font-size: 0.75rem; color: #6b7a8f; margin-bottom: 5px;">(Beim ersten Mal wird dieser als dein neuer PIN gespeichert)</p>
 
                 <div class="otp-container" id="otpContainer">
                     <div class="otp-group">
@@ -305,11 +196,8 @@
                 <button class="smooth-btn outline" id="backToStep1Btn" style="margin-top: 10px;">← Zurück</button>
             </div>
 
-            <!-- Schritt 3: Erfolg -->
             <div id="profileView" class="profile-view">
-                <div class="profile-head">
-                    <img id="profileHead" src="" alt="Minecraft-Head">
-                </div>
+                <div class="profile-head"><img id="profileHead" src="" alt="Minecraft-Head"></div>
                 <div class="profile-info">
                     <div class="name" id="profileName">–</div>
                     <div class="status"><span class="dot"></span>Verifiziert</div>
@@ -332,7 +220,7 @@
             `https://raw.githubusercontent.com/InventivetalentDev/minecraft-assets/${MINECRAFT_VERSION}/assets/minecraft/textures`,
         ];
         const ITEM_ONLY = new Set(['diamond','coal','emerald','redstone','lapis_lazuli','iron_ingot','gold_ingot','netherite_ingot','netherite_scrap','nether_wart','sugar_cane','kelp','bamboo','cactus','stick','apple','wheat','paper','book','flint','charcoal','string','feather','leather','bone','bone_meal','slime_ball','snowball','egg','blaze_rod','blaze_powder','ender_pearl','ender_eye','ghast_tear','magma_cream','gunpowder','glowstone_dust','nether_star','nautilus_shell','prismarine_shard','prismarine_crystals','shulker_shell','phantom_membrane']);
-        const NAME_MAPPING = {'diamantblock':'diamond_block','diamant':'diamond','stein':'stone','kohleblock':'coal_block','eisenblock':'iron_block','goldblock':'gold_block','redstoneblock':'redstone_block','smaragdblock':'emerald_block','lapislazuliblock':'lapis_block','netheritblock':'netherite_block','kupferblock':'copper_block','angelaufener_kupferblock':'exposed_copper','verwitterter_kupferblock':'weathered_copper','oxidierter_kupferblock':'oxidized_copper','quarzblock':'quartz_block','glatterquarzblock':'smooth_quartz','amathystblock':'amethyst_block','eichenstamm':'oak_log','eichenholz':'oak_log','eichenholzbretter':'oak_planks','eichenholztreppe':'oak_stairs','eichenholzstufe':'oak_slab','eichenholzzaun':'oak_fence','eichenholzzauntor':'oak_fence_gate','eichenholztür':'oak_door','eichenholzfalltür':'oak_trapdoor','fichtenstamm':'spruce_log','fichtenholz':'spruce_log','fichtenholzbretter':'spruce_planks','birkenstamm':'birch_log','birkenholz':'birch_log','tropenbaumstamm':'jungle_log','tropenholz':'jungle_log','akazienstamm':'acacia_log','akazienholz':'acacia_log','schwarzeichenstamm':'dark_oak_log','schwarzeichenholz':'dark_oak_log','mangrovenstamm':'mangrove_log','mangrovenholz':'mangrove_log','kirschstamm':'cherry_log','kirschholz':'cherry_log','blasseichenstamm':'pale_oak_log','blasseichenholz':'pale_oak_log','glas':'glass','weißesglas':'white_stained_glass','schwarzesglas':'black_stained_glass','rotesglas':'red_stained_glass','orangesglas':'orange_stained_glass','gelbesglas':'yellow_stained_glass','grünesglas':'lime_stained_glass','türkisesglas':'cyan_stained_glass','blauesglas':'blue_stained_glass','violettesglas':'purple_stained_glass','magenta_glss':'magenta_stained_glass','rosaglas':'pink_stained_glass','ofen':'furnace','werkbank':'crafting_table','truhe':'chest','endertruhe':'ender_chest','fackel':'torch','laterne':'lantern','seelenlaterne':'soul_lantern','amboss':'anvil','verzauberungstisch':'enchanting_table','braustand':'brewing_stand','kessel':'cauldron','komposter':'composter','notenblock':'note_block','plattenspieler':'jukebox','bücherregal':'bookshelf','lesepult':'lectern','leiter':'ladder','gerüst':'scaffolding','blitzableiter':'lightning_rod','schleimblock':'slime_block','honigblock':'honey_block','honigwabenblock':'honeycomb_block','kürbis':'pumpkin','geschnitzterkürbis':'carved_pumpkin','kürbislaterne':'jack_o_lantern','melon':'melon','strohballen':'hay_bale','seelensand':'soul_sand','seelenerde':'soul_soil','knochenblock':'bone_block','obsidian':'obsidian','weinenderobsidian':'crying_obsidian','endstein':'end_stone','purpurblock':'purpur_block','prismarin':'prismarine','seelaterne':'sea_lantern','leuchtstein':'glowstone','basalt':'basalt','glatterbasalt':'smooth_basalt','polierterbasalt':'polished_basalt','schwarzstein':'blackstone','golddurchzogener_schwarzstein':'gilded_blackstone','netherrack':'netherrack','netherziegel':'nether_bricks','rotenetherziegel':'red_nether_bricks','kalzit':'calcite','tropfsteinblock':'dripstone_block','magmablock':'magma_block','eis':'ice','packeis':'packed_ice','blaueis':'blue_ice','schneeblock':'snow_block','sand':'sand','roter_sand':'red_sand','kies':'gravel','ton':'clay','erde':'dirt','grasblock':'grass_block','podsol':'podzol','myzel':'mycelium','mossblock':'moss_block','blassmoosblock':'pale_moss_block','kohle':'coal','eisenbarren':'iron_ingot','goldbarren':'gold_ingot','netheritbarren':'netherite_ingot','smaragd':'emerald','lapislazuli':'lapis_lazuli','redstone':'redstone','netherwarze':'nether_wart','wirrwarze':'warped_wart','karmesinwarze':'crimson_fungus','brauner_pilz':'brown_mushroom','roter_pilz':'red_mushroom','zuckerrohr':'sugar_cane','kaktus':'cactus','bambus':'bamboo','seetang':'kelp','getrockneter_seetangblock':'dried_kelp_block','seerosenblatt':'lily_pad','spinnennetz':'cobweb'};
+        const NAME_MAPPING = {'diamantblock':'diamond_block','diamant':'diamond','stein':'stone','kohleblock':'coal_block','eisenblock':'iron_block','goldblock':'gold_block','redstoneblock':'redstone_block','smaragdblock':'emerald_block','lapislazuliblock':'lapis_block','netheritblock':'netherite_block','kupferblock':'copper_block','eichenstamm':'oak_log','eichenholz':'oak_log','eichenholzbretter':'oak_planks','glas':'glass','weißesglas':'white_stained_glass','schwarzesglas':'black_stained_glass','rotesglas':'red_stained_glass','truhe':'chest','endertruhe':'ender_chest','fackel':'torch','ofen':'furnace','werkbank':'crafting_table','bücherregal':'bookshelf','leiter':'ladder','kohle':'coal','eisenbarren':'iron_ingot','goldbarren':'gold_ingot','netheritbarren':'netherite_ingot','smaragd':'emerald','lapislazuli':'lapis_lazuli','redstone':'redstone','zuckerrohr':'sugar_cane','kaktus':'cactus','bambus':'bamboo'};
 
         let itemDatabase = {};
         let itemCounter = 0;
@@ -588,8 +476,9 @@
         deliveryBtn.addEventListener('click', () => selectShipping('delivery'));
 
         async function submitOrder() {
-            const user = sessionStorage.getItem('mc_user');
-            const discordId = sessionStorage.getItem('discord_id');
+            // ===== WICHTIG: localStorage statt sessionStorage! =====
+            const user = localStorage.getItem('mc_user');
+            const discordId = localStorage.getItem('discord_id');
 
             if (!user || !discordId) {
                 showToast('Du musst dich einloggen, um zu bestellen!', 'error');
@@ -659,13 +548,12 @@
         }
         init();
 
-        // ===== OTP PIN LOGIK =====
+        // ===== OTP LOGIK =====
         const otpSlots = document.querySelectorAll('.otp-slot');
         const otpHiddenInput = document.getElementById('otpHiddenInput');
         let otpValue = '';
 
         document.getElementById('otpContainer').addEventListener('click', () => otpHiddenInput.focus());
-
         otpHiddenInput.addEventListener('input', (e) => {
             otpValue = e.target.value.replace(/[^0-9]/g, '').slice(0, 6);
             e.target.value = otpValue;
@@ -690,13 +578,11 @@
                     slot.classList.add('filled');
                 }
             });
-            const btn = document.getElementById('loginWithPinBtn');
-            if (otpValue.length === 6) { btn.disabled = false; } else { btn.disabled = true; }
+            document.getElementById('loginWithPinBtn').disabled = otpValue.length !== 6;
         }
-
         updateOTPSlots();
 
-        // ===== ACCOUNT MODAL LOGIC =====
+        // ===== ACCOUNT MODAL =====
         (function() {
             const modal = document.getElementById('accountModal');
             const modalContent = document.getElementById('accountModalContent');
@@ -719,7 +605,6 @@
             const errorMsg2 = document.getElementById('errorMsg2');
             const verifyStatus = document.getElementById('verifyStatus');
 
-            // Live-Update des MC-Kopfes
             mcInput.addEventListener('input', () => {
                 const name = mcInput.value.trim();
                 if (name.length >= 2) {
@@ -730,8 +615,9 @@
                 }
             });
 
+            // ===== WICHTIG: localStorage =====
             function updateHeaderUI() {
-                const user = sessionStorage.getItem('mc_user');
+                const user = localStorage.getItem('mc_user');
                 if (user) {
                     loginHeaderBtn.classList.add('hidden');
                     headerAvatar.classList.add('visible');
@@ -760,7 +646,7 @@
             function openModal() {
                 modal.classList.add('active');
                 document.body.style.overflow = 'hidden';
-                const user = sessionStorage.getItem('mc_user');
+                const user = localStorage.getItem('mc_user');
                 if (!user) resetToStep1();
                 else {
                     step1.style.display = 'none';
@@ -776,7 +662,6 @@
                 document.body.style.overflow = '';
             }
 
-            // Schritt 1 -> Schritt 2 (Check ob User auf Discord)
             nextToPinBtn.addEventListener('click', async () => {
                 const mcName = mcInput.value.trim();
                 if (mcName.length < 2) {
@@ -798,7 +683,7 @@
                     const result = await response.json();
 
                     if (result.success) {
-                        sessionStorage.setItem('discord_id', result.discordId);
+                        localStorage.setItem('discord_id', result.discordId);
                         step1.style.display = 'none';
                         step2.style.display = 'block';
                         setTimeout(() => otpHiddenInput.focus(), 150);
@@ -819,7 +704,6 @@
 
             backToStep1Btn.addEventListener('click', resetToStep1);
 
-            // Login mit PIN
             loginWithPinBtn.addEventListener('click', async () => {
                 if (otpValue.length < 6) return;
                 const mcName = mcInput.value.trim();
@@ -840,8 +724,8 @@
                     const result = await response.json();
 
                     if (result.success) {
-                        sessionStorage.setItem('mc_user', mcName);
-                        sessionStorage.setItem('discord_id', result.discordId);
+                        localStorage.setItem('mc_user', mcName);
+                        localStorage.setItem('discord_id', result.discordId);
 
                         verifyStatus.innerHTML = `
                             <div class="verify-status success">
@@ -876,8 +760,8 @@
             });
 
             logoutBtn.addEventListener('click', () => {
-                sessionStorage.removeItem('mc_user');
-                sessionStorage.removeItem('discord_id');
+                localStorage.removeItem('mc_user');
+                localStorage.removeItem('discord_id');
                 resetToStep1();
                 updateHeaderUI();
             });
