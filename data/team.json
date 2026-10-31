@@ -63,10 +63,6 @@
       "head_url": "https://mc-heads.net/head/MrLukex"
     },
     {
-      "mc_name": "Niklas131",
-      "head_url": "https://mc-heads.net/head/Niklas131"
-    },
-    {
       "mc_name": "Noah",
       "head_url": "https://mc-heads.net/head/Noah"
     },
@@ -92,5 +88,5 @@
     }
   ],
   "builder": [],
-  "updated_at": 1793441197
+  "updated_at": 1793441502
 }
