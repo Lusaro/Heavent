@@ -23,6 +23,10 @@
       "head_url": "https://mc-heads.net/head/DarkVoiP"
     },
     {
+      "mc_name": "Demon",
+      "head_url": "https://mc-heads.net/head/Demon"
+    },
+    {
       "mc_name": "Flo",
       "head_url": "https://mc-heads.net/head/Flo"
     },
@@ -96,5 +100,5 @@
     }
   ],
   "builder": [],
-  "updated_at": 1793794821
+  "updated_at": 1793795126
 }
