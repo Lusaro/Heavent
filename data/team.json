@@ -75,6 +75,10 @@
       "head_url": "https://mc-heads.net/head/Noah"
     },
     {
+      "mc_name": "Noel",
+      "head_url": "https://mc-heads.net/head/Noel"
+    },
+    {
       "mc_name": "Pandy",
       "head_url": "https://mc-heads.net/head/Pandy"
     },
@@ -100,5 +104,5 @@
     }
   ],
   "builder": [],
-  "updated_at": 1793889820
+  "updated_at": 1793890126
 }
