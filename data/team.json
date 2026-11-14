@@ -31,10 +31,6 @@
       "head_url": "https://mc-heads.net/head/Holystar015"
     },
     {
-      "mc_name": "im ze noob",
-      "head_url": "https://mc-heads.net/head/im ze noob"
-    },
-    {
       "mc_name": "James354a",
       "head_url": "https://mc-heads.net/head/James354a"
     },
@@ -75,6 +71,10 @@
       "head_url": "https://mc-heads.net/head/Noah"
     },
     {
+      "mc_name": "Noel",
+      "head_url": "https://mc-heads.net/head/Noel"
+    },
+    {
       "mc_name": "Pandy",
       "head_url": "https://mc-heads.net/head/Pandy"
     },
@@ -100,5 +100,5 @@
     }
   ],
   "builder": [],
-  "updated_at": 1794685058
+  "updated_at": 1794685363
 }
