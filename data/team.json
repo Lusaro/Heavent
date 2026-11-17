@@ -55,6 +55,10 @@
       "head_url": "https://mc-heads.net/head/Leon8723"
     },
     {
+      "mc_name": "Lion",
+      "head_url": "https://mc-heads.net/head/Lion"
+    },
+    {
       "mc_name": "luk_ski_jumper",
       "head_url": "https://mc-heads.net/head/luk_ski_jumper"
     },
@@ -104,5 +108,5 @@
     }
   ],
   "builder": [],
-  "updated_at": 1794949616
+  "updated_at": 1794949921
 }
