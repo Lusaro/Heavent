@@ -1,267 +1,267 @@
 {
     "Amethyst Cluster": {
         "farmer_preis": 10.2,
-        "kunden_preis": 43.5
+        "kunden_preis": 43.4
     },
     "Amethyst Shard": {
         "farmer_preis": 1.1,
-        "kunden_preis": 2.9
+        "kunden_preis": 3.3
     },
     "Antiker Schrott": {
-        "farmer_preis": 2016.6,
-        "kunden_preis": 2844.1
+        "farmer_preis": 2016.8,
+        "kunden_preis": 2843.2
     },
     "Holzkohle": {
         "farmer_preis": 2.5,
-        "kunden_preis": 17.3
+        "kunden_preis": 17.1
     },
     "Kohle": {
-        "farmer_preis": 7.0,
-        "kunden_preis": 16.9
+        "farmer_preis": 7.1,
+        "kunden_preis": 16.5
     },
     "Coal Block": {
-        "farmer_preis": 105.0,
-        "kunden_preis": 175.0
+        "farmer_preis": 105.1,
+        "kunden_preis": 178.8
     },
     "Steinkohle": {
-        "farmer_preis": 9.6,
-        "kunden_preis": 33.4
+        "farmer_preis": 9.5,
+        "kunden_preis": 33.3
     },
     "Kupferblock": {
-        "farmer_preis": 9.2,
-        "kunden_preis": 51.1
+        "farmer_preis": 9.3,
+        "kunden_preis": 51.4
     },
     "Kupferbarren": {
         "farmer_preis": 0.9,
-        "kunden_preis": 2.9
+        "kunden_preis": 2.6
     },
     "Kupfererz": {
         "farmer_preis": 8.5,
-        "kunden_preis": 17.2
+        "kunden_preis": 17.1
     },
     "Tiefenschiefer-Steinkohle": {
-        "farmer_preis": 555.2,
-        "kunden_preis": 1234.1
+        "farmer_preis": 555.3,
+        "kunden_preis": 1234.3
     },
     "Tiefenschiefer-Kupfererz": {
         "farmer_preis": 12.8,
-        "kunden_preis": 109.2
+        "kunden_preis": 109.0
     },
     "Tiefenschiefer-Diamanterz": {
         "farmer_preis": 180.1,
-        "kunden_preis": 219.9
+        "kunden_preis": 219.4
     },
     "Tiefenschiefer-Smaragderz": {
-        "farmer_preis": 16151.5,
-        "kunden_preis": 31859.8
+        "farmer_preis": 16151.3,
+        "kunden_preis": 31859.6
     },
     "Tiefenschiefer-Golderz": {
         "farmer_preis": 17.8,
-        "kunden_preis": 28.9
+        "kunden_preis": 29.5
     },
     "Tiefenschiefer-Eisenerz": {
         "farmer_preis": 16.3,
-        "kunden_preis": 29.1
+        "kunden_preis": 28.9
     },
     "Tiefenschiefer-Lapislazulierz": {
         "farmer_preis": 6.5,
-        "kunden_preis": 61.6
+        "kunden_preis": 61.1
     },
     "Tiefenschiefer-Redstone-Erz": {
         "farmer_preis": 1.1,
-        "kunden_preis": 4.8
+        "kunden_preis": 4.9
     },
     "Diamant": {
-        "farmer_preis": 60.0,
+        "farmer_preis": 59.1,
         "kunden_preis": 69.0
     },
     "Diamantblock": {
-        "farmer_preis": 535.1,
-        "kunden_preis": 628.3
+        "farmer_preis": 516.1,
+        "kunden_preis": 627.6
     },
     "Diamanterz": {
-        "farmer_preis": 473.6,
-        "kunden_preis": 926.4
+        "farmer_preis": 473.7,
+        "kunden_preis": 926.2
     },
     "Smaragd": {
-        "farmer_preis": 50.8,
-        "kunden_preis": 89.9
+        "farmer_preis": 51.6,
+        "kunden_preis": 95.1
     },
     "Smaragdblock": {
-        "farmer_preis": 600.2,
-        "kunden_preis": 774.1
+        "farmer_preis": 580.7,
+        "kunden_preis": 774.4
     },
     "Smaragderz": {
-        "farmer_preis": 300.3,
-        "kunden_preis": 664.9
+        "farmer_preis": 300.5,
+        "kunden_preis": 664.7
     },
     "Golddurchzogener Schwarzstein": {
-        "farmer_preis": 385.4,
-        "kunden_preis": 712.5
+        "farmer_preis": 386.0,
+        "kunden_preis": 699.7
     },
     "Goldblock": {
-        "farmer_preis": 129.0,
-        "kunden_preis": 187.8
+        "farmer_preis": 128.6,
+        "kunden_preis": 187.0
     },
     "Gold": {
-        "farmer_preis": 16.5,
-        "kunden_preis": 20.4
+        "farmer_preis": 16.4,
+        "kunden_preis": 20.3
     },
     "Golderz": {
         "farmer_preis": 22.2,
-        "kunden_preis": 111.6
+        "kunden_preis": 111.2
     },
     "Eisenblock": {
-        "farmer_preis": 160.0,
+        "farmer_preis": 158.3,
         "kunden_preis": 189.9
     },
     "Eisen": {
-        "farmer_preis": 17.5,
-        "kunden_preis": 20.0
+        "farmer_preis": 20.2,
+        "kunden_preis": 26.3
     },
     "Eisenerz": {
         "farmer_preis": 15.8,
         "kunden_preis": 44.2
     },
     "Lapisblock": {
-        "farmer_preis": 30.5,
-        "kunden_preis": 214.5
+        "farmer_preis": 15.2,
+        "kunden_preis": 204.9
     },
     "Lapislazuli": {
-        "farmer_preis": 0.8,
-        "kunden_preis": 23.3
+        "farmer_preis": 1.0,
+        "kunden_preis": 22.7
     },
     "Lapislazulierz": {
         "farmer_preis": 21.3,
-        "kunden_preis": 134.0
+        "kunden_preis": 133.7
     },
     "Large Amethyst Bud": {
         "farmer_preis": 6.1,
         "kunden_preis": 84.5
     },
     "Medium Amethyst Bud": {
-        "farmer_preis": 26.4,
-        "kunden_preis": 94.3
+        "farmer_preis": 26.5,
+        "kunden_preis": 94.4
     },
     "Netheritblock": {
-        "farmer_preis": 78401.8,
-        "kunden_preis": 88999.3
+        "farmer_preis": 85550.2,
+        "kunden_preis": 95999.9
     },
     "Netheritbarren": {
         "farmer_preis": 8800.5,
-        "kunden_preis": 11436.0
+        "kunden_preis": 9666.1
     },
     "Nether Gold Ore": {
         "farmer_preis": 13.4,
-        "kunden_preis": 32.2
+        "kunden_preis": 30.1
     },
     "Netherquarzerz": {
         "farmer_preis": 54.2,
         "kunden_preis": 70.0
     },
     "Netherquarz": {
-        "farmer_preis": 32.0,
-        "kunden_preis": 33.9
+        "farmer_preis": 22.5,
+        "kunden_preis": 29.7
     },
     "Rohkupfer": {
         "farmer_preis": 0.8,
-        "kunden_preis": 2.5
+        "kunden_preis": 2.3
     },
     "Raw Copper Block": {
         "farmer_preis": 5.1,
         "kunden_preis": 62.9
     },
     "Rohgold": {
-        "farmer_preis": 13.7,
-        "kunden_preis": 18.2
+        "farmer_preis": 12.9,
+        "kunden_preis": 17.9
     },
     "Raw Gold Block": {
         "farmer_preis": 75.8,
-        "kunden_preis": 296.8
+        "kunden_preis": 296.2
     },
     "Roheisen": {
         "farmer_preis": 10.6,
-        "kunden_preis": 20.0
+        "kunden_preis": 19.7
     },
     "Raw Iron Block": {
-        "farmer_preis": 113.5,
-        "kunden_preis": 268.0
+        "farmer_preis": 113.6,
+        "kunden_preis": 267.8
     },
     "Redstone": {
-        "farmer_preis": 1.2,
+        "farmer_preis": 1.3,
         "kunden_preis": 4.1
     },
     "Redstoneblock": {
-        "farmer_preis": 5.5,
-        "kunden_preis": 16.2
+        "farmer_preis": 5.6,
+        "kunden_preis": 17.0
     },
     "Redstone-Erz": {
         "farmer_preis": 37.1,
-        "kunden_preis": 210.1
+        "kunden_preis": 209.9
     },
     "Small Amethyst Bud": {
-        "farmer_preis": 11.5,
-        "kunden_preis": 43.8
+        "farmer_preis": 11.6,
+        "kunden_preis": 43.9
     },
     "Acacia Leaves": {
-        "farmer_preis": 2.5,
-        "kunden_preis": 28.5
+        "farmer_preis": 10.3,
+        "kunden_preis": 39.1
     },
     "Akazienstamm": {
         "farmer_preis": 5.6,
-        "kunden_preis": 18.0
+        "kunden_preis": 22.2
     },
     "Acacia Sapling": {
         "farmer_preis": 12.1,
         "kunden_preis": 109.5
     },
     "Azalea": {
-        "farmer_preis": 0.0,
+        "farmer_preis": 0.8,
         "kunden_preis": 1.4
     },
     "Azalea Leaves": {
-        "farmer_preis": 2.2,
-        "kunden_preis": 19.7
+        "farmer_preis": 2.3,
+        "kunden_preis": 19.8
     },
     "Bambusblock": {
-        "farmer_preis": 1.0,
-        "kunden_preis": 3.9
+        "farmer_preis": 1.1,
+        "kunden_preis": 4.0
     },
     "Birch Leaves": {
-        "farmer_preis": 2.3,
-        "kunden_preis": 16.7
+        "farmer_preis": 2.4,
+        "kunden_preis": 16.6
     },
     "Birkenstamm": {
         "farmer_preis": 2.4,
-        "kunden_preis": 5.9
+        "kunden_preis": 5.2
     },
     "Birch Sapling": {
-        "farmer_preis": 0.8,
-        "kunden_preis": 10.5
+        "farmer_preis": 0.0,
+        "kunden_preis": 10.4
     },
     "Cherry Leaves": {
-        "farmer_preis": 1.5,
-        "kunden_preis": 25.0
+        "farmer_preis": 1.6,
+        "kunden_preis": 22.6
     },
     "Kirschstamm": {
-        "farmer_preis": 3.7,
-        "kunden_preis": 11.7
+        "farmer_preis": 3.2,
+        "kunden_preis": 9.0
     },
     "Cherry Sapling": {
         "farmer_preis": 3.7,
-        "kunden_preis": 24.5
+        "kunden_preis": 24.4
     },
     "Karmesinstiel": {
-        "farmer_preis": 2.3,
-        "kunden_preis": 16.5
+        "farmer_preis": 1.3,
+        "kunden_preis": 15.5
     },
     "Dark Oak Leaves": {
-        "farmer_preis": 2.7,
+        "farmer_preis": 2.8,
         "kunden_preis": 21.5
     },
     "Schwarzeichenstamm": {
-        "farmer_preis": 1.8,
-        "kunden_preis": 7.5
+        "farmer_preis": 2.0,
+        "kunden_preis": 6.1
     },
     "Dark Oak Sapling": {
         "farmer_preis": 0.8,
@@ -272,71 +272,71 @@
         "kunden_preis": 5.4
     },
     "Flowering Azalea Leaves": {
-        "farmer_preis": 3.7,
+        "farmer_preis": 3.8,
         "kunden_preis": 94.9
     },
     "Jungle Leaves": {
-        "farmer_preis": 4.3,
+        "farmer_preis": 4.4,
         "kunden_preis": 33.9
     },
     "Tropenholzstamm": {
-        "farmer_preis": 2.6,
-        "kunden_preis": 9.6
+        "farmer_preis": 1.7,
+        "kunden_preis": 9.4
     },
     "Jungle Sapling": {
         "farmer_preis": 80.2,
         "kunden_preis": 158.1
     },
     "Mangrove Leaves": {
-        "farmer_preis": 1.2,
+        "farmer_preis": 1.3,
         "kunden_preis": 9.8
     },
     "Mangrovenstamm": {
-        "farmer_preis": 4.0,
-        "kunden_preis": 17.7
+        "farmer_preis": 3.9,
+        "kunden_preis": 17.9
     },
     "Mangrove Propagule": {
         "farmer_preis": 1.0,
-        "kunden_preis": 39.0
+        "kunden_preis": 38.0
     },
     "Oak Leaves": {
-        "farmer_preis": 0.9,
-        "kunden_preis": 14.8
+        "farmer_preis": 1.0,
+        "kunden_preis": 14.5
     },
     "Eichenstamm": {
-        "farmer_preis": 7.8,
-        "kunden_preis": 10.0
+        "farmer_preis": 7.4,
+        "kunden_preis": 9.7
     },
     "Oak Sapling": {
         "farmer_preis": 1.1,
-        "kunden_preis": 13.8
+        "kunden_preis": 12.3
     },
     "Pale Oak Leaves": {
-        "farmer_preis": 2.2,
+        "farmer_preis": 2.3,
         "kunden_preis": 28.6
     },
     "Blasseichenstamm": {
         "farmer_preis": 3.0,
-        "kunden_preis": 14.0
+        "kunden_preis": 9.0
     },
     "Spruce Leaves": {
-        "farmer_preis": 2.7,
-        "kunden_preis": 29.7
+        "farmer_preis": 2.8,
+        "kunden_preis": 29.6
     },
     "Fichtenstamm": {
         "farmer_preis": 5.0,
-        "kunden_preis": 5.9
+        "kunden_preis": 5.8
     },
     "Spruce Sapling": {
         "farmer_preis": 7.2,
-        "kunden_preis": 22.9
+        "kunden_preis": 24.7
     },
     "Wirrstiel": {
         "farmer_preis": 5.0,
-        "kunden_preis": 19.7
+        "kunden_preis": 19.8
     },
     "Armadillo Scute": {
-        "farmer_preis": 1.8,
+        "farmer_preis": 1.9,
         "kunden_preis": 11.9
     },
     "Pfeil": {
@@ -344,16 +344,16 @@
         "kunden_preis": 0.8
     },
     "Lohenrute": {
-        "farmer_preis": 42.0,
-        "kunden_preis": 74.9
+        "farmer_preis": 39.1,
+        "kunden_preis": 80.0
     },
     "Blue Egg": {
         "farmer_preis": 2.5,
-        "kunden_preis": 29.1
+        "kunden_preis": 27.0
     },
     "Knochen": {
-        "farmer_preis": 4.5,
-        "kunden_preis": 20.9
+        "farmer_preis": 4.1,
+        "kunden_preis": 19.5
     },
     "Breeze Rod": {
         "farmer_preis": 3.0,
@@ -361,7 +361,7 @@
     },
     "Brown Egg": {
         "farmer_preis": 1.9,
-        "kunden_preis": 22.0
+        "kunden_preis": 22.6
     },
     "Creaking Heart": {
         "farmer_preis": 55.3,
@@ -369,42 +369,42 @@
     },
     "Egg": {
         "farmer_preis": 1.7,
-        "kunden_preis": 25.0
+        "kunden_preis": 20.0
     },
     "Enderperle": {
         "farmer_preis": 0.8,
-        "kunden_preis": 1.1
+        "kunden_preis": 1.6
     },
     "Feder": {
         "farmer_preis": 7.1,
-        "kunden_preis": 39.8
+        "kunden_preis": 39.9
     },
     "Ghastträne": {
         "farmer_preis": 41.0,
-        "kunden_preis": 129.0
+        "kunden_preis": 128.9
     },
     "Leuchttintenbeutel": {
-        "farmer_preis": 15.1,
-        "kunden_preis": 28.5
+        "farmer_preis": 15.0,
+        "kunden_preis": 28.6
     },
     "Schwarzpulver": {
-        "farmer_preis": 8.4,
-        "kunden_preis": 13.7
+        "farmer_preis": 8.3,
+        "kunden_preis": 13.9
     },
     "Honigwabe": {
-        "farmer_preis": 3.5,
+        "farmer_preis": 3.2,
         "kunden_preis": 8.0
     },
     "Tintenbeutel": {
-        "farmer_preis": 20.6,
-        "kunden_preis": 33.1
+        "farmer_preis": 20.1,
+        "kunden_preis": 32.9
     },
     "Leder": {
-        "farmer_preis": 4.3,
-        "kunden_preis": 9.8
+        "farmer_preis": 4.7,
+        "kunden_preis": 10.0
     },
     "Magmacreme": {
-        "farmer_preis": 11.5,
+        "farmer_preis": 11.6,
         "kunden_preis": 35.3
     },
     "Ominous Bottle": {
@@ -428,64 +428,64 @@
         "kunden_preis": 44.7
     },
     "Rotten Flesh": {
-        "farmer_preis": 1.9,
-        "kunden_preis": 8.9
+        "farmer_preis": 1.8,
+        "kunden_preis": 8.7
     },
     "Sattel": {
-        "farmer_preis": 2.2,
-        "kunden_preis": 58.9
+        "farmer_preis": 10.1,
+        "kunden_preis": 389.9
     },
     "Skeleton Skull": {
-        "farmer_preis": 852.6,
-        "kunden_preis": 3259.3
+        "farmer_preis": 852.7,
+        "kunden_preis": 3259.1
     },
     "Schleimball": {
-        "farmer_preis": 10.7,
+        "farmer_preis": 10.8,
         "kunden_preis": 26.5
     },
     "Spider Eye": {
-        "farmer_preis": 1.2,
-        "kunden_preis": 5.9
+        "farmer_preis": 1.1,
+        "kunden_preis": 6.0
     },
     "Faden": {
-        "farmer_preis": 7.6,
-        "kunden_preis": 30.0
+        "farmer_preis": 7.5,
+        "kunden_preis": 35.3
     },
     "Wither Skeleton Skull": {
-        "farmer_preis": 201.5,
-        "kunden_preis": 889.9
+        "farmer_preis": 210.0,
+        "kunden_preis": 884.9
     },
     "Apfel": {
         "farmer_preis": 25.0,
-        "kunden_preis": 47.9
+        "kunden_preis": 48.0
     },
     "Beef": {
         "farmer_preis": 1.0,
-        "kunden_preis": 2.9
+        "kunden_preis": 3.0
     },
     "Rote Bete": {
-        "farmer_preis": 6.1,
-        "kunden_preis": 15.0
+        "farmer_preis": 5.6,
+        "kunden_preis": 14.0
     },
     "Rote-Bete-Samen": {
         "farmer_preis": 0.0,
         "kunden_preis": 1.0
     },
     "Brot": {
-        "farmer_preis": 8.5,
-        "kunden_preis": 29.6
+        "farmer_preis": 9.0,
+        "kunden_preis": 29.0
     },
     "Brown Mushroom": {
-        "farmer_preis": 38.4,
+        "farmer_preis": 25.2,
         "kunden_preis": 81.6
     },
     "Kuchen": {
         "farmer_preis": 1.1,
-        "kunden_preis": 63.5
+        "kunden_preis": 63.6
     },
     "Karotte": {
         "farmer_preis": 0.9,
-        "kunden_preis": 3.2
+        "kunden_preis": 5.0
     },
     "Chicken": {
         "farmer_preis": 7.4,
@@ -493,11 +493,11 @@
     },
     "Cod": {
         "farmer_preis": 1.0,
-        "kunden_preis": 2.3
+        "kunden_preis": 2.2
     },
     "Keks": {
-        "farmer_preis": 1.4,
-        "kunden_preis": 6.6
+        "farmer_preis": 1.1,
+        "kunden_preis": 6.3
     },
     "Getrockneter Seetang": {
         "farmer_preis": 1.3,
@@ -505,19 +505,19 @@
     },
     "Glow Berries": {
         "farmer_preis": 6.1,
-        "kunden_preis": 48.7
+        "kunden_preis": 48.6
     },
     "Goldener Apfel": {
         "farmer_preis": 201.2,
-        "kunden_preis": 269.6
+        "kunden_preis": 269.4
     },
     "Golden Carrot": {
-        "farmer_preis": 26.5,
-        "kunden_preis": 46.8
+        "farmer_preis": 26.6,
+        "kunden_preis": 48.0
     },
     "Melon": {
         "farmer_preis": 1.8,
-        "kunden_preis": 2.2
+        "kunden_preis": 1.9
     },
     "Melon Seeds": {
         "farmer_preis": 1.0,
@@ -528,7 +528,7 @@
         "kunden_preis": 0.9
     },
     "Mutton": {
-        "farmer_preis": 1.0,
+        "farmer_preis": 0.0,
         "kunden_preis": 4.0
     },
     "Porkchop": {
@@ -536,28 +536,28 @@
         "kunden_preis": 7.5
     },
     "Kartoffel": {
-        "farmer_preis": 1.8,
-        "kunden_preis": 4.6
+        "farmer_preis": 1.6,
+        "kunden_preis": 4.2
     },
     "Kürbis": {
         "farmer_preis": 2.0,
-        "kunden_preis": 3.9
+        "kunden_preis": 3.8
     },
     "Pumpkin Pie": {
-        "farmer_preis": 8.0,
+        "farmer_preis": 6.1,
         "kunden_preis": 19.9
     },
     "Pumpkin Seeds": {
-        "farmer_preis": 0.9,
-        "kunden_preis": 5.2
+        "farmer_preis": 0.8,
+        "kunden_preis": 5.4
     },
     "Rabbit": {
         "farmer_preis": 4.0,
-        "kunden_preis": 16.8
+        "kunden_preis": 16.7
     },
     "Red Mushroom": {
         "farmer_preis": 1.1,
-        "kunden_preis": 40.8
+        "kunden_preis": 36.7
     },
     "Salmon": {
         "farmer_preis": 1.7,
@@ -569,7 +569,7 @@
     },
     "Weizen": {
         "farmer_preis": 4.9,
-        "kunden_preis": 11.9
+        "kunden_preis": 11.5
     },
     "Weizensamen": {
         "farmer_preis": 0.0,
@@ -577,43 +577,43 @@
     },
     "Zierlauch": {
         "farmer_preis": 6.1,
-        "kunden_preis": 55.2
+        "kunden_preis": 55.1
     },
     "Amethyst Block": {
         "farmer_preis": 0.8,
         "kunden_preis": 4.0
     },
     "Andesit": {
-        "farmer_preis": 2.9,
-        "kunden_preis": 12.0
+        "farmer_preis": 6.0,
+        "kunden_preis": 11.9
     },
     "Porzellansternchen": {
         "farmer_preis": 0.0,
         "kunden_preis": 9.5
     },
     "Bambus": {
-        "farmer_preis": 1.0,
+        "farmer_preis": 0.8,
         "kunden_preis": 2.0
     },
     "Basalt": {
         "farmer_preis": 0.0,
-        "kunden_preis": 6.4
+        "kunden_preis": 6.2
     },
     "Bienennest": {
         "farmer_preis": 325.1,
         "kunden_preis": 2549.2
     },
     "Big Dripleaf": {
-        "farmer_preis": 5.4,
+        "farmer_preis": 5.8,
         "kunden_preis": 51.5
     },
     "Schwarzstein": {
-        "farmer_preis": 4.5,
-        "kunden_preis": 24.8
+        "farmer_preis": 5.5,
+        "kunden_preis": 24.6
     },
     "Schwarzer Beton": {
         "farmer_preis": 16.1,
-        "kunden_preis": 30.0
+        "kunden_preis": 29.9
     },
     "Schwarzer Trockenbeton": {
         "farmer_preis": 20.1,
@@ -621,39 +621,39 @@
     },
     "Black Stained Glass": {
         "farmer_preis": 15.1,
-        "kunden_preis": 22.3
+        "kunden_preis": 22.5
     },
     "Schwarze Keramik": {
         "farmer_preis": 4.8,
-        "kunden_preis": 68.1
+        "kunden_preis": 68.0
     },
     "Schwarze Wolle": {
         "farmer_preis": 4.1,
-        "kunden_preis": 11.3
+        "kunden_preis": 10.8
     },
     "Blauer Beton": {
         "farmer_preis": 3.8,
-        "kunden_preis": 19.5
+        "kunden_preis": 19.9
     },
     "Blue Concrete Powder": {
         "farmer_preis": 4.0,
         "kunden_preis": 15.0
     },
     "Blaueis": {
-        "farmer_preis": 18.5,
-        "kunden_preis": 40.0
+        "farmer_preis": 18.7,
+        "kunden_preis": 65.0
     },
     "Blaue Orchidee": {
         "farmer_preis": 0.0,
-        "kunden_preis": 4.0
+        "kunden_preis": 4.1
     },
     "Blue Stained Glass": {
         "farmer_preis": 8.0,
-        "kunden_preis": 11.5
+        "kunden_preis": 11.6
     },
     "Blaue Keramik": {
         "farmer_preis": 8.1,
-        "kunden_preis": 85.5
+        "kunden_preis": 85.8
     },
     "Blaue Wolle": {
         "farmer_preis": 1.2,
@@ -661,7 +661,7 @@
     },
     "Brain Coral": {
         "farmer_preis": 1.8,
-        "kunden_preis": 86.1
+        "kunden_preis": 86.3
     },
     "Brain Coral Block": {
         "farmer_preis": 11.0,
@@ -681,7 +681,7 @@
     },
     "Brown Mushroom Block": {
         "farmer_preis": 0.8,
-        "kunden_preis": 4.6
+        "kunden_preis": 4.2
     },
     "Brown Stained Glass": {
         "farmer_preis": 5.1,
@@ -693,7 +693,7 @@
     },
     "Braune Wolle": {
         "farmer_preis": 3.2,
-        "kunden_preis": 4.0
+        "kunden_preis": 4.1
     },
     "Bubble Coral": {
         "farmer_preis": 2.2,
@@ -705,23 +705,23 @@
     },
     "Bubble Coral Fan": {
         "farmer_preis": 0.8,
-        "kunden_preis": 8.3
+        "kunden_preis": 8.4
     },
     "Budding Amethyst": {
         "farmer_preis": 20.0,
-        "kunden_preis": 56.1
+        "kunden_preis": 56.5
     },
     "Kaktus": {
-        "farmer_preis": 0.8,
-        "kunden_preis": 6.2
+        "farmer_preis": 0.0,
+        "kunden_preis": 6.3
     },
     "Cactus Flower": {
         "farmer_preis": 4.9,
         "kunden_preis": 29.6
     },
     "Kalzit": {
-        "farmer_preis": 3.6,
-        "kunden_preis": 13.8
+        "farmer_preis": 4.3,
+        "kunden_preis": 14.4
     },
     "Chiseled Nether Bricks": {
         "farmer_preis": 1.7,
@@ -732,11 +732,11 @@
         "kunden_preis": 36.3
     },
     "Gemeißelte Steinziegel": {
-        "farmer_preis": 1.0,
-        "kunden_preis": 36.6
+        "farmer_preis": 1.1,
+        "kunden_preis": 36.4
     },
     "Chiseled Tuff": {
-        "farmer_preis": 12.0,
+        "farmer_preis": 2.0,
         "kunden_preis": 29.9
     },
     "Chiseled Tuff Bricks": {
@@ -745,11 +745,11 @@
     },
     "Chorus Flower": {
         "farmer_preis": 51.3,
-        "kunden_preis": 137.5
+        "kunden_preis": 128.9
     },
     "Chorus Fruit": {
         "farmer_preis": 1.4,
-        "kunden_preis": 20.5
+        "kunden_preis": 13.9
     },
     "Chorus Plant": {
         "farmer_preis": 2.6,
@@ -757,7 +757,7 @@
     },
     "Ton": {
         "farmer_preis": 7.5,
-        "kunden_preis": 27.9
+        "kunden_preis": 27.7
     },
     "Closed Eyeblossom": {
         "farmer_preis": 6.6,
@@ -765,23 +765,23 @@
     },
     "Grobe Erde": {
         "farmer_preis": 2.0,
-        "kunden_preis": 30.0
+        "kunden_preis": 43.0
     },
     "Bruchtiefenschiefer": {
         "farmer_preis": 0.0,
         "kunden_preis": 3.9
     },
     "Bruchstein": {
-        "farmer_preis": 0.0,
-        "kunden_preis": 0.8
+        "farmer_preis": 0.8,
+        "kunden_preis": 1.0
     },
     "Cobweb": {
         "farmer_preis": 74.6,
-        "kunden_preis": 190.0
+        "kunden_preis": 190.4
     },
     "Kakaobohnen": {
         "farmer_preis": 6.6,
-        "kunden_preis": 33.2
+        "kunden_preis": 33.0
     },
     "Kornblume": {
         "farmer_preis": 7.2,
@@ -793,11 +793,11 @@
     },
     "Cracked Polished Blackstone Bricks": {
         "farmer_preis": 2.5,
-        "kunden_preis": 13.0
+        "kunden_preis": 12.9
     },
     "Rissige Steinziegel": {
-        "farmer_preis": 6.4,
-        "kunden_preis": 45.0
+        "farmer_preis": 1.1,
+        "kunden_preis": 44.5
     },
     "Crimson Fungus": {
         "farmer_preis": 2.6,
@@ -805,7 +805,7 @@
     },
     "Crimson Nylium": {
         "farmer_preis": 9.6,
-        "kunden_preis": 98.7
+        "kunden_preis": 98.5
     },
     "Crimson Roots": {
         "farmer_preis": 0.0,
@@ -813,7 +813,7 @@
     },
     "Weinender Obsidian": {
         "farmer_preis": 202.2,
-        "kunden_preis": 319.9
+        "kunden_preis": 309.9
     },
     "Türkiser Beton": {
         "farmer_preis": 1.7,
@@ -829,7 +829,7 @@
     },
     "Türkise Keramik": {
         "farmer_preis": 1.9,
-        "kunden_preis": 57.5
+        "kunden_preis": 57.4
     },
     "Türkise Wolle": {
         "farmer_preis": 1.0,
@@ -852,7 +852,7 @@
         "kunden_preis": 135.2
     },
     "Dead Bush": {
-        "farmer_preis": 14.2,
+        "farmer_preis": 13.7,
         "kunden_preis": 149.2
     },
     "Dead Fire Coral Block": {
@@ -869,19 +869,19 @@
     },
     "Tiefenschiefer": {
         "farmer_preis": 0.0,
-        "kunden_preis": 1.7
+        "kunden_preis": 0.9
     },
     "Diorit": {
-        "farmer_preis": 2.3,
-        "kunden_preis": 10.0
+        "farmer_preis": 2.4,
+        "kunden_preis": 9.9
     },
     "Erde": {
-        "farmer_preis": 1.5,
+        "farmer_preis": 2.0,
         "kunden_preis": 3.3
     },
     "Dirt Path": {
-        "farmer_preis": 3.8,
-        "kunden_preis": 215.5
+        "farmer_preis": 3.4,
+        "kunden_preis": 215.1
     },
     "Tropfsteinblock": {
         "farmer_preis": 0.8,
@@ -893,14 +893,14 @@
     },
     "Endsteinziegel": {
         "farmer_preis": 0.0,
-        "kunden_preis": 4.1
+        "kunden_preis": 4.9
     },
     "Farmland": {
-        "farmer_preis": 13.8,
-        "kunden_preis": 149.9
+        "farmer_preis": 13.9,
+        "kunden_preis": 150.0
     },
     "Fern": {
-        "farmer_preis": 15.0,
+        "farmer_preis": 12.7,
         "kunden_preis": 135.1
     },
     "Firefly Bush": {
@@ -921,27 +921,27 @@
     },
     "Feuerstein": {
         "farmer_preis": 1.2,
-        "kunden_preis": 14.8
+        "kunden_preis": 14.5
     },
     "Glas": {
-        "farmer_preis": 2.2,
+        "farmer_preis": 2.5,
         "kunden_preis": 9.0
     },
     "Glowstone": {
-        "farmer_preis": 24.1,
-        "kunden_preis": 44.8
+        "farmer_preis": 24.2,
+        "kunden_preis": 50.0
     },
     "Granit": {
         "farmer_preis": 2.3,
         "kunden_preis": 7.1
     },
     "Grasblock": {
-        "farmer_preis": 3.9,
-        "kunden_preis": 9.9
+        "farmer_preis": 4.0,
+        "kunden_preis": 7.4
     },
     "Kies": {
-        "farmer_preis": 7.6,
-        "kunden_preis": 10.0
+        "farmer_preis": 7.5,
+        "kunden_preis": 9.7
     },
     "Grauer Beton": {
         "farmer_preis": 3.6,
@@ -953,15 +953,15 @@
     },
     "Gray Stained Glass": {
         "farmer_preis": 7.2,
-        "kunden_preis": 23.7
+        "kunden_preis": 23.8
     },
     "Graue Keramik": {
         "farmer_preis": 7.1,
-        "kunden_preis": 61.7
+        "kunden_preis": 61.6
     },
     "Graue Wolle": {
         "farmer_preis": 1.6,
-        "kunden_preis": 3.4
+        "kunden_preis": 3.1
     },
     "Grüner Beton": {
         "farmer_preis": 2.2,
@@ -977,19 +977,19 @@
     },
     "Grüne Keramik": {
         "farmer_preis": 3.7,
-        "kunden_preis": 59.3
+        "kunden_preis": 59.2
     },
     "Grüne Wolle": {
         "farmer_preis": 1.2,
-        "kunden_preis": 3.1
+        "kunden_preis": 3.0
     },
     "Hanging Roots": {
         "farmer_preis": 2.3,
         "kunden_preis": 24.4
     },
     "Honigblock": {
-        "farmer_preis": 12.0,
-        "kunden_preis": 23.7
+        "farmer_preis": 10.0,
+        "kunden_preis": 23.6
     },
     "Horn Coral": {
         "farmer_preis": 2.2,
@@ -1045,11 +1045,11 @@
     },
     "Hellblauer Beton": {
         "farmer_preis": 1.3,
-        "kunden_preis": 22.4
+        "kunden_preis": 22.5
     },
     "Light Blue Concrete Powder": {
         "farmer_preis": 3.4,
-        "kunden_preis": 17.4
+        "kunden_preis": 17.3
     },
     "Light Blue Stained Glass": {
         "farmer_preis": 2.5,
@@ -1057,15 +1057,15 @@
     },
     "Light Blue Terracotta": {
         "farmer_preis": 10.1,
-        "kunden_preis": 79.5
+        "kunden_preis": 79.8
     },
     "Hellblaue Wolle": {
         "farmer_preis": 1.4,
-        "kunden_preis": 4.6
+        "kunden_preis": 4.5
     },
     "Hellgrauer Beton": {
-        "farmer_preis": 5.7,
-        "kunden_preis": 29.9
+        "farmer_preis": 5.8,
+        "kunden_preis": 29.8
     },
     "Light Gray Concrete Powder": {
         "farmer_preis": 10.3,
@@ -1073,14 +1073,14 @@
     },
     "Light Gray Stained Glass": {
         "farmer_preis": 6.1,
-        "kunden_preis": 24.8
+        "kunden_preis": 24.9
     },
     "Hellgraue Keramik": {
         "farmer_preis": 2.1,
         "kunden_preis": 24.1
     },
     "Hellgraue Wolle": {
-        "farmer_preis": 2.0,
+        "farmer_preis": 2.1,
         "kunden_preis": 3.2
     },
     "Maiglöckchen": {
@@ -1089,7 +1089,7 @@
     },
     "Lily Pad": {
         "farmer_preis": 2.8,
-        "kunden_preis": 175.7
+        "kunden_preis": 175.6
     },
     "Hellgrüner Beton": {
         "farmer_preis": 3.2,
@@ -1105,7 +1105,7 @@
     },
     "Hellgrüne Keramik": {
         "farmer_preis": 7.8,
-        "kunden_preis": 66.9
+        "kunden_preis": 66.7
     },
     "Hellgrüne Wolle": {
         "farmer_preis": 1.3,
@@ -1113,26 +1113,26 @@
     },
     "Magenta Beton": {
         "farmer_preis": 1.8,
-        "kunden_preis": 21.3
+        "kunden_preis": 21.4
     },
     "Magenta Concrete Powder": {
         "farmer_preis": 2.0,
         "kunden_preis": 17.4
     },
     "Magenta Stained Glass": {
-        "farmer_preis": 2.1,
+        "farmer_preis": 2.0,
         "kunden_preis": 12.3
     },
     "Magenta Keramik": {
-        "farmer_preis": 11.0,
-        "kunden_preis": 54.0
+        "farmer_preis": 10.9,
+        "kunden_preis": 53.9
     },
     "Magenta Wolle": {
         "farmer_preis": 1.2,
         "kunden_preis": 3.2
     },
     "Magmablock": {
-        "farmer_preis": 1.6,
+        "farmer_preis": 1.1,
         "kunden_preis": 16.3
     },
     "Mangrove Roots": {
@@ -1160,39 +1160,39 @@
         "kunden_preis": 15.9
     },
     "Muddy Mangrove Roots": {
-        "farmer_preis": 3.7,
-        "kunden_preis": 24.7
+        "farmer_preis": 3.6,
+        "kunden_preis": 24.6
     },
     "Mushroom Stem": {
-        "farmer_preis": 7.3,
-        "kunden_preis": 35.2
+        "farmer_preis": 7.0,
+        "kunden_preis": 34.9
     },
     "Myzel": {
         "farmer_preis": 0.9,
-        "kunden_preis": 3.2
+        "kunden_preis": 3.3
     },
     "Netherrack": {
         "farmer_preis": 1.0,
         "kunden_preis": 2.9
     },
     "Netherziegel": {
-        "farmer_preis": 1.0,
-        "kunden_preis": 12.7
+        "farmer_preis": 0.9,
+        "kunden_preis": 12.9
     },
     "Netherwarze": {
-        "farmer_preis": 2.2,
+        "farmer_preis": 2.5,
         "kunden_preis": 13.5
     },
     "Nether Wart Block": {
-        "farmer_preis": 0.9,
-        "kunden_preis": 19.2
+        "farmer_preis": 0.8,
+        "kunden_preis": 19.0
     },
     "Obsidian": {
-        "farmer_preis": 37.2,
-        "kunden_preis": 49.9
+        "farmer_preis": 37.1,
+        "kunden_preis": 44.0
     },
     "Ochre Froglight": {
-        "farmer_preis": 11.1,
+        "farmer_preis": 9.8,
         "kunden_preis": 29.3
     },
     "Open Eyeblossom": {
@@ -1220,20 +1220,20 @@
         "kunden_preis": 2.7
     },
     "Orange Wolle": {
-        "farmer_preis": 3.1,
-        "kunden_preis": 4.0
+        "farmer_preis": 0.0,
+        "kunden_preis": 4.1
     },
     "Margerite": {
         "farmer_preis": 1.5,
         "kunden_preis": 20.0
     },
     "Packeis": {
-        "farmer_preis": 2.8,
-        "kunden_preis": 12.0
+        "farmer_preis": 2.7,
+        "kunden_preis": 14.9
     },
     "Pale Hanging Moss": {
         "farmer_preis": 2.4,
-        "kunden_preis": 33.1
+        "kunden_preis": 33.0
     },
     "Pale Moss Block": {
         "farmer_preis": 0.0,
@@ -1244,7 +1244,7 @@
         "kunden_preis": 0.8
     },
     "Pearlescent Froglight": {
-        "farmer_preis": 10.0,
+        "farmer_preis": 10.2,
         "kunden_preis": 26.9
     },
     "Rosa Beton": {
@@ -1261,7 +1261,7 @@
     },
     "Rosa Keramik": {
         "farmer_preis": 8.7,
-        "kunden_preis": 56.5
+        "kunden_preis": 56.4
     },
     "Rosa Tulpe": {
         "farmer_preis": 0.8,
@@ -1269,7 +1269,7 @@
     },
     "Rosa Wolle": {
         "farmer_preis": 1.2,
-        "kunden_preis": 3.1
+        "kunden_preis": 3.2
     },
     "Kannenpflanze": {
         "farmer_preis": 5.2,
@@ -1281,7 +1281,7 @@
     },
     "Podsol": {
         "farmer_preis": 6.3,
-        "kunden_preis": 32.6
+        "kunden_preis": 32.8
     },
     "Tropfsteinspitze": {
         "farmer_preis": 0.0,
@@ -1289,14 +1289,14 @@
     },
     "Polierter Basalt": {
         "farmer_preis": 1.7,
-        "kunden_preis": 12.4
+        "kunden_preis": 12.5
     },
     "Polierter Schwarzstein": {
         "farmer_preis": 9.3,
         "kunden_preis": 40.0
     },
     "Polierte Schwarzsteinziegel": {
-        "farmer_preis": 1.6,
+        "farmer_preis": 1.5,
         "kunden_preis": 37.0
     },
     "Polished Tuff": {
@@ -1309,11 +1309,11 @@
     },
     "Prismarin": {
         "farmer_preis": 5.7,
-        "kunden_preis": 33.4
+        "kunden_preis": 34.4
     },
     "Prismarinziegel": {
         "farmer_preis": 1.6,
-        "kunden_preis": 6.1
+        "kunden_preis": 6.5
     },
     "Pufferfish": {
         "farmer_preis": 1.2,
@@ -1321,7 +1321,7 @@
     },
     "Lila Beton": {
         "farmer_preis": 2.5,
-        "kunden_preis": 22.4
+        "kunden_preis": 22.5
     },
     "Purple Concrete Powder": {
         "farmer_preis": 2.3,
@@ -1333,7 +1333,7 @@
     },
     "Lila Keramik": {
         "farmer_preis": 9.8,
-        "kunden_preis": 59.3
+        "kunden_preis": 59.2
     },
     "Lila Wolle": {
         "farmer_preis": 0.9,
@@ -1341,11 +1341,11 @@
     },
     "Purpurblock": {
         "farmer_preis": 7.1,
-        "kunden_preis": 33.1
+        "kunden_preis": 33.0
     },
     "Quarzblock": {
-        "farmer_preis": 106.0,
-        "kunden_preis": 150.8
+        "farmer_preis": 110.1,
+        "kunden_preis": 157.9
     },
     "Roter Beton": {
         "farmer_preis": 4.6,
@@ -1361,7 +1361,7 @@
     },
     "Rote Netherziegel": {
         "farmer_preis": 13.4,
-        "kunden_preis": 64.7
+        "kunden_preis": 64.9
     },
     "Red Nether Brick Slab": {
         "farmer_preis": 3.2,
@@ -1377,71 +1377,71 @@
     },
     "Roter Sand": {
         "farmer_preis": 2.7,
-        "kunden_preis": 3.8
+        "kunden_preis": 3.9
     },
     "Roter Sandstein": {
         "farmer_preis": 10.0,
         "kunden_preis": 19.6
     },
     "Red Stained Glass": {
-        "farmer_preis": 3.4,
-        "kunden_preis": 11.9
+        "farmer_preis": 3.6,
+        "kunden_preis": 12.0
     },
     "Rote Keramik": {
         "farmer_preis": 3.8,
-        "kunden_preis": 19.6
+        "kunden_preis": 19.5
     },
     "Rote Tulpe": {
         "farmer_preis": 0.0,
-        "kunden_preis": 2.3
+        "kunden_preis": 2.4
     },
     "Rote Wolle": {
         "farmer_preis": 1.4,
-        "kunden_preis": 3.2
+        "kunden_preis": 3.4
     },
     "Reinforced Deepslate": {
-        "farmer_preis": 400.0,
-        "kunden_preis": 1049.4
+        "farmer_preis": 500.0,
+        "kunden_preis": 1049.2
     },
     "Wurzelerde": {
         "farmer_preis": 3.6,
         "kunden_preis": 29.8
     },
     "Sand": {
-        "farmer_preis": 2.8,
-        "kunden_preis": 4.1
+        "farmer_preis": 3.1,
+        "kunden_preis": 3.9
     },
     "Sandstein": {
         "farmer_preis": 0.9,
-        "kunden_preis": 4.8
+        "kunden_preis": 4.1
     },
     "Sculk": {
         "farmer_preis": 8.0,
-        "kunden_preis": 67.1
+        "kunden_preis": 57.6
     },
     "Sculk Catalyst": {
-        "farmer_preis": 36.5,
-        "kunden_preis": 328.5
+        "farmer_preis": 50.0,
+        "kunden_preis": 490.0
     },
     "Sculk Sensor": {
-        "farmer_preis": 25.3,
-        "kunden_preis": 159.9
+        "farmer_preis": 25.5,
+        "kunden_preis": 165.0
     },
     "Sculk Shrieker": {
         "farmer_preis": 50.2,
         "kunden_preis": 274.5
     },
     "Sculk Vein": {
-        "farmer_preis": 2.4,
+        "farmer_preis": 2.5,
         "kunden_preis": 21.2
     },
     "Seagrass": {
-        "farmer_preis": 2.1,
+        "farmer_preis": 2.3,
         "kunden_preis": 19.9
     },
     "Seelaterne": {
         "farmer_preis": 372.2,
-        "kunden_preis": 415.0
+        "kunden_preis": 414.9
     },
     "Meeresgurke": {
         "farmer_preis": 1.0,
@@ -1452,8 +1452,8 @@
         "kunden_preis": 9.3
     },
     "Pilzlicht": {
-        "farmer_preis": 98.4,
-        "kunden_preis": 219.0
+        "farmer_preis": 98.0,
+        "kunden_preis": 218.7
     },
     "Small Dripleaf": {
         "farmer_preis": 255.4,
@@ -1461,23 +1461,23 @@
     },
     "Glatter Basalt": {
         "farmer_preis": 1.1,
-        "kunden_preis": 17.8
+        "kunden_preis": 17.7
     },
     "Glatter Stein": {
-        "farmer_preis": 2.5,
-        "kunden_preis": 10.0
+        "farmer_preis": 2.1,
+        "kunden_preis": 9.9
     },
     "Schnee": {
-        "farmer_preis": 1.9,
+        "farmer_preis": 1.5,
         "kunden_preis": 69.7
     },
     "Schneeblock": {
-        "farmer_preis": 2.7,
-        "kunden_preis": 17.0
+        "farmer_preis": 1.2,
+        "kunden_preis": 4.9
     },
     "Seelensand": {
         "farmer_preis": 0.0,
-        "kunden_preis": 2.9
+        "kunden_preis": 3.0
     },
     "Seelenerde": {
         "farmer_preis": 0.8,
@@ -1488,24 +1488,24 @@
         "kunden_preis": 162.3
     },
     "Spore Blossom": {
-        "farmer_preis": 465.4,
-        "kunden_preis": 1798.7
+        "farmer_preis": 465.3,
+        "kunden_preis": 1798.6
     },
     "Stein": {
-        "farmer_preis": 1.2,
-        "kunden_preis": 2.9
+        "farmer_preis": 1.3,
+        "kunden_preis": 5.0
     },
     "Steinziegel": {
-        "farmer_preis": 1.0,
+        "farmer_preis": 0.9,
         "kunden_preis": 10.3
     },
     "Zuckerrohr": {
-        "farmer_preis": 0.9,
-        "kunden_preis": 7.5
+        "farmer_preis": 1.0,
+        "kunden_preis": 6.4
     },
     "Tall Dry Grass": {
         "farmer_preis": 5.1,
-        "kunden_preis": 9.9
+        "kunden_preis": 9.7
     },
     "Keramik": {
         "farmer_preis": 3.3,
@@ -1513,11 +1513,11 @@
     },
     "Getöntes Glas": {
         "farmer_preis": 7.5,
-        "kunden_preis": 38.0
+        "kunden_preis": 38.7
     },
     "Tnt": {
-        "farmer_preis": 65.9,
-        "kunden_preis": 104.0
+        "farmer_preis": 66.1,
+        "kunden_preis": 104.1
     },
     "Fackellilie": {
         "farmer_preis": 7.1,
@@ -1525,7 +1525,7 @@
     },
     "Torchflower Seeds": {
         "farmer_preis": 1.2,
-        "kunden_preis": 8.2
+        "kunden_preis": 8.3
     },
     "Tropical Fish": {
         "farmer_preis": 0.8,
@@ -1548,23 +1548,23 @@
         "kunden_preis": 3.5
     },
     "Tuff Bricks": {
-        "farmer_preis": 2.2,
-        "kunden_preis": 12.2
+        "farmer_preis": 2.0,
+        "kunden_preis": 13.9
     },
     "Twisting Vines": {
-        "farmer_preis": 1.2,
+        "farmer_preis": 1.1,
         "kunden_preis": 23.7
     },
     "Verdant Froglight": {
-        "farmer_preis": 11.0,
+        "farmer_preis": 10.9,
         "kunden_preis": 25.7
     },
     "Vine": {
-        "farmer_preis": 0.8,
-        "kunden_preis": 18.4
+        "farmer_preis": 5.5,
+        "kunden_preis": 29.9
     },
     "Warped Fungus": {
-        "farmer_preis": 2.1,
+        "farmer_preis": 2.2,
         "kunden_preis": 39.9
     },
     "Warped Nylium": {
@@ -1577,15 +1577,15 @@
     },
     "Warped Wart Block": {
         "farmer_preis": 3.6,
-        "kunden_preis": 23.7
+        "kunden_preis": 23.5
     },
     "Weeping Vines": {
-        "farmer_preis": 1.6,
-        "kunden_preis": 42.0
+        "farmer_preis": 1.5,
+        "kunden_preis": 41.8
     },
     "Weißer Beton": {
-        "farmer_preis": 11.1,
-        "kunden_preis": 24.4
+        "farmer_preis": 11.2,
+        "kunden_preis": 24.8
     },
     "Weißer Trockenbeton": {
         "farmer_preis": 6.3,
@@ -1593,11 +1593,11 @@
     },
     "White Stained Glass": {
         "farmer_preis": 4.4,
-        "kunden_preis": 12.3
+        "kunden_preis": 12.4
     },
     "Weiße Keramik": {
-        "farmer_preis": 2.1,
-        "kunden_preis": 26.6
+        "farmer_preis": 2.0,
+        "kunden_preis": 26.5
     },
     "Weiße Tulpe": {
         "farmer_preis": 0.0,
@@ -1632,19 +1632,19 @@
         "kunden_preis": 3.2
     },
     "Allay Spawn Egg": {
-        "farmer_preis": 58480.9,
+        "farmer_preis": 58481.0,
         "kunden_preis": 149999.7
     },
     "Leuchtfeuer": {
-        "farmer_preis": 290000.5,
-        "kunden_preis": 320395.0
+        "farmer_preis": 290000.4,
+        "kunden_preis": 315000.0
     },
     "Grundgestein": {
-        "farmer_preis": 35002.2,
-        "kunden_preis": 57497.1
+        "farmer_preis": 35002.5,
+        "kunden_preis": 57496.9
     },
     "Blaze Spawn Egg": {
-        "farmer_preis": 25000000.0,
+        "farmer_preis": 25000000.1,
         "kunden_preis": 49999999.9
     },
     "Cat Spawn Egg": {
@@ -1653,59 +1653,59 @@
     },
     "Aquisator": {
         "farmer_preis": 2273.3,
-        "kunden_preis": 5397.7
+        "kunden_preis": 5397.8
     },
     "Cow Spawn Egg": {
-        "farmer_preis": 120000.4,
-        "kunden_preis": 290000.0
+        "farmer_preis": 120000.6,
+        "kunden_preis": 380000.0
     },
     "Creeper Spawn Egg": {
-        "farmer_preis": 750001.2,
-        "kunden_preis": 1334999.6
+        "farmer_preis": 900000.0,
+        "kunden_preis": 1250999.9
     },
     "Dragon Egg": {
-        "farmer_preis": 55000.2,
-        "kunden_preis": 87498.7
+        "farmer_preis": 55000.1,
+        "kunden_preis": 87497.9
     },
     "Dragon Head": {
         "farmer_preis": 1710.0,
         "kunden_preis": 1989.1
     },
     "Elytra": {
-        "farmer_preis": 38529.0,
+        "farmer_preis": 38530.8,
         "kunden_preis": 46999.8
     },
     "Verzauberter Goldener Apfel": {
-        "farmer_preis": 2784.0,
-        "kunden_preis": 4135.0
+        "farmer_preis": 2800.4,
+        "kunden_preis": 3949.9
     },
     "Endermite Spawn Egg": {
         "farmer_preis": 80003.9,
-        "kunden_preis": 149999.9
+        "kunden_preis": 178998.8
     },
     "Erfahrungsfläschchen": {
-        "farmer_preis": 210.3,
-        "kunden_preis": 268.6
+        "farmer_preis": 210.5,
+        "kunden_preis": 264.8
     },
     "Glow Squid Spawn Egg": {
         "farmer_preis": 15000000.0,
         "kunden_preis": 40000000.0
     },
     "Heavy Core": {
-        "farmer_preis": 137461.9,
-        "kunden_preis": 197999.7
+        "farmer_preis": 137460.6,
+        "kunden_preis": 191945.4
     },
     "Lead": {
         "farmer_preis": 7.0,
         "kunden_preis": 85.0
     },
     "Namensschild": {
-        "farmer_preis": 5.0,
-        "kunden_preis": 51.9
+        "farmer_preis": 5.1,
+        "kunden_preis": 50.0
     },
     "Nautilusschale": {
-        "farmer_preis": 230.2,
-        "kunden_preis": 999.5
+        "farmer_preis": 230.1,
+        "kunden_preis": 999.4
     },
     "Panda Spawn Egg": {
         "farmer_preis": 60956.7,
@@ -1728,39 +1728,39 @@
         "kunden_preis": 89999.7
     },
     "Shulker Box": {
-        "farmer_preis": 161000.1,
-        "kunden_preis": 199999.3
+        "farmer_preis": 161000.5,
+        "kunden_preis": 199998.7
     },
     "Skeleton Spawn Egg": {
         "farmer_preis": 500000.0,
         "kunden_preis": 1262699.8
     },
     "Slime Spawn Egg": {
-        "farmer_preis": 8250000.0,
+        "farmer_preis": 8000000.0,
         "kunden_preis": 24999998.0
     },
     "Spawner": {
-        "farmer_preis": 16200000.3,
-        "kunden_preis": 17999998.0
+        "farmer_preis": 16050000.4,
+        "kunden_preis": 17949999.9
     },
     "Spider Spawn Egg": {
         "farmer_preis": 100003.7,
-        "kunden_preis": 225000.0
+        "kunden_preis": 234999.7
     },
     "Squid Spawn Egg": {
         "farmer_preis": 20000000.0,
         "kunden_preis": 39950000.0
     },
     "Totem der Unsterblichkeit": {
-        "farmer_preis": 174000.3,
-        "kunden_preis": 223999.3
+        "farmer_preis": 175000.2,
+        "kunden_preis": 223499.5
     },
     "Witch Spawn Egg": {
         "farmer_preis": 3000000.0,
-        "kunden_preis": 5499999.4
+        "kunden_preis": 5482000.0
     },
     "Witherrose": {
-        "farmer_preis": 15001.6,
+        "farmer_preis": 15001.7,
         "kunden_preis": 69999.6
     },
     "Wolf Spawn Egg": {
@@ -1769,11 +1769,11 @@
     },
     "Zombie Spawn Egg": {
         "farmer_preis": 51001.1,
-        "kunden_preis": 159999.9
+        "kunden_preis": 159999.6
     },
     "Zombified Piglin Spawn Egg": {
         "farmer_preis": 1750000.0,
-        "kunden_preis": 3400000.0
+        "kunden_preis": 3399999.9
     },
     "Seelenlaterne": {
         "farmer_preis": 55.0,
